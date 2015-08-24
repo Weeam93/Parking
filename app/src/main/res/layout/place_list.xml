@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:dividerPadding="10dp"
+    android:orientation="vertical" >
+"
+
+    <LinearLayout
+        android:id="@+id/sortingLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Black"
+        android:orientation="horizontal"
+        android:showDividers="middle" >
+
+        <Button
+            android:id="@+id/distanceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="sortDistanceBtn"
+            android:text="@string/sort_Distance"
+            android:textColor="@color/aqua" />
+
+        <Button
+            android:id="@+id/priceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="sortPriceBtn"
+            android:text="@string/sort_Price"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/placeList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#E6E6E6"
+        android:dividerHeight="0px" >
+    </ListView>
+
+</LinearLayout>
