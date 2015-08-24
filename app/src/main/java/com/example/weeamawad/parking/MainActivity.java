@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -35,9 +36,9 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(com.example.parking.R.layout.activity_main);
 		
-		if (android.os.Build.VERSION.SDK_INT > 9) 
+		if (Build.VERSION.SDK_INT > 9)
 		{
 		    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		    StrictMode.setThreadPolicy(policy);
@@ -53,19 +54,19 @@ public class MainActivity extends ActionBarActivity {
 			aBar.setDisplayShowTitleEnabled(true);
 
 			Tab t=aBar.newTab();		
-			t.setIcon(R.drawable.ic_tab_map_icon_selected);
+			t.setIcon(com.example.parking.R.drawable.ic_tab_map_icon_selected);
 			MyTabListener<MapActivity> mapTabListener=new MyTabListener<MapActivity>(this,mapLabel,MapActivity.class);
 			t.setTabListener(mapTabListener);
 			aBar.addTab(t);
 
 			t=aBar.newTab();			
-			t.setIcon(R.drawable.ic_tab_list_icon_selected);
+			t.setIcon(com.example.parking.R.drawable.ic_tab_list_icon_selected);
 			MyTabListener<PlaceList> listTabListener=new MyTabListener<PlaceList>(this,listLabel,PlaceList.class);
 			t.setTabListener(listTabListener);
 			aBar.addTab(t);
 
 			t=aBar.newTab();			
-			t.setIcon(R.drawable.ic_tab_settings_icon_selected);
+			t.setIcon(com.example.parking.R.drawable.ic_tab_settings_icon_selected);
 			t.setTabListener(null);
 			aBar.addTab(t);
 
