@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(com.example.parking.R.layout.activity_main);
+		setContentView(R.layout.activity_main);
 		
 		if (Build.VERSION.SDK_INT > 9)
 		{
@@ -54,19 +54,19 @@ public class MainActivity extends ActionBarActivity {
 			aBar.setDisplayShowTitleEnabled(true);
 
 			Tab t=aBar.newTab();		
-			t.setIcon(com.example.parking.R.drawable.ic_tab_map_icon_selected);
+			t.setIcon(R.drawable.ic_tab_map_icon_selected);
 			MyTabListener<MapActivity> mapTabListener=new MyTabListener<MapActivity>(this,mapLabel,MapActivity.class);
 			t.setTabListener(mapTabListener);
 			aBar.addTab(t);
 
 			t=aBar.newTab();			
-			t.setIcon(com.example.parking.R.drawable.ic_tab_list_icon_selected);
+			t.setIcon(R.drawable.ic_tab_list_icon_selected);
 			MyTabListener<PlaceList> listTabListener=new MyTabListener<PlaceList>(this,listLabel,PlaceList.class);
 			t.setTabListener(listTabListener);
 			aBar.addTab(t);
 
 			t=aBar.newTab();			
-			t.setIcon(com.example.parking.R.drawable.ic_tab_settings_icon_selected);
+			t.setIcon(R.drawable.ic_tab_settings_icon_selected);
 			t.setTabListener(null);
 			aBar.addTab(t);
 
