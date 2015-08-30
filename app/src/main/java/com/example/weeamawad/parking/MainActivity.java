@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TabHost;
 
+import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.fragments.MapFragment;
 import com.example.weeamawad.parking.fragments.PlaceListFragment;
 
@@ -26,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        VolleyRequestQueue.getInstance(this);
         if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);

@@ -1,5 +1,16 @@
 package com.example.weeamawad.parking.Utility;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.example.weeamawad.parking.Listeners.GeocodeListener;
+import com.example.weeamawad.parking.Listeners.ParkingListener;
+import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.model.Place;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -7,12 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -23,118 +28,116 @@ public class ServiceUtility {
     private static final String GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json?";
     private static final String PARKING_Base = "http://api.parkwhiz.com/search/?";
     private static final String PARKING_API_KEY = "c71066144c39ee80c3d36f995d914d91";
+    private static final String LAT_KEY = "lat";
+    private static final String LNG_KEY = "lng";
+    private static final String LOCATION_NAME_KEY = "location_name";
+    private static final String ADDRESS_KEY = "address";
+    private static final String PRICE_KEY = "price";
+    private static final String AVAILABLE_SPOTS_KEY = "available_spots";
+    private static final String DISTANCE_KEY = "distance";
+    private static final String CITY_KEY = "city";
+    private static final String STATE_KEY = "state";
+    private static final String ZIP_KEY = "zip";
+    private static final String PARKING_LISTING_KEY = "parking_listings";
+    private static final String RESULTS_KEY = "results";
+    private static final String GEOMETRY_KEY = "geometry";
+    private static final String LOCATION_KEY = "location";
 
-    public static LatLng geocodeService(String address) {
+    public static void geocodeService(Context context, String address, final GeocodeListener listener) {
         String completeUrl = address.replaceAll(" ", "+");
         completeUrl = "address=" + completeUrl;
         completeUrl = GEOCODE_BASE + completeUrl;
-        String json = getJSON(completeUrl);
+        JsonRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, completeUrl, (String) null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                double lattitude = 0;
+                double longitude = 0;
+                System.out.println("this is it" + response);
+                try {
+                    System.out.println("Working");
+                    JSONArray resultArray = response.getJSONArray(RESULTS_KEY);
+                    JSONObject geometryObject = (JSONObject) resultArray.getJSONObject(0).get(GEOMETRY_KEY);
+                    JSONObject locationObject = (JSONObject) geometryObject.get(LOCATION_KEY);
+                    lattitude = (Double) locationObject.get(LAT_KEY);
+                    longitude = (Double) locationObject.get(LNG_KEY);
 
-        double lattitude = 0;
-        double longitude = 0;
-        System.out.println("this is it" + json);
-        try {
-            JSONObject object = new JSONObject(json);
-            System.out.println("Working");
-            JSONArray resultArray = object.getJSONArray("results");
+                    System.out.println(lattitude);
+                    System.out.println(longitude);
+                    LatLng coordinate = new LatLng(lattitude, longitude);
+                    listener.onSuccess(coordinate);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
+                Log.e("GeocodeService", "Failed");
+                listener.onFailure();
+            }
+        });
+        VolleyRequestQueue.getInstance(context.getApplicationContext()).addToRequestQueue(jsObjRequest);
 
-            JSONObject geometryObject = (JSONObject) resultArray.getJSONObject(0).get("geometry");
-            JSONObject locationObject = (JSONObject) geometryObject.get("location");
-            lattitude = (Double) locationObject.get("lat");
-            longitude = (Double) locationObject.get("lng");
-
-            System.out.println(lattitude);
-        } catch (JSONException e) {
-            //Log.e(LOG_TAG, "Cannot process JSON results", e);
-            System.out.println("Cannot process JSON results");
-        }
-        LatLng coordinate = new LatLng(lattitude, longitude);
-        return coordinate;
     }
 
-    public static ArrayList<Place> parkingService(LatLng location) {
+    public static void parkingService(Context context, LatLng location, final ParkingListener listener) {
         double lat = location.latitude;
         double lng = location.longitude;
         String completeUrl = PARKING_Base;
         completeUrl = completeUrl + "lat=" + lat;
         completeUrl = completeUrl + "&lng=" + lng;
         completeUrl = completeUrl + "&key=" + PARKING_API_KEY;
-        String json = getJSON(completeUrl);
 
-        try {
+        JsonRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, completeUrl, (String) null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
 
-            System.out.println("Starting");
-            JSONObject object = new JSONObject(json);
-            JSONArray resultArray = object.getJSONArray("parking_listings");
-            //JSONArray resultArray=object.getJSONArray("results");
+                System.out.println("Starting");
+                try {
+                    JSONArray resultArray = response.getJSONArray(PARKING_LISTING_KEY);
+                    //JSONArray resultArray=object.getJSONArray("results");
+                    ArrayList<Place> parkingList = new ArrayList<Place>();
+                    for (int i = 0; i < resultArray.length(); i++) {
+                        Place p = parseJSON((JSONObject) resultArray.get(i));
+                        parkingList.add(p);
+                    }
+                    listener.onSuccess(parkingList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            ArrayList<Place> parkingList = new ArrayList<Place>();
-            for (int i = 0; i < resultArray.length(); i++) {
-                Place p = parseJSON((JSONObject) resultArray.get(i));
-                parkingList.add(p);
             }
-            return parkingList;
-            /*for(int i=0;i<placeList.size();i++)
-			{
-			System.out.println(placeList.get(i).printInfo());
-			}*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-    private static String getJSON(String completeUrl) {
-        System.out.println("FULL: " + completeUrl);
-        HttpURLConnection conn = null;
-        StringBuilder contents = new StringBuilder();
-        try {
-            URL url = new URL(completeUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                contents.append(line);
+                Log.e("ParkingService", "Failed");
+                listener.onFailure();
             }
-        } catch (MalformedURLException e) {
-            //Log.e(LOG_TAG, "Error processing Places API URL", e);
-            System.out.println("Error processing Geocoding API URL");
-            return contents.toString();
-        } catch (IOException e) {
-            //Log.e(LOG_TAG, "Error connecting to Places API", e);
-            System.out.println("Error connecting to Geocoding API");
-            return contents.toString();
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }
-        return contents.toString();
+        });
+        VolleyRequestQueue.getInstance(context.getApplicationContext()).addToRequestQueue(jsObjRequest);
     }
 
     private static Place parseJSON(JSONObject j) {
         Place result = new Place();
         try {
-            result.setLatitude((Double) j.get("lat"));
-            result.setLongitude((Double) j.get("lng"));
-            result.setName(j.getString("location_name"));
-            result.setAddress(j.getString("address"));
-            result.setPrice(j.getDouble("price"));
-            result.setAvailible_spots(j.getInt("available_spots"));
-            result.setDistance(j.getInt("distance"));
+            result.setLatitude((Double) j.get(LAT_KEY));
+            result.setLongitude((Double) j.get(LNG_KEY));
+            result.setName(j.getString(LOCATION_NAME_KEY));
+            result.setAddress(j.getString(ADDRESS_KEY));
+            result.setPrice(j.getDouble(PRICE_KEY));
+            result.setAvailible_spots(j.getInt(AVAILABLE_SPOTS_KEY));
+            result.setDistance(j.getInt(DISTANCE_KEY));
 
-            result.setCity(j.getString("city"));
-            result.setState(j.getString("state"));
-            result.setZip(j.getString("zip"));
+            result.setCity(j.getString(CITY_KEY));
+            result.setState(j.getString(STATE_KEY));
+            result.setZip(j.getString(ZIP_KEY));
             result.setCompleteAddress();
 
             result.setOptimized();
-            //result.setMarkerImage();
             return result;
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
