@@ -49,7 +49,7 @@ import com.google.maps.android.ui.IconGenerator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener {
+public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -61,9 +61,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private Context mContext;
     private Button findParkingBtn;
     private LinearLayout outerBottomPanel;
-    private double newLat;
-    private double newLng;
     private boolean mRequestingLocationUpdates;
+    private ImageButton listBtn;
+    private View mView;
 
 
     protected void createLocationRequest() {
@@ -72,14 +72,17 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         mLocationRequest.setFastestInterval(16);  // 16ms = 60fps
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
+
     protected void startLocationUpdates() {
         mRequestingLocationUpdates = true;
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
+
     protected void stopLocationUpdates() {
         mRequestingLocationUpdates = false;
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -93,37 +96,30 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             startLocationUpdates();
         }
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_map, container, false);
         return view;
     }
+
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-
-        autoCompView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete);
-        autoCompView.setThreshold(1);
-        AutoCompleteAdapter adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
-        autoCompView.setAdapter(adapter);
+        mView = v;
+        initMap();
+        initViews();
         autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // TODO Auto-generated method stub
                 InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
 
-                Toast.makeText(mContext, autoCompView.getText().toString(), Toast.LENGTH_LONG).show();
                 ServiceUtility.geocodeService(getActivity(), autoCompView.getText().toString(), new GeocodeListener() {
                     @Override
                     public void onSuccess(LatLng location) {
-                        newLat = location.latitude;
-                        newLng = location.longitude;
-                        System.out.println(newLat);
-                        System.out.println(newLng);
                         findNearbyParking(location);
                     }
 
@@ -135,59 +131,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             }
         });
 
-        findParkingBtn = (Button) v.findViewById(R.id.findparkingbtn);
-        findParkingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                findParkingBtn.setText("Pushed");
-                //40.7903 73.9597 manhattan
-                //34.0508590,-118.2489990 LA
-                findNearbyParking(new LatLng(40.7903, -73.9597));
-            }
-        });
-
-        ImageButton listBtn = (ImageButton) v.findViewById(R.id.listButton);
-        listBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                String t = "Los+Angeles,+CA,+United+States";
-                Toast.makeText(mContext, t, Toast.LENGTH_LONG).show();
-                ServiceUtility.geocodeService(getActivity(), t, new GeocodeListener() {
-                    @Override
-                    public void onSuccess(LatLng location) {
-                        findNearbyParking(location);
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-                });
-            }
-        });
-
-        outerBottomPanel = (LinearLayout) v.findViewById(R.id.OuterBottomPanel);
-        map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.getUiSettings().setCompassEnabled(false);
-        map.getUiSettings().setZoomControlsEnabled(false);
-        map.setOnMarkerClickListener(this);
-        map.setOnMapClickListener(new OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng position) {
-                // TODO Auto-generated method stub
-                map.clear();
-                outerBottomPanel.setVisibility(View.INVISIBLE);
-                Toast.makeText(mContext, Double.toString(position.latitude) + "," + Double.toString(position.longitude), Toast.LENGTH_SHORT).show();
-                findNearbyParking(position);
-
-            }
-        });
     }
 
     @Override
@@ -232,10 +175,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     public void onConnected(Bundle arg0) {
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Toast.makeText(mContext, "Connected", Toast.LENGTH_SHORT).show();
-        Toast.makeText(mContext, mLastLocation.toString(), Toast.LENGTH_LONG).show();
         myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-
         CircleOptions c = new CircleOptions()
                 .center(myCoordinates)
                 .radius(500)
@@ -262,6 +202,67 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         mLastLocation = location;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.findparkingbtn:
+                findParkingBtn.setText("Pushed");
+                //40.7903 73.9597 manhattan
+                //34.0508590,-118.2489990 LA
+                findNearbyParking(new LatLng(40.7903, -73.9597));
+                break;
+            case R.id.listButton:
+                String t = "Los+Angeles,+CA,+United+States";
+                ServiceUtility.geocodeService(getActivity(), t, new GeocodeListener() {
+                    @Override
+                    public void onSuccess(LatLng location) {
+                        findNearbyParking(location);
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+                break;
+            case R.id.OuterBottomPanel:
+                break;
+            case R.id.autoComplete:
+                break;
+        }
+    }
+
+    private void initMap() {
+        map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.setOnMarkerClickListener(this);
+        map.setOnMapClickListener(new OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng position) {
+                // TODO Auto-generated method stub
+                map.clear();
+                outerBottomPanel.setVisibility(View.INVISIBLE);
+                Toast.makeText(mContext, Double.toString(position.latitude) + "," + Double.toString(position.longitude), Toast.LENGTH_SHORT).show();
+                findNearbyParking(position);
+
+            }
+        });
+    }
+
+    private void initViews() {
+        findParkingBtn = (Button) mView.findViewById(R.id.findparkingbtn);
+        listBtn = (ImageButton) mView.findViewById(R.id.listButton);
+        outerBottomPanel = (LinearLayout) mView.findViewById(R.id.OuterBottomPanel);
+        autoCompView = (AutoCompleteTextView) mView.findViewById(R.id.autoComplete);
+        autoCompView.setThreshold(1);
+        AutoCompleteAdapter adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
+        autoCompView.setAdapter(adapter);
+    }
+
     private void buildGoogleAPI() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -275,6 +276,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         ServiceUtility.parkingService(getActivity(), position, new ParkingListener() {
             @Override
             public void onSuccess(final ArrayList<Place> parkingLocations) {
+                parkingPlaces = parkingLocations;
                 android.os.Handler h = new android.os.Handler();
                 h.post(new Runnable() {
                     @Override
@@ -310,6 +312,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             }
         });
     }
+
     public void updateCameraLocation(double latitude, double longitude) {
         CameraPosition cam = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
@@ -363,6 +366,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
         return true;
     }
+
 
 }
 

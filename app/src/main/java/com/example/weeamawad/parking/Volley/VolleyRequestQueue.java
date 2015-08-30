@@ -1,6 +1,7 @@
 package com.example.weeamawad.parking.Volley;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +36,7 @@ public class VolleyRequestQueue {
     }
 
     public <T> void addToRequestQueue(Request<T> req) {
+        Log.i("Volley", String.format("addReqeust() - %s", req.getUrl()));
         getRequestQueue().add(req);
     }
-
 }

@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class ServiceUtility {
 
-    private static final String GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json?";
-    private static final String PARKING_Base = "http://api.parkwhiz.com/search/?";
+    private static final String GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json?address=%s";
+    private static final String PARKING_Base = "http://api.parkwhiz.com/search/?lat=%s&lng=%s&key=%s";
     private static final String PARKING_API_KEY = "c71066144c39ee80c3d36f995d914d91";
     private static final String LAT_KEY = "lat";
     private static final String LNG_KEY = "lng";
@@ -45,25 +45,17 @@ public class ServiceUtility {
 
     public static void geocodeService(Context context, String address, final GeocodeListener listener) {
         String completeUrl = address.replaceAll(" ", "+");
-        completeUrl = "address=" + completeUrl;
-        completeUrl = GEOCODE_BASE + completeUrl;
+        completeUrl = String.format(GEOCODE_BASE, completeUrl);
         JsonRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, completeUrl, (String) null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                double lattitude = 0;
-                double longitude = 0;
-                System.out.println("this is it" + response);
                 try {
-                    System.out.println("Working");
                     JSONArray resultArray = response.getJSONArray(RESULTS_KEY);
                     JSONObject geometryObject = (JSONObject) resultArray.getJSONObject(0).get(GEOMETRY_KEY);
                     JSONObject locationObject = (JSONObject) geometryObject.get(LOCATION_KEY);
-                    lattitude = (Double) locationObject.get(LAT_KEY);
-                    longitude = (Double) locationObject.get(LNG_KEY);
-
-                    System.out.println(lattitude);
-                    System.out.println(longitude);
-                    LatLng coordinate = new LatLng(lattitude, longitude);
+                    double latitude = (Double) locationObject.get(LAT_KEY);
+                    double longitude = (Double) locationObject.get(LNG_KEY);
+                    LatLng coordinate = new LatLng(latitude, longitude);
                     listener.onSuccess(coordinate);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -82,21 +74,12 @@ public class ServiceUtility {
     }
 
     public static void parkingService(Context context, LatLng location, final ParkingListener listener) {
-        double lat = location.latitude;
-        double lng = location.longitude;
-        String completeUrl = PARKING_Base;
-        completeUrl = completeUrl + "lat=" + lat;
-        completeUrl = completeUrl + "&lng=" + lng;
-        completeUrl = completeUrl + "&key=" + PARKING_API_KEY;
-
+        String completeUrl = String.format(PARKING_Base, location.latitude, location.longitude, PARKING_API_KEY);
         JsonRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, completeUrl, (String) null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
-                System.out.println("Starting");
                 try {
                     JSONArray resultArray = response.getJSONArray(PARKING_LISTING_KEY);
-                    //JSONArray resultArray=object.getJSONArray("results");
                     ArrayList<Place> parkingList = new ArrayList<Place>();
                     for (int i = 0; i < resultArray.length(); i++) {
                         Place p = parseJSON((JSONObject) resultArray.get(i));
