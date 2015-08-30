@@ -214,6 +214,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             }
         });
     }
+
     private void initViews() {
         findParkingBtn = (Button) findViewById(R.id.findparkingbtn);
         listBtn = (ImageButton) findViewById(R.id.listButton);
@@ -250,6 +251,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             }
         });
     }
+
     private void buildGoogleAPI() {
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addApi(LocationServices.API)
