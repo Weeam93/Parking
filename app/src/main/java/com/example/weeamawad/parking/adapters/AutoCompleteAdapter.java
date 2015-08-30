@@ -1,12 +1,14 @@
-package com.example.weeamawad.parking;
-
-import java.util.ArrayList;
+package com.example.weeamawad.parking.adapters;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+
+import com.example.weeamawad.parking.model.TextPrediction;
+
+import java.util.ArrayList;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     private ArrayList<String> resultList;

@@ -1,20 +1,4 @@
-package com.example.weeamawad.parking;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.*;
-import com.google.maps.android.ui.IconGenerator;
+package com.example.weeamawad.parking.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +21,33 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.weeamawad.parking.R;
+import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
+import com.example.weeamawad.parking.model.Geocoding;
+import com.example.weeamawad.parking.model.Parking;
+import com.example.weeamawad.parking.model.Place;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 public class MapActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener {
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
@@ -51,6 +62,7 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
     private LinearLayout outerBottomPanel;
     private double newLat;
     private double newLng;
+    private boolean mRequestingLocationUpdates;
 
 
     protected void createLocationRequest() {
@@ -61,11 +73,27 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     protected void startLocationUpdates() {
+        mRequestingLocationUpdates = true;
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     protected void stopLocationUpdates() {
+        mRequestingLocationUpdates = false;
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
     }
 
     @Override
@@ -138,7 +166,8 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
 
 
         map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setMyLocationEnabled(false);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setCompassEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
 
@@ -163,8 +192,10 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
 
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-
-		/*if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER) && !m.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        buildGoogleAPI();
+        mGoogleApiClient.connect();
+        createLocationRequest();
+        /*if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER) && !m.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
 
 			AlertDialog.Builder d=new AlertDialog.Builder(context);
@@ -189,7 +220,7 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
 			d.show();
 		}*/
         {
-            buildGoogleAPI();
+
 
         }
     }
@@ -226,6 +257,7 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
+        updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
     private void buildGoogleAPI() {

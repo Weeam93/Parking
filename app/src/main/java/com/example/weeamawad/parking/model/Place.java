@@ -1,12 +1,8 @@
-package com.example.weeamawad.parking;
-
-import java.io.Serializable;
-import java.text.DecimalFormat;
+package com.example.weeamawad.parking.model;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+
+import java.io.Serializable;
 
 public class Place implements Serializable {
 

@@ -1,24 +1,20 @@
-package com.example.weeamawad.parking;
+package com.example.weeamawad.parking.fragments;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
+
+import com.example.weeamawad.parking.R;
+import com.example.weeamawad.parking.adapters.PlaceAdapter;
+import com.example.weeamawad.parking.model.Place;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.os.Build;
 
 public class PlaceList extends Fragment {
 

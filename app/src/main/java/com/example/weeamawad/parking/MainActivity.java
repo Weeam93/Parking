@@ -1,32 +1,21 @@
 package com.example.weeamawad.parking;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import android.app.Activity;
-import android.app.ActivityGroup;
-import android.app.AlertDialog;
-import android.app.TabActivity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBar.TabListener;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
-import android.widget.Toast;
+
+import com.example.weeamawad.parking.fragments.MapActivity;
+import com.example.weeamawad.parking.fragments.PlaceList;
 
 public class MainActivity extends ActionBarActivity {
 
