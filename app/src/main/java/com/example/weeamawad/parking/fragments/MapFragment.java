@@ -7,10 +7,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -49,7 +47,7 @@ import com.google.maps.android.ui.IconGenerator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
+public class MapFragment extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -63,8 +61,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private LinearLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
     private ImageButton listBtn;
-    private View mView;
-
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -98,49 +94,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.activity_map, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View v, Bundle savedInstanceState) {
-        super.onViewCreated(v, savedInstanceState);
-        mView = v;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+        mContext = this;
         initMap();
         initViews();
-        autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
+        initialize();
 
-                ServiceUtility.geocodeService(getActivity(), autoCompView.getText().toString(), new GeocodeListener() {
-                    @Override
-                    public void onSuccess(LatLng location) {
-                        findNearbyParking(location);
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-                });
-            }
-        });
-
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        mContext = getActivity();
-        buildGoogleAPI();
-        mGoogleApiClient.connect();
-        createLocationRequest();
         /*if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER) && !m.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
 
@@ -213,7 +174,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 break;
             case R.id.listButton:
                 String t = "Los+Angeles,+CA,+United+States";
-                ServiceUtility.geocodeService(getActivity(), t, new GeocodeListener() {
+                ServiceUtility.geocodeService(mContext, t, new GeocodeListener() {
                     @Override
                     public void onSuccess(LatLng location) {
                         findNearbyParking(location);
@@ -233,7 +194,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void initMap() {
-        map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        map = mapFragment.getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setCompassEnabled(false);
@@ -252,19 +214,44 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             }
         });
     }
-
     private void initViews() {
-        findParkingBtn = (Button) mView.findViewById(R.id.findparkingbtn);
-        listBtn = (ImageButton) mView.findViewById(R.id.listButton);
-        outerBottomPanel = (LinearLayout) mView.findViewById(R.id.OuterBottomPanel);
-        autoCompView = (AutoCompleteTextView) mView.findViewById(R.id.autoComplete);
+        findParkingBtn = (Button) findViewById(R.id.findparkingbtn);
+        listBtn = (ImageButton) findViewById(R.id.listButton);
+        outerBottomPanel = (LinearLayout) findViewById(R.id.OuterBottomPanel);
+        autoCompView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         autoCompView.setThreshold(1);
-        AutoCompleteAdapter adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
+        AutoCompleteAdapter adapter = new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1);
         autoCompView.setAdapter(adapter);
     }
 
+    private void initialize() {
+        mContext = this;
+        buildGoogleAPI();
+        mGoogleApiClient.connect();
+        createLocationRequest();
+        autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
+
+                ServiceUtility.geocodeService(mContext, autoCompView.getText().toString(), new GeocodeListener() {
+                    @Override
+                    public void onSuccess(LatLng location) {
+                        findNearbyParking(location);
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+            }
+        });
+    }
     private void buildGoogleAPI() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -273,7 +260,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void findNearbyParking(LatLng position) {
-        ServiceUtility.parkingService(getActivity(), position, new ParkingListener() {
+        ServiceUtility.parkingService(mContext, position, new ParkingListener() {
             @Override
             public void onSuccess(final ArrayList<Place> parkingLocations) {
                 parkingPlaces = parkingLocations;
@@ -333,12 +320,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
 
         outerBottomPanel.setVisibility(View.VISIBLE);
-        LinearLayout bottomPanel = (LinearLayout) this.getView().findViewById(R.id.bottomPanel);
-        TextView placeName = (TextView) this.getView().findViewById(R.id.mapPlaceName);
-        final TextView placeAddress = (TextView) this.getView().findViewById(R.id.mapPlaceAddress);
-        TextView placeDistance = (TextView) this.getView().findViewById(R.id.mapDistanceInfo);
-        TextView placePrice = (TextView) this.getView().findViewById(R.id.mapPriceInfo);
-        TextView placeOpenings = (TextView) this.getView().findViewById(R.id.mapOpeningsInfo);
+        LinearLayout bottomPanel = (LinearLayout) findViewById(R.id.bottomPanel);
+        TextView placeName = (TextView) findViewById(R.id.mapPlaceName);
+        final TextView placeAddress = (TextView) findViewById(R.id.mapPlaceAddress);
+        TextView placeDistance = (TextView) findViewById(R.id.mapDistanceInfo);
+        TextView placePrice = (TextView) findViewById(R.id.mapPriceInfo);
+        TextView placeOpenings = (TextView) findViewById(R.id.mapOpeningsInfo);
 
 
         placeName.setText(chosenPlace.getName());
@@ -348,16 +335,15 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         placeOpenings.setText(chosenPlace.getFreeSpots() + " Openings");
 
         final String address = chosenPlace.getCompleteAddress().replace(" ", "+");
-        ImageButton navigationBtn = (ImageButton) this.getView().findViewById(R.id.launchNavigationBtn1);
+        ImageButton navigationBtn = (ImageButton) findViewById(R.id.launchNavigationBtn1);
         navigationBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 String uri = "google.navigation:q=" + address;
-                Toast.makeText(getActivity(), uri, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, uri, Toast.LENGTH_LONG).show();
                 Intent navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-
                 startActivity(navigationIntent);
 
             }
