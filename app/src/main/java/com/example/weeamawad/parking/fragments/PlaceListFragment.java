@@ -11,12 +11,13 @@ import android.widget.ListView;
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.adapters.PlaceAdapter;
 import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.model.PlacesModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PlaceList extends Fragment {
+public class PlaceListFragment extends Fragment {
 
     private ListView list;
     private ArrayList<Place> parkingPlaces;
@@ -47,7 +48,7 @@ public class PlaceList extends Fragment {
         distanceBtn = (Button) v.findViewById(R.id.distanceBtn);
         priceBtn = (Button) v.findViewById(R.id.priceBtn);
 
-        parkingPlaces = (ArrayList<Place>) getActivity().getIntent().getSerializableExtra("PlaceList");
+        parkingPlaces = PlacesModel.getParkingPlaces();
         adapter = new PlaceAdapter(this.getActivity(), R.layout.custom_place_view, parkingPlaces);
         list.setAdapter(adapter);
 

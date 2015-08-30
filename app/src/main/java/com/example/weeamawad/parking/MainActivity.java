@@ -14,8 +14,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TabHost;
 
-import com.example.weeamawad.parking.fragments.MapActivity;
-import com.example.weeamawad.parking.fragments.PlaceList;
+import com.example.weeamawad.parking.fragments.MapFragment;
+import com.example.weeamawad.parking.fragments.PlaceListFragment;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -42,13 +42,13 @@ public class MainActivity extends ActionBarActivity {
 
             Tab t = aBar.newTab();
             t.setIcon(R.drawable.ic_tab_map_icon_selected);
-            MyTabListener<MapActivity> mapTabListener = new MyTabListener<MapActivity>(this, mapLabel, MapActivity.class);
+            MyTabListener<MapFragment> mapTabListener = new MyTabListener<MapFragment>(this, mapLabel, MapFragment.class);
             t.setTabListener(mapTabListener);
             aBar.addTab(t);
 
             t = aBar.newTab();
             t.setIcon(R.drawable.ic_tab_list_icon_selected);
-            MyTabListener<PlaceList> listTabListener = new MyTabListener<PlaceList>(this, listLabel, PlaceList.class);
+            MyTabListener<PlaceListFragment> listTabListener = new MyTabListener<PlaceListFragment>(this, listLabel, PlaceListFragment.class);
             t.setTabListener(listTabListener);
             aBar.addTab(t);
 
@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
     public void map(View v) {
 
 
-        Intent mapIntent = new Intent(this, MapActivity.class);
+        Intent mapIntent = new Intent(this, MapFragment.class);
         startActivity(mapIntent);
 
     }

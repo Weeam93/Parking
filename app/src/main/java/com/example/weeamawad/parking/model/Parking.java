@@ -1,3 +1,4 @@
+/*
 package com.example.weeamawad.parking.model;
 
 import org.json.JSONArray;
@@ -26,22 +27,12 @@ public class Parking {
     private String distance;
 
     public Parking(double latitude, double longitude) {
-        //https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Vict&components=country:us&types=(cities)&key=AIzaSyBOqw91vKAUAaRhgSDoDBy4lmg-4pEOBwU
-        /*this.API_KEY="AIzaSyBOqw91vKAUAaRhgSDoDBy4lmg-4pEOBwU"; //browser api key
-		this.baseUrl="https://maps.googleapis.com/maps/api/place/search/json?";
-		this.type="parking";
-		this.latitude=latitude;
-		this.longitude=longitude;
-		this.sensor="false";
-		this.radius=5000;*/
-
         this.API_KEY = "c71066144c39ee80c3d36f995d914d91"; //browser api key
         this.baseUrl = "http://api.parkwhiz.com/search/?";
         this.latitude = latitude;
         this.longitude = longitude;
 
         setCompleteUrl();
-        //this.completeUrl="http://api.parkwhiz.com/search/?destination=312+N+wacker+Dr,+Chicago&start=1402441321&end=1402452121&key=62d882d8cfe5680004fa849286b6ce20";
     }
 
     public double getLatitude() {
@@ -59,19 +50,6 @@ public class Parking {
     public void setCompleteUrl() {
 
         StringBuilder a = new StringBuilder(this.baseUrl);
-		/*a.append("location=");
-		a.append(this.latitude);
-		a.append(',');
-		a.append(this.longitude);
-		a.append("&radius=");
-		a.append(this.radius);
-		a.append("&types=");
-		a.append(this.type);
-		a.append("&sensor=");
-		a.append(this.sensor);
-		a.append("&key=");
-		a.append(this.API_KEY);*/
-
         a.append("lat=");
         a.append(this.latitude);
         a.append("&lng=");
@@ -96,10 +74,12 @@ public class Parking {
                 parkingList.add(p);
             }
             return parkingList;
-			/*for(int i=0;i<placeList.size();i++)
-			{
+			*/
+/*for(int i=0;i<placeList.size();i++)
+            {
 			System.out.println(placeList.get(i).printInfo());
-			}*/
+			}*//*
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,14 +90,6 @@ public class Parking {
     public Place parseJSON(JSONObject j) {
         Place result = new Place();
         try {
-			/*JSONObject geometryObject=(JSONObject) j.get("geometry");
-			JSONObject locationObject=(JSONObject) geometryObject.get("location");
-			result.setLatitude((Double) locationObject.get("lat"));
-			result.setLongitude((Double) locationObject.get("lng"));
-			result.setName(j.getString("name"));
-			result.setVicinity(j.getString("vicinity"));
-			result.setIcon(j.getString("icon"));*/
-
             result.setLatitude((Double) j.get("lat"));
             result.setLongitude((Double) j.get("lng"));
             result.setName(j.getString("location_name"));
@@ -167,3 +139,4 @@ public class Parking {
 
 
 
+*/

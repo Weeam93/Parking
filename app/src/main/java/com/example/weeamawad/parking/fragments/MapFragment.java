@@ -22,10 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weeamawad.parking.R;
+import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
-import com.example.weeamawad.parking.model.Geocoding;
-import com.example.weeamawad.parking.model.Parking;
 import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -48,7 +48,7 @@ import com.google.maps.android.ui.IconGenerator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class MapActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener {
+public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener {
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -120,14 +120,14 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
                 InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
 
-                Geocoding g = new Geocoding(autoCompView.getText().toString());
+
                 Toast.makeText(mContext, autoCompView.getText().toString(), Toast.LENGTH_LONG).show();
-                LatLng newPlace = g.getCoordinates();
+                LatLng newPlace = ServiceUtility.geocodeService(autoCompView.getText().toString());
                 newLat = newPlace.latitude;
                 newLng = newPlace.longitude;
                 System.out.println(newLat);
                 System.out.println(newLng);
-                new getParkingPlaces(newLat, newLng).execute();
+                new getParkingPlaces(newPlace).execute();
 
             }
         });
@@ -141,8 +141,8 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
                 findParkingBtn.setText("Pushed");
                 //40.7903 73.9597 manhattan
                 //34.0508590,-118.2489990 LA
-                Parking p = new Parking(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                new getParkingPlaces(40.7903, -73.9597).execute();
+                ServiceUtility.parkingService(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                new getParkingPlaces(new LatLng(40.7903, -73.9597)).execute();
 
 
             }
@@ -157,8 +157,7 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
 
                 String t = "Los+Angeles,+CA,+United+States";
                 Toast.makeText(mContext, t, Toast.LENGTH_LONG).show();
-                Geocoding g = new Geocoding(t);
-                LatLng newPlace = g.getCoordinates();
+                LatLng newPlace = ServiceUtility.geocodeService(t);
             }
         });
 
@@ -181,7 +180,7 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
                 map.clear();
                 outerBottomPanel.setVisibility(View.INVISIBLE);
                 Toast.makeText(mContext, Double.toString(position.latitude) + "," + Double.toString(position.longitude), Toast.LENGTH_SHORT).show();
-                new getParkingPlaces(position.latitude, position.longitude).execute();
+                new getParkingPlaces(position).execute();
 
             }
         });
@@ -224,7 +223,6 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
 
         }
     }
-
     @Override
     public void onConnected(Bundle arg0) {
 
@@ -257,7 +255,6 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
     private void buildGoogleAPI() {
@@ -273,11 +270,11 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
 
         //Parking p = new Parking(currLocation.getLatitude(),currLocation.getLongitude());
         //Parking p = new Parking(34.0508590,-118.2489990); //downtown LA
-        Parking p;
+        LatLng position;
 
-        public getParkingPlaces(double latitude, double longitude) {
+        public getParkingPlaces(LatLng latlng) {
             // TODO Auto-generated constructor stub
-            p = new Parking(latitude, longitude);
+            position = latlng;
         }
 
         //Parking p = new Parking(37.378049,-122.030632); //San Fran
@@ -289,7 +286,7 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
             iconGenerator.setStyle(iconGenerator.STYLE_BLUE);
             iconGenerator.setTextAppearance(R.style.Bubble_TextAppearance_Light);
 
-            getActivity().getIntent().putExtra("PlaceList", result);
+            PlacesModel.setParkingPlaces(result);
 
             try {
                 for (int i = 0; i < result.size(); i++) {
@@ -320,12 +317,11 @@ public class MapActivity extends Fragment implements GoogleApiClient.ConnectionC
         @Override
         protected ArrayList<Place> doInBackground(Void... params) {
             // TODO Auto-generated method stub
-            parkingPlaces = p.parsePlaces();
+            parkingPlaces = ServiceUtility.parkingService(position);
             return parkingPlaces;
         }
 
     }
-
     public void updateCameraLocation(double latitude, double longitude) {
         CameraPosition cam = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
