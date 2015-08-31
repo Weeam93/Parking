@@ -8,14 +8,18 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +76,9 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private TextView placeAddress;
     private TextView placePrice;
     private String placeCompleteAddress;
+    private ListView mLv_Navigation;
+    private DrawerLayout mDl_Navigation;
+    private String[] mList;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -109,10 +116,18 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         mContext = this;
+        mList = new String[4];
+        mList[0] = "Settings";
+        mList[1] = "Favorites";
+        mList[2] = "Car Location";
+        mList[3] = "History";
+
         initMap();
         initViews();
         initListeners();
         initialize();
+
+
 
         /*if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER) && !m.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
@@ -138,12 +153,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 			d.create();
 			d.show();
 		}*/
-        {
-
-
         }
-    }
-
     @Override
     public void onConnected(Bundle arg0) {
 
@@ -179,9 +189,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_listButton:
-                PlacesModel.setParkingPlaces(parkingPlaces);
-                Intent listIntent = new Intent(this, PlaceListFragment.class);
-                startActivity(listIntent);
+                mDl_Navigation.openDrawer(Gravity.LEFT);
                 break;
             case R.id.autoComplete:
                 break;
@@ -239,8 +247,8 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         navigationBtn = (ImageButton) findViewById(R.id.launchNavigationBtn1);
         autoCompView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         autoCompView.setThreshold(1);
-        AutoCompleteAdapter adapter = new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1);
-        autoCompView.setAdapter(adapter);
+        mDl_Navigation = (DrawerLayout) findViewById(R.id.dl_navigation);
+        mLv_Navigation = (ListView) findViewById(R.id.lv_navigation);
     }
 
     private void initListeners() {
@@ -255,6 +263,8 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         buildGoogleAPI();
         mGoogleApiClient.connect();
         createLocationRequest();
+        mLv_Navigation.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_navigation, mList));
+        autoCompView.setAdapter(new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1));
         autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -275,6 +285,19 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 });
             }
         });
+        mLv_Navigation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mDl_Navigation.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                    }
+                });
+                mDl_Navigation.closeDrawer(mLv_Navigation);
+            }
+        });
+
     }
 
     private void buildGoogleAPI() {
