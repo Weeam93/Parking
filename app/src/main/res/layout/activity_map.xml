@@ -1,199 +1,200 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dl_navigation"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/mapRelativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-        <RelativeLayout
-            android:id="@+id/mapRelativeLayout"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
+            android:layout_height="fill_parent"
+            android:background="@color/Black"
+            android:orientation="vertical">
             <LinearLayout
+                android:id="@+id/searchPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".01"
+                android:background="@color/LightBlack"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="15dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight=".5"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoComplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="@color/White"
+                    android:ems="12"
+                    android:hint="@string/search_hint"
+                    android:paddingLeft="10dp" />
+
+                <ImageButton
+                    android:id="@+id/ib_listButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight=".5"
+                    android:background="@null"
+                    android:src="@drawable/ic_tab_list_icon_selected" />
+            </LinearLayout>
+
+            <android.support.v4.widget.DrawerLayout
+                android:id="@+id/dl_navigation"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/Black"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/searchPanel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/LightBlack"
-                    android:orientation="horizontal"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="15dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_weight=".5"
-                        android:paddingRight="5dp"
-                        android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoComplete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:background="@color/White"
-                        android:ems="12"
-                        android:hint="@string/search_hint"
-                        android:paddingLeft="5dp" />
-
-                    <ImageButton
-                        android:id="@+id/ib_listButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_weight=".5"
-                        android:background="@null"
-                        android:src="@drawable/ic_tab_list_icon_selected" />
-
-                </LinearLayout>
-
+                android:layout_weight="3">
                 <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:tag="map" />
-            </LinearLayout>
+
+                <ListView
+                    android:id="@+id/lv_navigation"
+                    android:layout_width="240dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="start"
+                    android:background="@color/LightBlack"
+                    android:divider="@color/white"
+                    android:dividerHeight="1px" />
+            </android.support.v4.widget.DrawerLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/OuterBottomPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+
+            android:background="@color/LightBlack"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/OuterBottomPanel"
-                android:layout_width="match_parent"
+                android:id="@+id/bottomPanel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:background="@color/LightBlack"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                android:layout_weight="2"
+                android:divider="@drawable/mydivider"
+                android:dividerPadding="10dp"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:showDividers="middle">
+
+                <TextView
+                    android:id="@+id/mapPlaceName"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:padding="5dp"
+                    android:text="Parking Name"
+                    android:textColor="@color/White"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/mapPlaceAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="5dp"
+                    android:text="2685 West Flint St. Chandler Az 85224"
+                    android:textColor="@color/White"
+                    android:textSize="17sp"
+                    android:textStyle="italic" />
 
                 <LinearLayout
-                    android:id="@+id/bottomPanel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:divider="@drawable/mydivider"
-                    android:dividerPadding="10dp"
-                    android:orientation="vertical"
-                    android:padding="5dp"
-                    android:showDividers="middle">
+                    android:id="@+id/mapAdditionInfoPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/mapPlaceName"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:padding="5dp"
-                        android:text="Parking Name"
-                        android:textColor="@color/White"
-                        android:textSize="25sp" />
-
-                    <TextView
-                        android:id="@+id/mapPlaceAddress"
-                        android:layout_width="match_parent"
+                        android:id="@+id/mapDistanceInfo"
+                        android:layout_width="50dp"
                         android:layout_height="35dp"
+                        android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="2685 West Flint St. Chandler Az 85224"
+                        android:text="0.8 miles"
                         android:textColor="@color/White"
                         android:textSize="17sp"
                         android:textStyle="italic" />
 
-                    <LinearLayout
-                        android:id="@+id/mapAdditionInfoPanel"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/mapPriceInfo"
+                        android:layout_width="30dp"
                         android:layout_height="35dp"
-                        android:orientation="horizontal">
+                        android:layout_weight=".5"
+                        android:padding="5dp"
+                        android:text="$15"
+                        android:textColor="@color/White"
+                        android:textSize="17sp"
+                        android:textStyle="italic" />
 
-                        <TextView
-                            android:id="@+id/mapDistanceInfo"
-                            android:layout_width="50dp"
-                            android:layout_height="35dp"
-                            android:layout_weight="1"
-                            android:padding="5dp"
-                            android:text="0.8 miles"
-                            android:textColor="@color/White"
-                            android:textSize="17sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/mapPriceInfo"
-                            android:layout_width="30dp"
-                            android:layout_height="35dp"
-                            android:layout_weight=".5"
-                            android:padding="5dp"
-                            android:text="$15"
-                            android:textColor="@color/White"
-                            android:textSize="17sp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/mapOpeningsInfo"
-                            android:layout_width="50dp"
-                            android:layout_height="35dp"
-                            android:layout_weight="1"
-                            android:padding="5dp"
-                            android:text="10 Openings"
-                            android:textColor="@color/White"
-                            android:textSize="17sp"
-                            android:textStyle="italic" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/ib_favoriteOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                    <TextView
+                        android:id="@+id/mapOpeningsInfo"
+                        android:layout_width="50dp"
+                        android:layout_height="35dp"
                         android:layout_weight="1"
-                        android:background="@null"
-                        android:padding="2dp"
-                        android:src="@android:drawable/btn_star_big_off" />
-
-                    <ImageButton
-                        android:id="@+id/ib_favoriteOn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:padding="2dp"
-                        android:src="@android:drawable/btn_star_big_on"
-                        android:visibility="gone" />
-
-                    <ImageButton
-                        android:id="@+id/launchNavigationBtn1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:padding="2dp"
-                        android:src="@drawable/directions_icon" />
-
+                        android:padding="5dp"
+                        android:text="10 Openings"
+                        android:textColor="@color/White"
+                        android:textSize="17sp"
+                        android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>
 
-        </RelativeLayout>
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/lv_navigation"
-        android:layout_width="240dp"
-        android:layout_height="fill_parent"
-        android:layout_gravity="start"
-        android:background="@color/LightBlack"
-        android:divider="@color/white"
-        android:dividerHeight="1px" />
+                <ImageButton
+                    android:id="@+id/ib_favoriteOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@android:drawable/btn_star_big_off" />
 
-</android.support.v4.widget.DrawerLayout>
+                <ImageButton
+                    android:id="@+id/ib_favoriteOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@android:drawable/btn_star_big_on"
+                    android:visibility="gone" />
+
+                <ImageButton
+                    android:id="@+id/launchNavigationBtn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@drawable/directions_icon" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>
+
+
+
+
