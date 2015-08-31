@@ -5,16 +5,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.TabHost;
 
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.fragments.MapFragment;
 
 public class MainActivity extends ActionBarActivity {
-
-    //ActivityGroup
-    private TabHost tHost;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,14 +22,9 @@ public class MainActivity extends ActionBarActivity {
         map();
 
     }
-
     public void map() {
-
-
         Intent mapIntent = new Intent(this, MapFragment.class);
         startActivity(mapIntent);
 
     }
-
-
 }

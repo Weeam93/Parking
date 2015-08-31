@@ -3,67 +3,55 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:tag="map" />
+        android:background="@color/Black"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/searchPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:background="@drawable/round_corners"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autoComplete"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/searchPanel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/search_hint">
+            android:background="@color/LightBlack"
+            android:orientation="horizontal"
+            android:paddingBottom="15dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="15dp">
 
-            <requestFocus />
-        </AutoCompleteTextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight=".5"
+                android:paddingRight="5dp"
+                android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
 
-    </LinearLayout>
+            <AutoCompleteTextView
+                android:id="@+id/autoComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/White"
+                android:ems="12"
+                android:hint="@string/search_hint"
+                android:paddingLeft="5dp" />
 
-    <LinearLayout
-        android:id="@+id/topPanel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchPanel"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/white">
+            <ImageButton
+                android:id="@+id/ib_listButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight=".5"
+                android:background="@null"
+                android:src="@drawable/ic_tab_list_icon_selected" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/findparkingbtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/findParking_btn_txt"
-            android:visibility="gone" />
-
-        <ImageButton
-            android:id="@+id/listButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/listButton_description"
-            android:src="@drawable/menu_list"
-            android:visibility="gone" />
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:tag="map" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,12 +59,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_margin="10dp"
-        android:background="@drawable/round_corners"
+        android:background="@color/LightBlack"
         android:orientation="horizontal"
-        android:visibility="gone">
-        "
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/bottomPanel"
@@ -86,6 +72,7 @@
             android:divider="@drawable/mydivider"
             android:dividerPadding="10dp"
             android:orientation="vertical"
+            android:padding="5dp"
             android:showDividers="middle">
 
             <TextView
@@ -94,7 +81,7 @@
                 android:layout_height="45dp"
                 android:padding="5dp"
                 android:text="Parking Name"
-                android:textColor="@color/Black"
+                android:textColor="@color/White"
                 android:textSize="25sp" />
 
             <TextView
@@ -103,7 +90,7 @@
                 android:layout_height="35dp"
                 android:padding="5dp"
                 android:text="2685 West Flint St. Chandler Az 85224"
-                android:textColor="@color/Black"
+                android:textColor="@color/White"
                 android:textSize="17sp"
                 android:textStyle="italic" />
 
@@ -120,7 +107,7 @@
                     android:layout_weight="1"
                     android:padding="5dp"
                     android:text="0.8 miles"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="17sp"
                     android:textStyle="italic" />
 
@@ -131,7 +118,7 @@
                     android:layout_weight=".5"
                     android:padding="5dp"
                     android:text="$15"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="17sp"
                     android:textStyle="italic" />
 
@@ -142,18 +129,49 @@
                     android:layout_weight="1"
                     android:padding="5dp"
                     android:text="10 Openings"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="17sp"
                     android:textStyle="italic" />
             </LinearLayout>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/launchNavigationBtn1"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.99"
-            android:src="@drawable/directions_icon" />
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/ib_favoriteOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:padding="2dp"
+                android:src="@android:drawable/btn_star_big_off" />
+
+            <ImageButton
+                android:id="@+id/ib_favoriteOn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:padding="2dp"
+                android:src="@android:drawable/btn_star_big_on"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/launchNavigationBtn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:padding="2dp"
+                android:src="@drawable/directions_icon" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

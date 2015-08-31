@@ -1,11 +1,12 @@
 package com.example.weeamawad.parking.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.weeamawad.parking.R;
@@ -17,55 +18,47 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PlaceListFragment extends Fragment {
+public class PlaceListFragment extends FragmentActivity implements View.OnClickListener {
 
     private ListView list;
     private ArrayList<Place> parkingPlaces;
     private Button distanceBtn;
     private Button priceBtn;
-    private Button optimizedBtn;
     private PlaceAdapter adapter;
-
-    int btnSelectedTxtColor;
-    int btnDefualtTxtColor;
-
-    private View view;
+    private Context mContext;
+    private int btnSelectedTxtColor;
+    private int btnDefualtTxtColor;
+    private ImageButton mapBtn;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        view = inflater.inflate(R.layout.place_list, container, false);
-        return view;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.place_list);
+        initData();
+        initViews();
+        initListeners();
     }
 
     @Override
-    public void onViewCreated(View v, Bundle savedInstanceState) {
-        btnSelectedTxtColor = getResources().getColor(R.color.aqua);
-        btnDefualtTxtColor = getResources().getColor(R.color.white);
+    public void onResume() {
+        super.onResume();
+    }
 
-        list = (ListView) v.findViewById(R.id.placeList);
-        distanceBtn = (Button) v.findViewById(R.id.distanceBtn);
-        priceBtn = (Button) v.findViewById(R.id.priceBtn);
+    @Override
+    public void onClick(View v) {
 
-        parkingPlaces = PlacesModel.getParkingPlaces();
-        adapter = new PlaceAdapter(this.getActivity(), R.layout.custom_place_view, parkingPlaces);
-        list.setAdapter(adapter);
-
-        distanceBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.ib_mapButton:
+                Intent mapIntent = new Intent(this, MapFragment.class);
+                startActivity(mapIntent);
+                break;
+            case R.id.distanceBtn:
                 distanceBtn.setTextColor(btnSelectedTxtColor);
                 priceBtn.setTextColor(btnDefualtTxtColor);
-
-
                 Collections.sort(parkingPlaces, new Comparator<Place>() {
 
                     @Override
                     public int compare(Place p1, Place p2) {
-                        // TODO Auto-generated method stub
                         if (p1.getDistance() < p2.getDistance()) {
                             return -1;
                         } else if (p1.getDistance() > p2.getDistance()) {
@@ -77,85 +70,45 @@ public class PlaceListFragment extends Fragment {
                 });
 
                 adapter.notifyDataSetChanged();
-            }
-        });
-
-        priceBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-
+                break;
+            case R.id.priceBtn:
                 distanceBtn.setTextColor(btnDefualtTxtColor);
                 priceBtn.setTextColor(btnSelectedTxtColor);
-
-
                 Collections.sort(parkingPlaces, new Comparator<Place>() {
 
                     @Override
                     public int compare(Place p1, Place p2) {
-                        // TODO Auto-generated method stub
                         return (p1.getPrice() - p2.getPrice());
                     }
 
                 });
-
                 adapter.notifyDataSetChanged();
-            }
-        });
+                break;
+        }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //System.out.println(parkingPlaces.get(0).getName());
+    private void initViews() {
+
+        list = (ListView) findViewById(R.id.placeList);
+        distanceBtn = (Button) findViewById(R.id.distanceBtn);
+        priceBtn = (Button) findViewById(R.id.priceBtn);
+        mapBtn = (ImageButton) findViewById(R.id.ib_mapButton);
+        adapter = new PlaceAdapter(this, R.layout.custom_place_view, parkingPlaces);
+        list.setAdapter(adapter);
 
     }
 
-	/*public void sortDistanceBtn(View v)
-    {
-		distanceBtn.setTextColor(btnSelectedTxtColor);
-		priceBtn.setTextColor(btnDefualtTxtColor);
-		optimizedBtn.setTextColor(btnDefualtTxtColor);
+    private void initListeners() {
+        distanceBtn.setOnClickListener(this);
+        priceBtn.setOnClickListener(this);
+        mapBtn.setOnClickListener(this);
+    }
 
-		Collections.sort(parkingPlaces, new Comparator<Place>(){
-
-			@Override
-			public int compare(Place p1, Place p2) {
-				// TODO Auto-generated method stub
-				if(p1.getDistance() < p2.getDistance())
-				{
-					return -1;
-				}
-				else if(p1.getDistance() > p2.getDistance())
-				{
-					return 1;
-				}
-				return 0;
-			}
-
-		});
-
-		adapter.notifyDataSetChanged();
-	}
-	public void sortPriceBtn(View v)
-	{
-		distanceBtn.setTextColor(btnDefualtTxtColor);
-		priceBtn.setTextColor(btnSelectedTxtColor);
-		optimizedBtn.setTextColor(btnDefualtTxtColor);
-
-		Collections.sort(parkingPlaces, new Comparator<Place>(){
-
-			@Override
-			public int compare(Place p1, Place p2) {
-				// TODO Auto-generated method stub
-				return (p1.getPrice() - p2.getPrice());
-			}
-
-		});
-
-		adapter.notifyDataSetChanged();
-	}*/
-
+    private void initData() {
+        mContext = this;
+        parkingPlaces = PlacesModel.getParkingPlaces();
+        btnSelectedTxtColor = getResources().getColor(R.color.aqua);
+        btnDefualtTxtColor = getResources().getColor(R.color.white);
+    }
 
 }

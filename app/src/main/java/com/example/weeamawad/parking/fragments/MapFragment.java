@@ -8,6 +8,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -61,6 +62,16 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private LinearLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
     private ImageButton listBtn;
+    private ImageButton favoriteBtnOff;
+    private ImageButton favoriteBtnOn;
+    private ImageButton navigationBtn;
+    private LinearLayout bottomPanel;
+    private TextView placeName;
+    private TextView placeOpenings;
+    private TextView placeDistance;
+    private TextView placeAddress;
+    private TextView placePrice;
+    private String placeCompleteAddress;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -100,6 +111,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         mContext = this;
         initMap();
         initViews();
+        initListeners();
         initialize();
 
         /*if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER) && !m.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
@@ -166,29 +178,28 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.findparkingbtn:
-                findParkingBtn.setText("Pushed");
-                //40.7903 73.9597 manhattan
-                //34.0508590,-118.2489990 LA
-                findNearbyParking(new LatLng(40.7903, -73.9597));
-                break;
-            case R.id.listButton:
-                String t = "Los+Angeles,+CA,+United+States";
-                ServiceUtility.geocodeService(mContext, t, new GeocodeListener() {
-                    @Override
-                    public void onSuccess(LatLng location) {
-                        findNearbyParking(location);
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-                });
-                break;
-            case R.id.OuterBottomPanel:
+            case R.id.ib_listButton:
+                PlacesModel.setParkingPlaces(parkingPlaces);
+                Intent listIntent = new Intent(this, PlaceListFragment.class);
+                startActivity(listIntent);
                 break;
             case R.id.autoComplete:
+                break;
+            case R.id.ib_favoriteOff:
+                Log.i("Favorite", "Clicked");
+                favoriteBtnOff.setVisibility(View.GONE);
+                favoriteBtnOn.setVisibility(View.VISIBLE);
+                break;
+            case R.id.ib_favoriteOn:
+                Log.i("Favorite", "Clicked");
+                favoriteBtnOn.setVisibility(View.GONE);
+                favoriteBtnOff.setVisibility(View.VISIBLE);
+                break;
+            case R.id.launchNavigationBtn1:
+                String uri = "google.navigation:q=" + placeCompleteAddress;
+                Toast.makeText(mContext, uri, Toast.LENGTH_LONG).show();
+                Intent navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(navigationIntent);
                 break;
         }
     }
@@ -207,22 +218,36 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             public void onMapClick(LatLng position) {
                 // TODO Auto-generated method stub
                 map.clear();
-                outerBottomPanel.setVisibility(View.INVISIBLE);
+                outerBottomPanel.setVisibility(View.GONE);
                 Toast.makeText(mContext, Double.toString(position.latitude) + "," + Double.toString(position.longitude), Toast.LENGTH_SHORT).show();
                 findNearbyParking(position);
-
             }
         });
     }
 
     private void initViews() {
-        findParkingBtn = (Button) findViewById(R.id.findparkingbtn);
-        listBtn = (ImageButton) findViewById(R.id.listButton);
+        listBtn = (ImageButton) findViewById(R.id.ib_listButton);
         outerBottomPanel = (LinearLayout) findViewById(R.id.OuterBottomPanel);
+        bottomPanel = (LinearLayout) findViewById(R.id.bottomPanel);
+        placeName = (TextView) findViewById(R.id.mapPlaceName);
+        placeAddress = (TextView) findViewById(R.id.mapPlaceAddress);
+        placeDistance = (TextView) findViewById(R.id.mapDistanceInfo);
+        placePrice = (TextView) findViewById(R.id.mapPriceInfo);
+        placeOpenings = (TextView) findViewById(R.id.mapOpeningsInfo);
+        favoriteBtnOff = (ImageButton) findViewById(R.id.ib_favoriteOff);
+        favoriteBtnOn = (ImageButton) findViewById(R.id.ib_favoriteOn);
+        navigationBtn = (ImageButton) findViewById(R.id.launchNavigationBtn1);
         autoCompView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         autoCompView.setThreshold(1);
         AutoCompleteAdapter adapter = new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1);
         autoCompView.setAdapter(adapter);
+    }
+
+    private void initListeners() {
+        listBtn.setOnClickListener(this);
+        favoriteBtnOff.setOnClickListener(this);
+        favoriteBtnOn.setOnClickListener(this);
+        navigationBtn.setOnClickListener(this);
     }
 
     private void initialize() {
@@ -320,37 +345,13 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         Place chosenPlace = parkingPlaces.get(index);
         DecimalFormat f = new DecimalFormat("###.#");
 
-
         outerBottomPanel.setVisibility(View.VISIBLE);
-        LinearLayout bottomPanel = (LinearLayout) findViewById(R.id.bottomPanel);
-        TextView placeName = (TextView) findViewById(R.id.mapPlaceName);
-        final TextView placeAddress = (TextView) findViewById(R.id.mapPlaceAddress);
-        TextView placeDistance = (TextView) findViewById(R.id.mapDistanceInfo);
-        TextView placePrice = (TextView) findViewById(R.id.mapPriceInfo);
-        TextView placeOpenings = (TextView) findViewById(R.id.mapOpeningsInfo);
-
-
         placeName.setText(chosenPlace.getName());
         placeAddress.setText(chosenPlace.getAddress());
         placeDistance.setText(f.format(chosenPlace.getDistance()) + " miles");
         placePrice.setText("$" + chosenPlace.getPrice());
-        placeOpenings.setText(chosenPlace.getFreeSpots() + " Openings");
-
-        final String address = chosenPlace.getCompleteAddress().replace(" ", "+");
-        ImageButton navigationBtn = (ImageButton) findViewById(R.id.launchNavigationBtn1);
-        navigationBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                String uri = "google.navigation:q=" + address;
-                Toast.makeText(mContext, uri, Toast.LENGTH_LONG).show();
-                Intent navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                startActivity(navigationIntent);
-
-            }
-        });
-
+        placeOpenings.setText(chosenPlace.getFreeSpots() + " Opening");
+        placeCompleteAddress = chosenPlace.getCompleteAddress().replace(" ", "+");
 
         return true;
     }
