@@ -13,5 +13,13 @@
     <string name="sort_Price">Price</string>
     <string name="sort_Optimized">Optimized</string>
     <string name="search_hint">Search City</string>
+    <string-array name="navHeaders">
+        <item>Home</item>
+        <item>Settings</item>
+        <item>Favorites</item>
+        <item>Car Location</item>
+        <item>History</item>
+        <item>About Us</item>
 
+    </string-array>
 </resources>

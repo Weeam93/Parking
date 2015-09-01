@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -28,6 +27,7 @@ import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
+import com.example.weeamawad.parking.adapters.NavigationAdapter;
 import com.example.weeamawad.parking.model.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
@@ -263,7 +263,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         buildGoogleAPI();
         mGoogleApiClient.connect();
         createLocationRequest();
-        mLv_Navigation.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_navigation, mList));
+        mLv_Navigation.setAdapter(new NavigationAdapter(this));
         autoCompView.setAdapter(new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1));
         autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -12,6 +12,7 @@
             android:layout_height="fill_parent"
             android:background="@color/Black"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/searchPanel"
                 android:layout_width="match_parent"
@@ -24,9 +25,19 @@
                 android:paddingRight="5dp"
                 android:paddingTop="15dp">
 
+                <ImageButton
+                    android:id="@+id/ib_listButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight=".5"
+                    android:background="@null"
+                    android:src="@drawable/ic_tab_list_icon_selected" />
+
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight=".5"
                     android:paddingRight="5dp"
                     android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
@@ -35,19 +46,15 @@
                     android:id="@+id/autoComplete"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@color/White"
                     android:ems="12"
                     android:hint="@string/search_hint"
                     android:paddingLeft="10dp" />
 
-                <ImageButton
-                    android:id="@+id/ib_listButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_weight=".5"
-                    android:background="@null"
-                    android:src="@drawable/ic_tab_list_icon_selected" />
+
             </LinearLayout>
 
             <android.support.v4.widget.DrawerLayout
@@ -55,7 +62,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="3">
-                <fragment
+
+            <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="fill_parent"
