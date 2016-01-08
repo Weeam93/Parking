@@ -63,7 +63,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="3">
 
-            <fragment
+                <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="fill_parent"
@@ -79,7 +79,19 @@
                     android:divider="@color/white"
                     android:dividerHeight="1px" />
             </android.support.v4.widget.DrawerLayout>
+
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ib_myLocatoinBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="65dp"
+            android:background="@null"
+            android:padding="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_my_location_white_24dp" />
 
         <LinearLayout
             android:id="@+id/OuterBottomPanel"
@@ -200,6 +212,7 @@
 
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 </FrameLayout>
 

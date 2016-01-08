@@ -79,6 +79,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private ListView mLv_Navigation;
     private DrawerLayout mDl_Navigation;
     private String[] mList;
+    private ImageButton myLocationBtn;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -191,6 +192,9 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             case R.id.ib_listButton:
                 mDl_Navigation.openDrawer(Gravity.LEFT);
                 break;
+            case R.id.ib_myLocatoinBtn:
+                updateCameraLocation(mLastLocation.getLatitude(),mLastLocation.getLongitude() );
+                break;
             case R.id.autoComplete:
                 break;
             case R.id.ib_favoriteOff:
@@ -235,6 +239,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
     private void initViews() {
         listBtn = (ImageButton) findViewById(R.id.ib_listButton);
+        myLocationBtn= (ImageButton) findViewById(R.id.ib_myLocatoinBtn);
         outerBottomPanel = (LinearLayout) findViewById(R.id.OuterBottomPanel);
         bottomPanel = (LinearLayout) findViewById(R.id.bottomPanel);
         placeName = (TextView) findViewById(R.id.mapPlaceName);
@@ -252,6 +257,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     }
 
     private void initListeners() {
+        myLocationBtn.setOnClickListener(this);
         listBtn.setOnClickListener(this);
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
