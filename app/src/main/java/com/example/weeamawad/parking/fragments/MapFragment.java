@@ -1,5 +1,6 @@
 package com.example.weeamawad.parking.fragments;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -29,6 +31,7 @@ import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
 import com.example.weeamawad.parking.adapters.NavigationAdapter;
+import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
@@ -77,11 +80,14 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private TextView placeAddress;
     private TextView placePrice;
     private String placeCompleteAddress;
-    private ListView mLv_Navigation;
+    private ListView mLv_DrawerList;
     private DrawerLayout mDl_Navigation;
     private String[] mList;
     private ImageButton myLocationBtn;
     private Place selectedPlace;
+
+    private static String CENTER_LOCATION = "centerLocation";
+    private NavigationAdapter settingsAdapter;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -119,12 +125,6 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         mContext = this;
-        mList = new String[4];
-        mList[0] = "Settings";
-        mList[1] = "Favorites";
-        mList[2] = "Car Location";
-        mList[3] = "History";
-
         initMap();
         initViews();
         initListeners();
@@ -204,13 +204,13 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 Log.i("Favorite", "Clicked");
                 favoriteBtnOff.setVisibility(View.GONE);
                 favoriteBtnOn.setVisibility(View.VISIBLE);
-                DatabaseUtils.deleteFavorite(mContext, selectedPlace);
+                DatabaseUtils.saveFavorite(mContext, selectedPlace);
                 break;
             case R.id.ib_favoriteOn:
                 Log.i("Favorite", "Clicked");
                 favoriteBtnOn.setVisibility(View.GONE);
                 favoriteBtnOff.setVisibility(View.VISIBLE);
-                DatabaseUtils.saveFavorite(mContext, selectedPlace);
+                DatabaseUtils.deleteFavorite(mContext, selectedPlace);
                 break;
             case R.id.launchNavigationBtn1:
                 String uri = "google.navigation:q=" + placeCompleteAddress;
@@ -258,7 +258,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         autoCompView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         autoCompView.setThreshold(1);
         mDl_Navigation = (DrawerLayout) findViewById(R.id.dl_navigation);
-        mLv_Navigation = (ListView) findViewById(R.id.lv_navigation);
+        mLv_DrawerList = (ListView) findViewById(R.id.lv_navigation);
     }
 
     private void initListeners() {
@@ -274,7 +274,6 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         buildGoogleAPI();
         mGoogleApiClient.connect();
         createLocationRequest();
-        mLv_Navigation.setAdapter(new NavigationAdapter(this));
         autoCompView.setAdapter(new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1));
         autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -296,18 +295,9 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 });
             }
         });
-        mLv_Navigation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mDl_Navigation.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        super.onDrawerClosed(drawerView);
-                    }
-                });
-                mDl_Navigation.closeDrawer(mLv_Navigation);
-            }
-        });
+        settingsAdapter = new NavigationAdapter(this);
+        mLv_DrawerList.setAdapter(settingsAdapter);
+        mLv_DrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
     }
 
@@ -320,11 +310,14 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
     }
 
-    private void findNearbyParking(LatLng position) {
+    private void findNearbyParking(final LatLng position) {
         ServiceUtility.parkingServiceSearch(mContext, position, new ParkingListener() {
             @Override
             public void onSuccess(final ArrayList<Place> parkingLocations) {
                 parkingPlaces = parkingLocations;
+                map.addMarker(new MarkerOptions()
+                        .position(position)
+                        .snippet(CENTER_LOCATION));
                 android.os.Handler h = new android.os.Handler();
                 h.post(new Runnable() {
                     @Override
@@ -374,20 +367,38 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
         // TODO Auto-generated method stub
         System.out.println("Marker CLicked");
+        if (m.getSnippet().equalsIgnoreCase(CENTER_LOCATION)) {
+            return false;
+        } else {
+            int index = Integer.parseInt(m.getSnippet());
+            selectedPlace = parkingPlaces.get(index);
+            DecimalFormat f = new DecimalFormat("###.#");
 
-        int index = Integer.parseInt(m.getSnippet());
-        selectedPlace = parkingPlaces.get(index);
-        DecimalFormat f = new DecimalFormat("###.#");
+            outerBottomPanel.setVisibility(View.VISIBLE);
+            placeName.setText(selectedPlace.getName());
+            placeAddress.setText(selectedPlace.getAddress());
+            placeDistance.setText(f.format(selectedPlace.getDistance()) + " miles");
+            placePrice.setText("$" + selectedPlace.getPrice());
+            placeOpenings.setText(selectedPlace.getFreeSpots() + " Opening");
+            placeCompleteAddress = selectedPlace.getCompleteAddress().replace(" ", "+");
 
-        outerBottomPanel.setVisibility(View.VISIBLE);
-        placeName.setText(selectedPlace.getName());
-        placeAddress.setText(selectedPlace.getAddress());
-        placeDistance.setText(f.format(selectedPlace.getDistance()) + " miles");
-        placePrice.setText("$" + selectedPlace.getPrice());
-        placeOpenings.setText(selectedPlace.getFreeSpots() + " Opening");
-        placeCompleteAddress = selectedPlace.getCompleteAddress().replace(" ", "+");
+            return true;
+        }
+    }
 
-        return true;
+    private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+
+        private void selectItem(int position) {
+            mLv_DrawerList.setItemChecked(position, true);
+            AppSettingsModel.isFavPage=true;
+            Fragment fragment = new PlaceListFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+            mDl_Navigation.closeDrawer(mLv_DrawerList);
+        }
     }
 }
 

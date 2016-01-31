@@ -31,6 +31,7 @@ public class FavoriteParkingProvider {
             FavoriteParking favorite = new FavoriteParking();
             favorite.listingID = place.getListingID();
             favorite.listingName = place.getName();
+            favorite.listingAddress = place.getAddress();
             favorite.listingCity = place.getCity();
             favorite.listingState = place.getState();
             favorite.listingZip = place.getZip();
@@ -53,7 +54,7 @@ public class FavoriteParkingProvider {
     public ArrayList<Place> getAllFavorites() {
         try {
             List<FavoriteParking> favoriteList = mProvider.getAll(FavoriteParking.class);
-            if (Utils.checkIfNull(favoriteList)) {
+            if (!Utils.checkIfNull(favoriteList)) {
                 ArrayList<Place> places = new ArrayList<>();
                 for (FavoriteParking fp : favoriteList) {
                     places.add(favToPlace(fp));
@@ -72,11 +73,12 @@ public class FavoriteParkingProvider {
         Place place = new Place();
         place.setListingID(fav.listingID);
         place.setName(fav.listingName);
+        place.setAddress(fav.listingAddress);
         place.setCity(fav.listingCity);
         place.setState(fav.listingState);
         place.setZip(fav.listingZip);
         place.setLatitude(Double.parseDouble(fav.latitude));
-        place.setLongitude(Double.parseDouble(fav.LONGITUDE));
+        place.setLongitude(Double.parseDouble(fav.longitude));
         place.formatCompleteAddress();
 
         return place;

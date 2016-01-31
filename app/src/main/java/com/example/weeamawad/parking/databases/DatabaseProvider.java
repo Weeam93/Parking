@@ -27,7 +27,7 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
      * @return
      */
     public synchronized static <T extends DatabaseModel> DatabaseProvider<T> getInstance(Context context) {
-        if (mInstance != null) {
+        if (mInstance == null) {
             mInstance = new DatabaseProvider<T>(context);
         }
         return mInstance;
@@ -35,7 +35,7 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
 
     private DatabaseProvider(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        if (mDatabase != null || !mDatabase.isOpen()) {
+        if (mDatabase == null || !mDatabase.isOpen()) {
             mDatabase = getWritableDatabase();
         }
 

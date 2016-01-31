@@ -3,14 +3,18 @@ package com.example.weeamawad.parking.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.weeamawad.parking.R;
+import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.adapters.PlaceAdapter;
+import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
 
@@ -18,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PlaceListFragment extends FragmentActivity implements View.OnClickListener {
+public class PlaceListFragment extends Fragment implements View.OnClickListener {
 
     private ListView list;
     private ArrayList<Place> parkingPlaces;
@@ -29,14 +33,17 @@ public class PlaceListFragment extends FragmentActivity implements View.OnClickL
     private int btnSelectedTxtColor;
     private int btnDefualtTxtColor;
     private ImageButton mapBtn;
+    private View mRootView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.place_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mRootView = inflater.inflate(R.layout.place_list, container, false);
+        mContext=getActivity();
         initData();
         initViews();
         initListeners();
+        return mRootView;
     }
 
     @Override
@@ -49,7 +56,7 @@ public class PlaceListFragment extends FragmentActivity implements View.OnClickL
 
         switch (v.getId()) {
             case R.id.ib_mapButton:
-                Intent mapIntent = new Intent(this, MapFragment.class);
+                Intent mapIntent = new Intent(getActivity(), MapFragment.class);
                 startActivity(mapIntent);
                 break;
             case R.id.distanceBtn:
@@ -89,11 +96,11 @@ public class PlaceListFragment extends FragmentActivity implements View.OnClickL
 
     private void initViews() {
 
-        list = (ListView) findViewById(R.id.placeList);
-        distanceBtn = (Button) findViewById(R.id.distanceBtn);
-        priceBtn = (Button) findViewById(R.id.priceBtn);
-        mapBtn = (ImageButton) findViewById(R.id.ib_mapButton);
-        adapter = new PlaceAdapter(this, R.layout.custom_place_view, parkingPlaces);
+        list = (ListView) mRootView.findViewById(R.id.placeList);
+        distanceBtn = (Button) mRootView.findViewById(R.id.distanceBtn);
+        priceBtn = (Button) mRootView.findViewById(R.id.priceBtn);
+        mapBtn = (ImageButton) mRootView.findViewById(R.id.ib_mapButton);
+        adapter = new PlaceAdapter(mContext, R.layout.custom_place_view, parkingPlaces);
         list.setAdapter(adapter);
 
     }
@@ -105,8 +112,14 @@ public class PlaceListFragment extends FragmentActivity implements View.OnClickL
     }
 
     private void initData() {
-        mContext = this;
-        parkingPlaces = PlacesModel.getParkingPlaces();
+        mContext = getActivity();
+        if (AppSettingsModel.isFavPage) {
+            parkingPlaces = DatabaseUtils.getAllFavorites(mContext);
+
+        } else {
+            parkingPlaces = PlacesModel.getParkingPlaces();
+
+        }
         btnSelectedTxtColor = getResources().getColor(R.color.aqua);
         btnDefualtTxtColor = getResources().getColor(R.color.white);
     }

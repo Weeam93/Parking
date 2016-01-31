@@ -106,7 +106,7 @@ public class ServiceUtility {
     private static Place parseJSON(JSONObject j) {
         Place result = new Place();
         try {
-            result.setListingID((String) j.get(LISTING_ID));
+            result.setListingID(Integer.toString((Integer) j.get(LISTING_ID)));
             result.setLatitude((Double) j.get(LAT_KEY));
             result.setLongitude((Double) j.get(LNG_KEY));
             result.setName(j.getString(LOCATION_NAME_KEY));

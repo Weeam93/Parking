@@ -19,11 +19,11 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        map();
+        showMainMap();
 
     }
 
-    public void map() {
+    public void showMainMap() {
         Intent mapIntent = new Intent(this, MapFragment.class);
         startActivity(mapIntent);
     }
