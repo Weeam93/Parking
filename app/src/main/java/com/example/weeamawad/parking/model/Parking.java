@@ -101,7 +101,7 @@ public class Parking {
             result.setCity(j.getString("city"));
             result.setState(j.getString("state"));
             result.setZip(j.getString("zip"));
-            result.setCompleteAddress();
+            result.formatCompleteAddress();
 
             result.setOptimized();
             //result.setMarkerImage();

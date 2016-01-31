@@ -10,6 +10,7 @@ public class Place implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
+    private String listingID;
     private String name;
     private String vicinity;
     private double latitude;
@@ -86,7 +87,7 @@ public class Place implements Serializable {
         this.zip = zip;
     }
 
-    public void setCompleteAddress() {
+    public void formatCompleteAddress() {
         StringBuilder a = new StringBuilder();
         a.append(this.address + " ");
         a.append(this.city + " ");
@@ -110,6 +111,14 @@ public class Place implements Serializable {
 
     public String getZip() {
         return this.zip;
+    }
+
+    public String getListingID() {
+        return listingID;
+    }
+
+    public void setListingID(String listingID) {
+        this.listingID = listingID;
     }
 
     public String getCompleteAddress() {

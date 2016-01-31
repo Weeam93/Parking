@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.R;
+import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
 import com.example.weeamawad.parking.adapters.NavigationAdapter;
@@ -80,6 +81,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private DrawerLayout mDl_Navigation;
     private String[] mList;
     private ImageButton myLocationBtn;
+    private Place selectedPlace;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -202,11 +204,13 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 Log.i("Favorite", "Clicked");
                 favoriteBtnOff.setVisibility(View.GONE);
                 favoriteBtnOn.setVisibility(View.VISIBLE);
+                DatabaseUtils.deleteFavorite(mContext, selectedPlace);
                 break;
             case R.id.ib_favoriteOn:
                 Log.i("Favorite", "Clicked");
                 favoriteBtnOn.setVisibility(View.GONE);
                 favoriteBtnOff.setVisibility(View.VISIBLE);
+                DatabaseUtils.saveFavorite(mContext, selectedPlace);
                 break;
             case R.id.launchNavigationBtn1:
                 String uri = "google.navigation:q=" + placeCompleteAddress;
@@ -317,7 +321,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     }
 
     private void findNearbyParking(LatLng position) {
-        ServiceUtility.parkingService(mContext, position, new ParkingListener() {
+        ServiceUtility.parkingServiceSearch(mContext, position, new ParkingListener() {
             @Override
             public void onSuccess(final ArrayList<Place> parkingLocations) {
                 parkingPlaces = parkingLocations;
@@ -372,20 +376,18 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         System.out.println("Marker CLicked");
 
         int index = Integer.parseInt(m.getSnippet());
-        Place chosenPlace = parkingPlaces.get(index);
+        selectedPlace = parkingPlaces.get(index);
         DecimalFormat f = new DecimalFormat("###.#");
 
         outerBottomPanel.setVisibility(View.VISIBLE);
-        placeName.setText(chosenPlace.getName());
-        placeAddress.setText(chosenPlace.getAddress());
-        placeDistance.setText(f.format(chosenPlace.getDistance()) + " miles");
-        placePrice.setText("$" + chosenPlace.getPrice());
-        placeOpenings.setText(chosenPlace.getFreeSpots() + " Opening");
-        placeCompleteAddress = chosenPlace.getCompleteAddress().replace(" ", "+");
+        placeName.setText(selectedPlace.getName());
+        placeAddress.setText(selectedPlace.getAddress());
+        placeDistance.setText(f.format(selectedPlace.getDistance()) + " miles");
+        placePrice.setText("$" + selectedPlace.getPrice());
+        placeOpenings.setText(selectedPlace.getFreeSpots() + " Opening");
+        placeCompleteAddress = selectedPlace.getCompleteAddress().replace(" ", "+");
 
         return true;
     }
-
-
 }
 

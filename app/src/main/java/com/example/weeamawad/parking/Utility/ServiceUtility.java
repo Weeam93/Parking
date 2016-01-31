@@ -28,6 +28,7 @@ public class ServiceUtility {
     private static final String GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json?address=%s";
     private static final String PARKING_Base = "http://api.parkwhiz.com/search/?lat=%s&lng=%s&key=%s";
     private static final String PARKING_API_KEY = "c71066144c39ee80c3d36f995d914d91";
+    private static final String LISTING_ID="listing_id";
     private static final String LAT_KEY = "lat";
     private static final String LNG_KEY = "lng";
     private static final String LOCATION_NAME_KEY = "location_name";
@@ -73,7 +74,7 @@ public class ServiceUtility {
 
     }
 
-    public static void parkingService(Context context, LatLng location, final ParkingListener listener) {
+    public static void parkingServiceSearch(Context context, LatLng location, final ParkingListener listener) {
         String completeUrl = String.format(PARKING_Base, location.latitude, location.longitude, PARKING_API_KEY);
         JsonRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, completeUrl, (String) null, new Response.Listener<JSONObject>() {
             @Override
@@ -105,6 +106,7 @@ public class ServiceUtility {
     private static Place parseJSON(JSONObject j) {
         Place result = new Place();
         try {
+            result.setListingID((String) j.get(LISTING_ID));
             result.setLatitude((Double) j.get(LAT_KEY));
             result.setLongitude((Double) j.get(LNG_KEY));
             result.setName(j.getString(LOCATION_NAME_KEY));
@@ -116,7 +118,7 @@ public class ServiceUtility {
             result.setCity(j.getString(CITY_KEY));
             result.setState(j.getString(STATE_KEY));
             result.setZip(j.getString(ZIP_KEY));
-            result.setCompleteAddress();
+            result.formatCompleteAddress();
 
             result.setOptimized();
             return result;
