@@ -44,12 +44,14 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(FavoriteParkingSchema.getCreateTable());
+        db.execSQL(RecentParkingSchema.getCreateTable());
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + FavoriteParkingSchema.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + RecentParkingSchema.TABLE_NAME);
         onCreate(db);
     }
 
