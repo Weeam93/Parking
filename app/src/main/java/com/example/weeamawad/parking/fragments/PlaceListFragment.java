@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
-import com.example.weeamawad.parking.adapters.PlaceAdapter;
+import com.example.weeamawad.parking.adapters.NearyByPlacesAdapter;
 import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
@@ -28,7 +28,7 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
     private ArrayList<Place> parkingPlaces;
     private Button distanceBtn;
     private Button priceBtn;
-    private PlaceAdapter adapter;
+    private NearyByPlacesAdapter adapter;
     private Context mContext;
     private int btnSelectedTxtColor;
     private int btnDefualtTxtColor;
@@ -100,7 +100,7 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
         distanceBtn = (Button) mRootView.findViewById(R.id.distanceBtn);
         priceBtn = (Button) mRootView.findViewById(R.id.priceBtn);
         mapBtn = (ImageButton) mRootView.findViewById(R.id.ib_mapButton);
-        adapter = new PlaceAdapter(mContext, R.layout.custom_place_view, parkingPlaces);
+        adapter = new NearyByPlacesAdapter(mContext, R.layout.custom_place_view, parkingPlaces);
         list.setAdapter(adapter);
 
     }

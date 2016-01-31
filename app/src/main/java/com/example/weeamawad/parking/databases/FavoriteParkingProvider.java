@@ -21,11 +21,6 @@ public class FavoriteParkingProvider {
         mProvider = DatabaseProvider.getInstance(mContext);
     }
 
-    /**
-     * Add favorite to the database with the date when
-     *
-     * @param place MemberLocation class
-     */
     public void addFavorite(Place place) {
         if (!Utils.isStringEmpty(place.getListingID())) {
             FavoriteParking favorite = new FavoriteParking();
@@ -37,15 +32,11 @@ public class FavoriteParkingProvider {
             favorite.listingZip = place.getZip();
             favorite.latitude = Double.toString(place.getLatitude());
             favorite.longitude = Double.toString(place.getLongitude());
+            favorite.price = Integer.toString(place.getPrice());
             mProvider.create(favorite);
         }
     }
 
-    /**
-     * Method to delete the complete data under favoritePlaces
-     *
-     * @param place
-     */
     public void deleteFavorite(Place place) {
         mProvider.delete(FavoriteParkingSchema.TABLE_NAME, FavoriteParkingSchema.LISTING_ID + " = ?",
                 new String[]{place.getListingID()});
@@ -79,6 +70,7 @@ public class FavoriteParkingProvider {
         place.setZip(fav.listingZip);
         place.setLatitude(Double.parseDouble(fav.latitude));
         place.setLongitude(Double.parseDouble(fav.longitude));
+        place.setPrice(Double.parseDouble(fav.price));
         place.formatCompleteAddress();
 
         return place;

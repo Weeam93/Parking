@@ -15,6 +15,7 @@ public class FavoriteParking implements DatabaseModel {
     public String listingZip;
     public String latitude;
     public String longitude;
+    public String price;
 
     @Override
     public <T extends DatabaseModel> T fromCursor(Cursor cursor) {
@@ -28,6 +29,7 @@ public class FavoriteParking implements DatabaseModel {
             parking.listingZip = cursor.getString(cursor.getColumnIndex(FavoriteParkingSchema.LISTING_ZIP));
             parking.latitude = cursor.getString(cursor.getColumnIndex(FavoriteParkingSchema.LATITUDE));
             parking.longitude = cursor.getString(cursor.getColumnIndex(FavoriteParkingSchema.LONGITUDE));
+            parking.price = cursor.getString(cursor.getColumnIndex(FavoriteParkingSchema.PRICE));
             return (T) parking;
         }
         return null;
@@ -44,6 +46,7 @@ public class FavoriteParking implements DatabaseModel {
                 FavoriteParkingSchema.LISTING_ZIP,
                 FavoriteParkingSchema.LATITUDE,
                 FavoriteParkingSchema.LONGITUDE,
+                FavoriteParkingSchema.PRICE,
         };
     }
 
@@ -52,12 +55,13 @@ public class FavoriteParking implements DatabaseModel {
         ContentValues values = new ContentValues();
         values.put(FavoriteParkingSchema.LISTING_ID, listingID);
         values.put(FavoriteParkingSchema.LISTING_NAME, listingName);
-        values.put(FavoriteParkingSchema.LISTING_ADDRESS,listingAddress);
+        values.put(FavoriteParkingSchema.LISTING_ADDRESS, listingAddress);
         values.put(FavoriteParkingSchema.LISTING_CITY, listingCity);
         values.put(FavoriteParkingSchema.LISTING_STATE, listingState);
         values.put(FavoriteParkingSchema.LISTING_ZIP, listingZip);
         values.put(FavoriteParkingSchema.LATITUDE, latitude);
         values.put(FavoriteParkingSchema.LONGITUDE, longitude);
+        values.put(FavoriteParkingSchema.PRICE, price);
         return values;
     }
 

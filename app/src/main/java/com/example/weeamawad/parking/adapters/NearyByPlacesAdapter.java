@@ -15,12 +15,12 @@ import com.example.weeamawad.parking.model.Place;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class PlaceAdapter extends ArrayAdapter<Place> {
+public class NearyByPlacesAdapter extends ArrayAdapter<Place> {
     Context context;
     int layoutResourceID;
     ArrayList<Place> parkingPlaces = null;
 
-    public PlaceAdapter(Context context, int layoutResourceId, ArrayList<Place> parkingPlaces) {
+    public NearyByPlacesAdapter(Context context, int layoutResourceId, ArrayList<Place> parkingPlaces) {
         super(context, layoutResourceId, parkingPlaces);
         // TODO Auto-generated constructor stub
         this.context = context;

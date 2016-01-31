@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/LightBlack"
     android:dividerPadding="10dp"
     android:orientation="vertical">
 
@@ -15,6 +16,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="15dp">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -40,6 +42,7 @@
             android:background="@null"
             android:src="@drawable/ic_tab_map_icon_selected" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/sortingLayout"
         android:layout_width="fill_parent"

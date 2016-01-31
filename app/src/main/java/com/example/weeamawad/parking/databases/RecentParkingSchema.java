@@ -1,10 +1,10 @@
 package com.example.weeamawad.parking.databases;
 
 /**
- * Created by Weeam Awad on 1/15/2016.
+ * Created by Weeam Awad on 1/31/2016.
  */
-public class FavoriteParkingSchema {
-    public static final String TABLE_NAME = "favorites";
+public class RecentParkingSchema {
+    public static final String TABLE_NAME = "recents";
     public static final String LISTING_ID = "listing_id";
     public static final String LISTING_NAME = "listing_name";
     public static final String LISTING_ADDRESS = "listing_address";
@@ -30,5 +30,4 @@ public class FavoriteParkingSchema {
         sb.append(");");
         return sb.toString();
     }
-
 }

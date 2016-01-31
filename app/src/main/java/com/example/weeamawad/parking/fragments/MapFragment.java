@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -386,6 +387,22 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         }
     }
 
+    public void addFragment(int containerId, Fragment fragment, boolean addToBackStack) {
+        // Check if the fragment has been added already. If so, then
+        // don't add the fragment.
+        Fragment temp = getSupportFragmentManager().findFragmentByTag(fragment.getClass().getName());
+        if (temp != null && temp.isAdded()) {
+            return;
+        }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        ft.add(containerId, fragment, fragment.getClass().getName());
+        if (addToBackStack) {
+            ft.addToBackStack(null);
+        }
+        ft.commit();
+    }
+
     private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -394,9 +411,8 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
         private void selectItem(int position) {
             mLv_DrawerList.setItemChecked(position, true);
-            AppSettingsModel.isFavPage=true;
-            Fragment fragment = new PlaceListFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+            AppSettingsModel.isFavPage = true;
+            addFragment(R.id.container, new FavoritesFragment(), true);
             mDl_Navigation.closeDrawer(mLv_DrawerList);
         }
     }
