@@ -1,0 +1,37 @@
+1. Favorite Locations
+2. Search History
+3. My Location Btn
+3. Remember Parking Location
+4. Settings
+5. Card layout for Places Lists
+6. Images/ App Logo
+7. Analytics
+
+
+--
+C:\Program Files\Java\jdk1.8.0_65\bin>keytool -list -v -keystore "C:\Users\Weeam Awad\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+Alias name: androiddebugkey
+Creation date: Jan 7, 2016
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=Android Debug, O=Android, C=US
+Issuer: CN=Android Debug, O=Android, C=US
+Serial number: 786364ac
+Valid from: Thu Jan 07 22:27:03 PST 2016 until: Sat Dec 30 22:27:03 PST 2045
+Certificate fingerprints:
+         MD5:  53:02:9E:E6:F7:EA:E9:73:35:9B:99:04:20:A8:85:B3
+         SHA1: 44:6A:12:DE:AA:A3:B3:C4:9A:F2:4D:2A:B9:5C:6F:E4:68:D3:E8:D8
+         SHA256: 96:E4:D6:22:96:10:F3:13:4B:EE:C8:5A:1E:FF:60:36:3F:BB:01:94:3A:5B:F9:4C:C5:56:44:48:92:3F:80:6A
+         Signature algorithm name: SHA256withRSA
+         Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: EB F7 D8 2B 20 EF C8 C4   43 AD 03 B8 1C D9 F2 C3  ...+ ...C.......
+0010: 06 38 75 71                                        .8uq
+]
+]

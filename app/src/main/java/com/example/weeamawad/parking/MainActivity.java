@@ -22,9 +22,9 @@ public class MainActivity extends ActionBarActivity {
         map();
 
     }
+
     public void map() {
         Intent mapIntent = new Intent(this, MapFragment.class);
         startActivity(mapIntent);
-
     }
 }

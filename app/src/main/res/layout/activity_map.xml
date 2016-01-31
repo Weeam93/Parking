@@ -84,13 +84,13 @@
 
         <ImageButton
             android:id="@+id/ib_myLocatoinBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="65dp"
-            android:background="@null"
+            android:layout_marginRight="5dp"
+            android:background="@color/Black"
             android:padding="5dp"
-            android:scaleType="fitXY"
             android:src="@drawable/ic_my_location_white_24dp" />
 
         <LinearLayout

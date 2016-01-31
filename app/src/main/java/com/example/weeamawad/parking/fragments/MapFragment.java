@@ -154,7 +154,8 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 			d.create();
 			d.show();
 		}*/
-        }
+    }
+
     @Override
     public void onConnected(Bundle arg0) {
 
@@ -193,7 +194,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 mDl_Navigation.openDrawer(Gravity.LEFT);
                 break;
             case R.id.ib_myLocatoinBtn:
-                updateCameraLocation(mLastLocation.getLatitude(),mLastLocation.getLongitude() );
+                updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 break;
             case R.id.autoComplete:
                 break;
@@ -239,7 +240,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
     private void initViews() {
         listBtn = (ImageButton) findViewById(R.id.ib_listButton);
-        myLocationBtn= (ImageButton) findViewById(R.id.ib_myLocatoinBtn);
+        myLocationBtn = (ImageButton) findViewById(R.id.ib_myLocatoinBtn);
         outerBottomPanel = (LinearLayout) findViewById(R.id.OuterBottomPanel);
         bottomPanel = (LinearLayout) findViewById(R.id.bottomPanel);
         placeName = (TextView) findViewById(R.id.mapPlaceName);
