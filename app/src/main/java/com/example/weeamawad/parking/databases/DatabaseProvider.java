@@ -62,7 +62,7 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
      * @return variable of type T
      */
     public T create(T model) {
-        long rowId = mDatabase.insert(model.getTableName(), null, model.getContentValues());
+        long rowId = mDatabase.insertWithOnConflict(model.getTableName(), null, model.getContentValues(), SQLiteDatabase.CONFLICT_REPLACE);
         String selection = model.getPrimaryKeyName() + " = " + rowId;
         T temp = null;
         mDatabase = getWritableDatabase();
@@ -126,5 +126,9 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
             }
         }
         return rows;
+    }
+
+    public void deleteAllData(String tableName) {
+        mDatabase.execSQL("delete from " + tableName);
     }
 }

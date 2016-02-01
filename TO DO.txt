@@ -1,7 +1,7 @@
-1. Favorite Locations
-2. Search History
+1. Favorite Locations (Add, Delete, DeleteALL)
+2. Search History( Add, Delete, DeleteALL)
 3. My Location Btn
-3. Remember Parking Location
+3. Remember Parking Location (Save Current Location)
 4. Settings
 5. Card layout for Places Lists
 6. Images/ App Logo

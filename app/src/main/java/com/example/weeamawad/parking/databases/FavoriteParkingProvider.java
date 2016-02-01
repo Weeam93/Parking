@@ -60,6 +60,10 @@ public class FavoriteParkingProvider {
         return null;
     }
 
+    public void deleteAllFavorites() {
+        mProvider.deleteAllData(FavoriteParkingSchema.TABLE_NAME);
+    }
+
     private Place favToPlace(FavoriteParking fav) {
         Place place = new Place();
         place.setListingID(fav.listingID);

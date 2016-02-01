@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.R;
+import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
@@ -87,7 +88,6 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private ImageButton myLocationBtn;
     private Place selectedPlace;
 
-    private static String CENTER_LOCATION = "centerLocation";
     private NavigationAdapter settingsAdapter;
 
     protected void createLocationRequest() {
@@ -318,7 +318,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 parkingPlaces = parkingLocations;
                 map.addMarker(new MarkerOptions()
                         .position(position)
-                        .snippet(CENTER_LOCATION));
+                        .snippet(Constants.CENTER_LOCATION));
                 android.os.Handler h = new android.os.Handler();
                 h.post(new Runnable() {
                     @Override
@@ -368,7 +368,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
         // TODO Auto-generated method stub
         System.out.println("Marker CLicked");
-        if (m.getSnippet().equalsIgnoreCase(CENTER_LOCATION)) {
+        if (m.getSnippet().equalsIgnoreCase(Constants.CENTER_LOCATION)) {
             return false;
         } else {
             int index = Integer.parseInt(m.getSnippet());
@@ -382,6 +382,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             placePrice.setText("$" + selectedPlace.getPrice());
             placeOpenings.setText(selectedPlace.getFreeSpots() + " Opening");
             placeCompleteAddress = selectedPlace.getCompleteAddress().replace(" ", "+");
+            DatabaseUtils.saveRecent(mContext, selectedPlace);
 
             return true;
         }
@@ -411,8 +412,29 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
 
         private void selectItem(int position) {
             mLv_DrawerList.setItemChecked(position, true);
-            AppSettingsModel.isFavPage = true;
-            addFragment(R.id.container, new FavoritesFragment(), true);
+            Fragment fragment;
+            switch (position) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    fragment = new FavoritesFragment();
+                    Bundle args = new Bundle();
+                    args.putBoolean(Constants.FAVORITES_KEY, true);
+                    fragment.setArguments(args);
+                    addFragment(R.id.container, fragment, true);
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    fragment = new FavoritesFragment();
+                    addFragment(R.id.container, fragment, true);
+                    break;
+                case 5:
+                    break;
+
+            }
             mDl_Navigation.closeDrawer(mLv_DrawerList);
         }
     }

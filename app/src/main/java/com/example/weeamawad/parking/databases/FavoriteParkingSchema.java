@@ -18,7 +18,7 @@ public class FavoriteParkingSchema {
     public static String getCreateTable() {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE " + TABLE_NAME + "(");
-        sb.append(LISTING_ID + " TEXT NOT NULL, ");
+        sb.append(LISTING_ID + " TEXT NOT NULL UNIQUE, ");
         sb.append(LISTING_NAME + " TEXT, ");
         sb.append(LISTING_ADDRESS + " TEXT, ");
         sb.append(LISTING_CITY + " TEXT, ");

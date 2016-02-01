@@ -20,7 +20,7 @@ public class RecentParking implements DatabaseModel {
     @Override
     public <T extends DatabaseModel> T fromCursor(Cursor cursor) {
         if (cursor != null) {
-            FavoriteParking parking = new FavoriteParking();
+            RecentParking parking = new RecentParking();
             parking.listingID = cursor.getString(cursor.getColumnIndex(RecentParkingSchema.LISTING_ID));
             parking.listingName = cursor.getString(cursor.getColumnIndex(RecentParkingSchema.LISTING_NAME));
             parking.listingAddress = cursor.getString(cursor.getColumnIndex(RecentParkingSchema.LISTING_ADDRESS));

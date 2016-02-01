@@ -75,4 +75,8 @@ public class RecentParkingProvider {
 
         return place;
     }
+
+    public void deleteAllRecents() {
+        mProvider.deleteAllData(RecentParkingSchema.TABLE_NAME);
+    }
 }

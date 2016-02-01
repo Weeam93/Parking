@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.weeamawad.parking.databases.FavoriteParkingProvider;
+import com.example.weeamawad.parking.databases.RecentParkingProvider;
+import com.example.weeamawad.parking.databases.RecentParkingSchema;
 import com.example.weeamawad.parking.model.Place;
 
 import java.util.ArrayList;
@@ -29,6 +31,32 @@ public class DatabaseUtils {
         FavoriteParkingProvider provider = new FavoriteParkingProvider(context);
         return provider.getAllFavorites();
     }
+
+    public static void deleteAllFavorites(Context context) {
+        FavoriteParkingProvider provider = new FavoriteParkingProvider(context);
+        provider.deleteAllFavorites();
+    }
+
+    public static void saveRecent(Context context, Place p) {
+        RecentParkingProvider provider = new RecentParkingProvider(context);
+        provider.addRecent(p);
+    }
+
+    public static void deleteRecent(Context context, Place p) {
+        RecentParkingProvider provider = new RecentParkingProvider(context);
+        provider.deleteRecent(p);
+    }
+
+    public static ArrayList<Place> getAllRecent(Context context) {
+        RecentParkingProvider provider = new RecentParkingProvider(context);
+        return provider.getAllRecents();
+    }
+
+    public static void deleteAllRecents(Context context) {
+        RecentParkingProvider provider = new RecentParkingProvider(context);
+        provider.deleteAllRecents();
+    }
+
 }
 
 
