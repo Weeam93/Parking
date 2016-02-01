@@ -44,7 +44,7 @@ public class NavigationAdapter extends BaseAdapter {
         View row = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.drawer_navigation, parent, false);
+            row = inflater.inflate(R.layout.row_drawer_navigation, parent, false);
         } else {
             row = convertView;
         }

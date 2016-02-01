@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="48dp"
-    android:background="@color/LightBlack"
+    android:background="@drawable/drawer_selector"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal">
 
@@ -11,21 +11,21 @@
         android:id="@+id/ib_navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:background="@null"
-        android:src="@android:drawable/ic_dialog_info"
-        android:layout_centerVertical="true" />
+        android:src="@android:drawable/ic_dialog_info" />
 
     <TextView
         android:id="@+id/tv_navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="72dp"
+        android:gravity="center"
         android:text="Sample Text"
         android:textColor="@color/white"
-        android:textSize="14sp"
-        android:gravity="center" />
+        android:textSize="14sp" />
 </RelativeLayout>
 
 

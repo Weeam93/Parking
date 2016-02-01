@@ -15,6 +15,9 @@
     <string name="search_hint">Search City</string>
     <string name="clear_favorites">Clear Favorite Places...</string>
     <string name="clear_recents">Clear Recent Places...</string>
+    <string name="menu">Menu</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
     <string-array name="navHeaders">
         <item>Home</item>
         <item>Settings</item>
