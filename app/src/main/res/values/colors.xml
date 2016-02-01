@@ -6,6 +6,9 @@
     <color name="textColorPrimary">@color/white</color>
     <color name="colorControlHighlight">@color/teal</color>
 
+    <color name="list_item_selected">@color/silver</color> <!-- papayawhip, Silver !-->
+    <color name="list_item_default">@color/primary</color>
+
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFFF00</color>
     <color name="fuchsia">#FF00FF</color>
