@@ -1,5 +1,9 @@
 package com.example.weeamawad.parking.Utility;
 
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 /**
  * Created by Weeam Awad on 1/30/2016.
  */
@@ -27,5 +31,27 @@ public class Utils {
      */
     public static <T> boolean checkIfNull(T objectToCheck) {
         return objectToCheck == null;
+    }
+
+    public static void animateInViewFromFromSide(View view, boolean isFromLeft) {
+        if (isFromLeft) {
+            Animation anim = AnimationUtils.makeInAnimation(view.getContext(), true);
+            view.startAnimation(anim);
+        } else {
+            Animation anim = AnimationUtils.makeInAnimation(view.getContext(), false);
+            view.startAnimation(anim);
+        }
+        view.setVisibility(View.VISIBLE);
+    }
+
+    public static void animateOutViewFromFromSide(View view, boolean toRight) {
+        if (toRight) {
+            Animation anim = AnimationUtils.makeOutAnimation(view.getContext(), true);
+            view.startAnimation(anim);
+        } else {
+            Animation anim = AnimationUtils.makeOutAnimation(view.getContext(), false);
+            view.startAnimation(anim);
+        }
+        view.setVisibility(View.GONE);
     }
 }

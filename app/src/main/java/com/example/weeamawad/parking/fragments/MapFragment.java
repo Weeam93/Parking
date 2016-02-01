@@ -8,7 +8,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +26,8 @@ import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
+import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
-import com.example.weeamawad.parking.adapters.NavigationAdapter;
 import com.example.weeamawad.parking.model.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
@@ -224,7 +221,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             public void onMapClick(LatLng position) {
                 // TODO Auto-generated method stub
                 map.clear();
-                outerBottomPanel.setVisibility(View.GONE);
+                if (outerBottomPanel.getVisibility() != View.GONE) {
+                    Utils.animateOutViewFromFromSide(outerBottomPanel, true);
+                }
                 Toast.makeText(mContext, Double.toString(position.latitude) + "," + Double.toString(position.longitude), Toast.LENGTH_SHORT).show();
                 findNearbyParking(position);
             }
@@ -355,7 +354,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             selectedPlace = parkingPlaces.get(index);
             DecimalFormat f = new DecimalFormat("###.#");
 
-            outerBottomPanel.setVisibility(View.VISIBLE);
+            if (outerBottomPanel.getVisibility() != View.VISIBLE) {
+                Utils.animateInViewFromFromSide(outerBottomPanel, true);
+            }
             placeName.setText(selectedPlace.getName());
             placeAddress.setText(selectedPlace.getAddress());
             placeDistance.setText(f.format(selectedPlace.getDistance()) + " miles");

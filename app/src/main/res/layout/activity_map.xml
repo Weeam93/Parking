@@ -27,22 +27,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/autoComplete"
                     android:paddingRight="5dp"
-                    android:src="@drawable/abc_ic_search_api_mtrl_alpha"
-                    android:layout_toLeftOf="@+id/autoComplete" />
+                    android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
 
                 <AutoCompleteTextView
                     android:id="@+id/autoComplete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="false"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@color/White"
                     android:ems="12"
                     android:hint="@string/search_hint"
-                    android:paddingLeft="10dp"
-                    android:layout_alignParentRight="false"
-                    android:layout_centerInParent="true" />
+                    android:paddingLeft="10dp" />
 
 
             </RelativeLayout>
@@ -72,7 +72,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-
             android:background="@color/LightBlack"
             android:orientation="horizontal"
             android:visibility="visible">
@@ -81,6 +80,7 @@
                 android:id="@+id/bottomPanel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="2"
                 android:divider="@drawable/mydivider"
                 android:dividerPadding="10dp"
@@ -91,11 +91,11 @@
                 <TextView
                     android:id="@+id/mapPlaceName"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="35dp"
                     android:padding="5dp"
                     android:text="Parking Name"
                     android:textColor="@color/White"
-                    android:textSize="25sp" />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/mapPlaceAddress"
@@ -104,7 +104,7 @@
                     android:padding="5dp"
                     android:text="2685 West Flint St. Chandler Az 85224"
                     android:textColor="@color/White"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="italic" />
 
                 <LinearLayout
@@ -121,7 +121,7 @@
                         android:padding="5dp"
                         android:text="0.8 miles"
                         android:textColor="@color/White"
-                        android:textSize="17sp"
+                        android:textSize="12sp"
                         android:textStyle="italic" />
 
                     <TextView
@@ -132,7 +132,7 @@
                         android:padding="5dp"
                         android:text="$15"
                         android:textColor="@color/White"
-                        android:textSize="17sp"
+                        android:textSize="12sp"
                         android:textStyle="italic" />
 
                     <TextView
@@ -143,7 +143,7 @@
                         android:padding="5dp"
                         android:text="10 Openings"
                         android:textColor="@color/White"
-                        android:textSize="17sp"
+                        android:textSize="12sp"
                         android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>
@@ -151,7 +151,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginRight="5dp">
 
                 <ImageButton
                     android:id="@+id/ib_favoriteOff"
