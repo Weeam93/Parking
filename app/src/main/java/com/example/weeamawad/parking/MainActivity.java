@@ -20,6 +20,7 @@ import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.adapters.NavigationAdapter;
 import com.example.weeamawad.parking.fragments.FavoritesFragment;
+import com.example.weeamawad.parking.fragments.MapFragment;
 
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -29,6 +30,7 @@ public class MainActivity extends FragmentActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mSettingTitles;
+    private int currentPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +63,9 @@ public class MainActivity extends FragmentActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-       /* if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
             selectItem(0);
-        }*/
+        }
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,32 +77,36 @@ public class MainActivity extends FragmentActivity {
     private void selectItem(int position) {
         // update the main content by replacing fragments
         Fragment fragment;
-        switch (position) {
-            case 0:
-                //fragment = new MapFragment();
-                break;
-            case 1:
-                break;
-            case 2:
-                fragment = new FavoritesFragment();
-                Bundle args = new Bundle();
-                args.putBoolean(Constants.FAVORITES_KEY, true);
-                fragment.setArguments(args);
-                replaceFragment(fragment);
-                break;
-            case 3:
-                break;
-            case 4:
-                fragment = new FavoritesFragment();
-                replaceFragment(fragment);
-                break;
-            case 5:
-                break;
+        if (position != currentPosition) {
+            switch (position) {
+                case 0:
+                    fragment = new MapFragment();
+                    replaceFragment(fragment);
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    fragment = new FavoritesFragment();
+                    Bundle args = new Bundle();
+                    args.putBoolean(Constants.FAVORITES_KEY, true);
+                    fragment.setArguments(args);
+                    replaceFragment(fragment);
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    fragment = new FavoritesFragment();
+                    replaceFragment(fragment);
+                    break;
+                case 5:
+                    break;
 
+            }
         }
         // update selected item title, then close the drawer
         setTitle(mSettingTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+        currentPosition = position;
     }
 
     @Override
@@ -250,6 +256,26 @@ package com.example.android.navigationdrawer;
  * established by the Action Bar that navigation should be to the left and actions to the right.
  * An action should be an operation performed on the current contents of the window,
  * for example enabling or disabling a data overlay on top of the current content.</p>
+ * <p/>
+ * When using the ActionBarDrawerToggle, you must call it during
+ * onPostCreate() and onConfigurationChanged()...
+ * <p/>
+ * Fragment that appears in the "content_frame", shows a planet
+ * <p/>
+ * When using the ActionBarDrawerToggle, you must call it during
+ * onPostCreate() and onConfigurationChanged()...
+ * <p/>
+ * Fragment that appears in the "content_frame", shows a planet
+ * <p/>
+ * When using the ActionBarDrawerToggle, you must call it during
+ * onPostCreate() and onConfigurationChanged()...
+ * <p/>
+ * Fragment that appears in the "content_frame", shows a planet
+ * <p/>
+ * When using the ActionBarDrawerToggle, you must call it during
+ * onPostCreate() and onConfigurationChanged()...
+ * <p/>
+ * Fragment that appears in the "content_frame", shows a planet
  * <p/>
  * When using the ActionBarDrawerToggle, you must call it during
  * onPostCreate() and onConfigurationChanged()...

@@ -1,6 +1,5 @@
 package com.example.weeamawad.parking.fragments;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,12 +8,11 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -33,7 +31,6 @@ import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.adapters.AutoCompleteAdapter;
 import com.example.weeamawad.parking.adapters.NavigationAdapter;
-import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
@@ -58,7 +55,7 @@ import com.google.maps.android.ui.IconGenerator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class MapFragment extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
+public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -68,10 +65,8 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private ArrayList<Place> parkingPlaces;
     private AutoCompleteTextView autoCompView;
     private Context mContext;
-    private Button findParkingBtn;
     private LinearLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
-    private ImageButton listBtn;
     private ImageButton favoriteBtnOff;
     private ImageButton favoriteBtnOn;
     private ImageButton navigationBtn;
@@ -82,13 +77,10 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     private TextView placeAddress;
     private TextView placePrice;
     private String placeCompleteAddress;
-    private ListView mLv_DrawerList;
-    private DrawerLayout mDl_Navigation;
-    private String[] mList;
     private ImageButton myLocationBtn;
     private Place selectedPlace;
 
-    private NavigationAdapter settingsAdapter;
+    private View mRootView;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -122,16 +114,15 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-        mContext = this;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mRootView = inflater.inflate(R.layout.activity_map, container, false);
+        mContext = getActivity();
         initMap();
         initViews();
         initListeners();
         initialize();
 
-
+        return mRootView;
 
         /*if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER) && !m.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
@@ -193,9 +184,6 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ib_listButton:
-                mDl_Navigation.openDrawer(Gravity.LEFT);
-                break;
             case R.id.ib_myLocatoinBtn:
                 updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 break;
@@ -223,7 +211,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     }
 
     private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
@@ -244,33 +232,30 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     }
 
     private void initViews() {
-        listBtn = (ImageButton) findViewById(R.id.ib_listButton);
-        myLocationBtn = (ImageButton) findViewById(R.id.ib_myLocatoinBtn);
-        outerBottomPanel = (LinearLayout) findViewById(R.id.OuterBottomPanel);
-        bottomPanel = (LinearLayout) findViewById(R.id.bottomPanel);
-        placeName = (TextView) findViewById(R.id.mapPlaceName);
-        placeAddress = (TextView) findViewById(R.id.mapPlaceAddress);
-        placeDistance = (TextView) findViewById(R.id.mapDistanceInfo);
-        placePrice = (TextView) findViewById(R.id.mapPriceInfo);
-        placeOpenings = (TextView) findViewById(R.id.mapOpeningsInfo);
-        favoriteBtnOff = (ImageButton) findViewById(R.id.ib_favoriteOff);
-        favoriteBtnOn = (ImageButton) findViewById(R.id.ib_favoriteOn);
-        navigationBtn = (ImageButton) findViewById(R.id.launchNavigationBtn1);
-        autoCompView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
+        myLocationBtn = (ImageButton) mRootView.findViewById(R.id.ib_myLocatoinBtn);
+        outerBottomPanel = (LinearLayout) mRootView.findViewById(R.id.OuterBottomPanel);
+        bottomPanel = (LinearLayout) mRootView.findViewById(R.id.bottomPanel);
+        placeName = (TextView) mRootView.findViewById(R.id.mapPlaceName);
+        placeAddress = (TextView) mRootView.findViewById(R.id.mapPlaceAddress);
+        placeDistance = (TextView) mRootView.findViewById(R.id.mapDistanceInfo);
+        placePrice = (TextView) mRootView.findViewById(R.id.mapPriceInfo);
+        placeOpenings = (TextView) mRootView.findViewById(R.id.mapOpeningsInfo);
+        favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
+        favoriteBtnOn = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOn);
+        navigationBtn = (ImageButton) mRootView.findViewById(R.id.launchNavigationBtn1);
+        autoCompView = (AutoCompleteTextView) mRootView.findViewById(R.id.autoComplete);
         autoCompView.setThreshold(1);
 
     }
 
     private void initListeners() {
         myLocationBtn.setOnClickListener(this);
-        listBtn.setOnClickListener(this);
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
         navigationBtn.setOnClickListener(this);
     }
 
     private void initialize() {
-        mContext = this;
         buildGoogleAPI();
         mGoogleApiClient.connect();
         createLocationRequest();
@@ -279,7 +264,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager in = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
 
                 ServiceUtility.geocodeService(mContext, autoCompView.getText().toString(), new GeocodeListener() {

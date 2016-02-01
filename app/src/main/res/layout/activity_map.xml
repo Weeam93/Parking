@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,48 +7,52 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-
         <LinearLayout
-            android:id="@+id/searchPanel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".01"
-            android:background="@color/LightBlack"
-            android:orientation="horizontal"
-            android:paddingBottom="15dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="15dp">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/Black"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/ib_listButton"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/searchPanel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight=".5"
-                android:background="@null"
-                android:src="@drawable/ic_tab_list_icon_selected" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight=".5"
+                android:background="@color/LightBlack"
+                android:paddingBottom="15dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
+                android:paddingTop="15dp">
 
-            <AutoCompleteTextView
-                android:id="@+id/autoComplete"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/abc_ic_search_api_mtrl_alpha"
+                    android:layout_toLeftOf="@+id/autoComplete" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoComplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/White"
+                    android:ems="12"
+                    android:hint="@string/search_hint"
+                    android:paddingLeft="10dp"
+                    android:layout_alignParentRight="false"
+                    android:layout_centerInParent="true" />
+
+
+            </RelativeLayout>
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@color/White"
-                android:ems="12"
-                android:hint="@string/search_hint"
-                android:paddingLeft="10dp" />
-
+                android:tag="map" />
 
         </LinearLayout>
 
