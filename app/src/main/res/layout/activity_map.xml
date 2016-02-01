@@ -13,40 +13,6 @@
             android:background="@color/Black"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/searchPanel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/LightBlack"
-                android:paddingBottom="15dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="15dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/autoComplete"
-                    android:paddingRight="5dp"
-                    android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoComplete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="false"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/White"
-                    android:ems="12"
-                    android:hint="@string/search_hint"
-                    android:paddingLeft="10dp" />
-
-
-            </RelativeLayout>
-
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -61,11 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="65dp"
             android:background="@color/Black"
             android:padding="5dp"
-            android:src="@drawable/ic_my_location_white_24dp" />
+            android:src="@drawable/ic_my_location_white_24dp"
+            android:layout_margin="5dp" />
 
         <LinearLayout
             android:id="@+id/OuterBottomPanel"

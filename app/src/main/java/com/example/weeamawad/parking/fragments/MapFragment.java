@@ -242,8 +242,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
         favoriteBtnOn = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOn);
         navigationBtn = (ImageButton) mRootView.findViewById(R.id.launchNavigationBtn1);
-        autoCompView = (AutoCompleteTextView) mRootView.findViewById(R.id.autoComplete);
-        autoCompView.setThreshold(1);
+       // autoCompView = (AutoCompleteTextView) mRootView.findViewById(R.id.autoComplete);
+        //autoCompView.setThreshold(1);
 
     }
 
@@ -258,7 +258,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         buildGoogleAPI();
         mGoogleApiClient.connect();
         createLocationRequest();
-        autoCompView.setAdapter(new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1));
+        /*autoCompView.setAdapter(new AutoCompleteAdapter(mContext, android.R.layout.simple_list_item_1));
         autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -278,7 +278,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                     }
                 });
             }
-        });
+        });*/
     }
 
     private void buildGoogleAPI() {

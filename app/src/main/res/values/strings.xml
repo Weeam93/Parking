@@ -12,6 +12,7 @@
     <string name="sort_Distance">Distance</string>
     <string name="sort_Price">Price</string>
     <string name="sort_Optimized">Optimized</string>
+    <string name="search">Search</string>
     <string name="search_hint">Search City</string>
     <string name="clear_favorites">Clear Favorite Places...</string>
     <string name="clear_recents">Clear Recent Places...</string>
