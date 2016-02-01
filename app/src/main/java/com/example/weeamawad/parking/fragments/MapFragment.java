@@ -223,7 +223,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
     }
 
     private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.container);
         map = mapFragment.getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
@@ -258,8 +258,7 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
         navigationBtn = (ImageButton) findViewById(R.id.launchNavigationBtn1);
         autoCompView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         autoCompView.setThreshold(1);
-        mDl_Navigation = (DrawerLayout) findViewById(R.id.dl_navigation);
-        mLv_DrawerList = (ListView) findViewById(R.id.lv_navigation);
+
     }
 
     private void initListeners() {
@@ -296,10 +295,6 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
                 });
             }
         });
-        settingsAdapter = new NavigationAdapter(this);
-        mLv_DrawerList.setAdapter(settingsAdapter);
-        mLv_DrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
     }
 
     private void buildGoogleAPI() {
@@ -385,57 +380,6 @@ public class MapFragment extends FragmentActivity implements GoogleApiClient.Con
             DatabaseUtils.saveRecent(mContext, selectedPlace);
 
             return true;
-        }
-    }
-
-    public void addFragment(int containerId, Fragment fragment, boolean addToBackStack) {
-        // Check if the fragment has been added already. If so, then
-        // don't add the fragment.
-        Fragment temp = getSupportFragmentManager().findFragmentByTag(fragment.getClass().getName());
-        if (temp != null && temp.isAdded()) {
-            return;
-        }
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        ft.add(containerId, fragment, fragment.getClass().getName());
-        if (addToBackStack) {
-            ft.addToBackStack(null);
-        }
-        ft.commit();
-    }
-
-    private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
-
-        private void selectItem(int position) {
-            mLv_DrawerList.setItemChecked(position, true);
-            Fragment fragment;
-            switch (position) {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    fragment = new FavoritesFragment();
-                    Bundle args = new Bundle();
-                    args.putBoolean(Constants.FAVORITES_KEY, true);
-                    fragment.setArguments(args);
-                    addFragment(R.id.container, fragment, true);
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    fragment = new FavoritesFragment();
-                    addFragment(R.id.container, fragment, true);
-                    break;
-                case 5:
-                    break;
-
-            }
-            mDl_Navigation.closeDrawer(mLv_DrawerList);
         }
     }
 }

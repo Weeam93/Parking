@@ -20,5 +20,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:gravity="center"
+        android:textColor="@color/black"
         android:text="@string/clear_favorites" />
 </RelativeLayout>

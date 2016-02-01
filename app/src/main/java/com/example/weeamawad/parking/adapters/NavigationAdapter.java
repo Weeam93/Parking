@@ -18,9 +18,9 @@ public class NavigationAdapter extends BaseAdapter {
     String[] navHeaders = null;
     int[] navImages = {R.drawable.ic_home_white_24dp, R.drawable.ic_setting_dark, R.drawable.ic_bookmark_white_24dp, R.drawable.ic_directions_car_white_24dp, R.drawable.ic_history_white_24dp, R.drawable.ic_info_outline_white_24dp};
 
-    public NavigationAdapter(Context context) {
+    public NavigationAdapter(Context context, String[] settingTitles) {
         mContext = context;
-        navHeaders = mContext.getResources().getStringArray(R.array.navHeaders);
+        navHeaders = settingTitles;
     }
 
     @Override
