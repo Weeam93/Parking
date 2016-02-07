@@ -1,7 +1,6 @@
 package com.example.weeamawad.parking.Utility;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -14,8 +13,7 @@ import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
-import com.example.weeamawad.parking.model.Place;
-import com.example.weeamawad.parking.model.TextPrediction;
+import com.example.weeamawad.parking.entities.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -148,29 +146,6 @@ public class ServiceUtility {
         });
         VolleyRequestQueue.getInstance(context.getApplicationContext()).addToRequestQueue(jsonRequest);
 
-    }
-
-    /*public static ArrayList<String> getAutoComplete(String query) {
-        TextPrediction textPrediction = new TextPrediction(query);
-        return textPrediction.getPredictions();
-    }*/
-
-    private class getTextPredictions extends AsyncTask<Void, Void, ArrayList<String>> {
-        TextPrediction predictions;
-        ArrayList<String> results;
-
-        public getTextPredictions(String input) {
-            predictions = new TextPrediction(input);
-        }
-
-        @Override
-        protected ArrayList<String> doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            results = new ArrayList<String>();
-            results = predictions.getPredictions();
-            //System.out.println(results.get(0));
-            return results;
-        }
     }
 
     private static AutoCompleteSuggestion convertTOSuggestion(String address) {

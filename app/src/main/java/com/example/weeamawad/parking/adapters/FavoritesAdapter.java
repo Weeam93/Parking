@@ -2,7 +2,6 @@ package com.example.weeamawad.parking.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**

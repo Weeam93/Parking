@@ -1,6 +1,6 @@
 package com.example.weeamawad.parking.Listeners;
 
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 
 import java.util.ArrayList;
 

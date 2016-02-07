@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

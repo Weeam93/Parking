@@ -1,12 +1,10 @@
 package com.example.weeamawad.parking.Utility;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.example.weeamawad.parking.databases.FavoriteParkingProvider;
 import com.example.weeamawad.parking.databases.RecentParkingProvider;
-import com.example.weeamawad.parking.databases.RecentParkingSchema;
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 
 import java.util.ArrayList;
 

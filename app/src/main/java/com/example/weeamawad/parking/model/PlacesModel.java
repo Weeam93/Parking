@@ -1,5 +1,7 @@
 package com.example.weeamawad.parking.model;
 
+import com.example.weeamawad.parking.entities.Place;
+
 import java.util.ArrayList;
 
 /**

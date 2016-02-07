@@ -13,12 +13,12 @@ import com.example.weeamawad.parking.R;
 /**
  * Created by Weeam Awad on 8/31/2015.
  */
-public class NavigationAdapter extends BaseAdapter {
+public class NavigationDrawerAdapter extends BaseAdapter {
     private Context mContext;
     String[] navHeaders = null;
     int[] navImages = {R.drawable.ic_home_white_24dp, R.drawable.ic_setting_dark, R.drawable.ic_bookmark_white_24dp, R.drawable.ic_directions_car_white_24dp, R.drawable.ic_history_white_24dp, R.drawable.ic_info_outline_white_24dp};
 
-    public NavigationAdapter(Context context, String[] settingTitles) {
+    public NavigationDrawerAdapter(Context context, String[] settingTitles) {
         mContext = context;
         navHeaders = settingTitles;
     }

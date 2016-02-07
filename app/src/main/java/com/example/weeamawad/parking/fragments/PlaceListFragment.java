@@ -15,7 +15,7 @@ import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.adapters.NearyByPlacesAdapter;
 import com.example.weeamawad.parking.model.AppSettingsModel;
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 import com.example.weeamawad.parking.model.PlacesModel;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.weeamawad.parking.model;
+package com.example.weeamawad.parking.entities;
 
 import android.graphics.Bitmap;
 

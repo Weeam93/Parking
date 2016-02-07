@@ -14,7 +14,7 @@ import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.adapters.FavoritesAdapter;
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 
 import java.util.ArrayList;
 

@@ -3,7 +3,7 @@ package com.example.weeamawad.parking.databases;
 import android.content.Context;
 
 import com.example.weeamawad.parking.Utility.Utils;
-import com.example.weeamawad.parking.model.Place;
+import com.example.weeamawad.parking.entities.Place;
 
 import java.util.ArrayList;
 import java.util.List;

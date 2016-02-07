@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -23,14 +22,14 @@ import android.widget.ListView;
 
 import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
-import com.example.weeamawad.parking.adapters.NavigationAdapter;
+import com.example.weeamawad.parking.adapters.NavigationDrawerAdapter;
 import com.example.weeamawad.parking.fragments.FavoritesFragment;
 import com.example.weeamawad.parking.fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private NavigationAdapter settingsAdapter;
+    private NavigationDrawerAdapter settingsAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_navigation);
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.ll_drawer);
         mDrawerList = (ListView) findViewById(R.id.lv_navigation);
-        settingsAdapter = new NavigationAdapter(this, mSettingTitles);
+        settingsAdapter = new NavigationDrawerAdapter(this, mSettingTitles);
         mDrawerList.setAdapter(settingsAdapter);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
