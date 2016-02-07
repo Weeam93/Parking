@@ -8,10 +8,17 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 /**
  * Created by Weeam Awad on 2/1/2016.
  */
-public class AutocompleteSuggestionfadf implements SearchSuggestion {
+public class AutoCompleteSuggestion implements SearchSuggestion {
+
+    private String mAddress;
+
+    public AutoCompleteSuggestion(String address) {
+        mAddress = address;
+    }
+
     @Override
     public String getBody() {
-        return null;
+        return mAddress;
     }
 
     @Override
@@ -26,6 +33,6 @@ public class AutocompleteSuggestionfadf implements SearchSuggestion {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(mAddress);
     }
 }
