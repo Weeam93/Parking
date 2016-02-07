@@ -8,7 +8,7 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 /**
  * Created by Weeam Awad on 2/1/2016.
  */
-public class AutocompleteSuggestion implements SearchSuggestion {
+public class AutocompleteSuggestionfadf implements SearchSuggestion {
     @Override
     public String getBody() {
         return null;
