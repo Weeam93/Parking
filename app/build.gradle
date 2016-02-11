@@ -7,6 +7,9 @@ buildscript {
 android {
     compileSdkVersion 23
     buildToolsVersion "22.0.1"
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         applicationId "com.example.weeamawad.parking"

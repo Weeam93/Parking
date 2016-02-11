@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.weeamawad.parking.databases.FavoriteParkingProvider;
 import com.example.weeamawad.parking.databases.RecentParkingProvider;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 
 import java.util.ArrayList;
 
@@ -15,17 +15,17 @@ public class DatabaseUtils {
     private static DatabaseUtils instance;
     private Context mContext;
 
-    public static void saveFavorite(Context context, Place p) {
+    public static void saveFavorite(Context context, GarageViewModel p) {
         FavoriteParkingProvider provider = new FavoriteParkingProvider(context);
         provider.addFavorite(p);
     }
 
-    public static void deleteFavorite(Context context, Place p) {
+    public static void deleteFavorite(Context context, GarageViewModel p) {
         FavoriteParkingProvider provider = new FavoriteParkingProvider(context);
         provider.deleteFavorite(p);
     }
 
-    public static ArrayList<Place> getAllFavorites(Context context) {
+    public static ArrayList<GarageViewModel> getAllFavorites(Context context) {
         FavoriteParkingProvider provider = new FavoriteParkingProvider(context);
         return provider.getAllFavorites();
     }
@@ -35,17 +35,22 @@ public class DatabaseUtils {
         provider.deleteAllFavorites();
     }
 
-    public static void saveRecent(Context context, Place p) {
+    public static boolean isFavorite(Context context, String listingID) {
+        FavoriteParkingProvider provider = new FavoriteParkingProvider(context);
+        return provider.checkIfFavorite(listingID);
+    }
+
+    public static void saveRecent(Context context, GarageViewModel p) {
         RecentParkingProvider provider = new RecentParkingProvider(context);
         provider.addRecent(p);
     }
 
-    public static void deleteRecent(Context context, Place p) {
+    public static void deleteRecent(Context context, GarageViewModel p) {
         RecentParkingProvider provider = new RecentParkingProvider(context);
         provider.deleteRecent(p);
     }
 
-    public static ArrayList<Place> getAllRecent(Context context) {
+    public static ArrayList<GarageViewModel> getAllRecent(Context context) {
         RecentParkingProvider provider = new RecentParkingProvider(context);
         return provider.getAllRecents();
     }

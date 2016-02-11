@@ -2,6 +2,7 @@ package com.example.weeamawad.parking.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
@@ -13,10 +14,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -32,8 +31,9 @@ import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.Utility.Utils;
+import com.example.weeamawad.parking.databinding.MapFragmentBinding;
 import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -66,26 +66,21 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private LocationRequest mLocationRequest;
     private LatLng myCoordinates;
     private Circle vision;
-    private ArrayList<Place> parkingPlaces;
+    private ArrayList<GarageViewModel> parkingGarageViewModels;
     private Context mContext;
-    private LinearLayout outerBottomPanel;
+    private RelativeLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
     private ImageButton favoriteBtnOff;
     private ImageButton favoriteBtnOn;
     private ImageButton navigationBtn;
-    private LinearLayout bottomPanel;
-    private TextView placeName;
-    private TextView placeOpenings;
-    private TextView placeDistance;
-    private TextView placeAddress;
-    private TextView placePrice;
     private String placeCompleteAddress;
     private ImageButton myLocationBtn;
-    private Place selectedPlace;
+    private GarageViewModel selectedGarageViewModel;
     private boolean isGpsClicked;
 
     private View mRootView;
     private FloatingSearchView mSearchView;
+    private MapFragmentBinding mBinding;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -120,7 +115,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.activity_map, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.map_fragment, container, false);
+        mRootView = mBinding.getRoot();
         mContext = getActivity();
         initMap();
         initViews();
@@ -192,15 +188,13 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 break;
             case R.id.ib_favoriteOff:
                 Log.i(TAG, "Favorite Off Clicked");
-                favoriteBtnOff.setVisibility(View.GONE);
-                favoriteBtnOn.setVisibility(View.VISIBLE);
-                DatabaseUtils.saveFavorite(mContext, selectedPlace);
+                selectedGarageViewModel.setIsFavorite(true);
+                DatabaseUtils.saveFavorite(mContext, selectedGarageViewModel);
                 break;
             case R.id.ib_favoriteOn:
                 Log.i(TAG, "Favorite On Clicked");
-                favoriteBtnOn.setVisibility(View.GONE);
-                favoriteBtnOff.setVisibility(View.VISIBLE);
-                DatabaseUtils.deleteFavorite(mContext, selectedPlace);
+                selectedGarageViewModel.setIsFavorite(false);
+                DatabaseUtils.deleteFavorite(mContext, selectedGarageViewModel);
                 break;
             case R.id.launchNavigationBtn1:
                 String uri = Constants.OPEN_GOOGLE_MAPS + placeCompleteAddress;
@@ -237,13 +231,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private void initViews() {
 
         mSearchView = (FloatingSearchView) mRootView.findViewById(R.id.floating_search_view);
-        outerBottomPanel = (LinearLayout) mRootView.findViewById(R.id.OuterBottomPanel);
-        bottomPanel = (LinearLayout) mRootView.findViewById(R.id.bottomPanel);
-        placeName = (TextView) mRootView.findViewById(R.id.mapPlaceName);
-        placeAddress = (TextView) mRootView.findViewById(R.id.mapPlaceAddress);
-        placeDistance = (TextView) mRootView.findViewById(R.id.mapDistanceInfo);
-        placePrice = (TextView) mRootView.findViewById(R.id.mapPriceInfo);
-        placeOpenings = (TextView) mRootView.findViewById(R.id.mapOpeningsInfo);
+        outerBottomPanel = (RelativeLayout) mRootView.findViewById(R.id.OuterBottomPanel);
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
         favoriteBtnOn = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOn);
         navigationBtn = (ImageButton) mRootView.findViewById(R.id.launchNavigationBtn1);
@@ -358,8 +346,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private void findNearbyParking(final LatLng position) {
         ServiceUtility.parkingServiceSearch(mContext, position, new ParkingListener() {
             @Override
-            public void onSuccess(final ArrayList<Place> parkingLocations) {
-                parkingPlaces = parkingLocations;
+            public void onSuccess(final ArrayList<GarageViewModel> parkingLocations) {
+                parkingGarageViewModels = parkingLocations;
                 map.addMarker(new MarkerOptions()
                         .position(position)
                         .snippet(Constants.CENTER_LOCATION));
@@ -374,7 +362,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                         PlacesModel.setParkingPlaces(parkingLocations);
                         try {
                             for (int i = 0; i < parkingLocations.size(); i++) {
-                                Place temp = parkingLocations.get(i);
+                                GarageViewModel temp = parkingLocations.get(i);
                                 Bitmap bmp = iconGenerator.makeIcon("$" + Integer.toString(temp.getPrice()));
                                 map.addMarker(new MarkerOptions()
                                         .title(temp.getName()) //name
@@ -416,19 +404,15 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             return false;
         } else {
             int index = Integer.parseInt(m.getSnippet());
-            selectedPlace = parkingPlaces.get(index);
-            DecimalFormat f = new DecimalFormat("###.#");
+            selectedGarageViewModel = parkingGarageViewModels.get(index);
+            mBinding.setGarage(selectedGarageViewModel);
+            selectedGarageViewModel.setIsFavorite(DatabaseUtils.isFavorite(mContext, selectedGarageViewModel.getListingID()));
+            placeCompleteAddress = selectedGarageViewModel.getCompleteAddress().replace(" ", "+");
 
             if (outerBottomPanel.getVisibility() != View.VISIBLE) {
                 Utils.animateInViewFromFromSide(outerBottomPanel, true);
             }
-            placeName.setText(selectedPlace.getName());
-            placeAddress.setText(selectedPlace.getAddress());
-            placeDistance.setText(f.format(selectedPlace.getDistance()) + " miles");
-            placePrice.setText("$" + selectedPlace.getPrice());
-            placeOpenings.setText(selectedPlace.getFreeSpots() + " Opening");
-            placeCompleteAddress = selectedPlace.getCompleteAddress().replace(" ", "+");
-            DatabaseUtils.saveRecent(mContext, selectedPlace);
+            DatabaseUtils.saveRecent(mContext, selectedGarageViewModel);
 
             return true;
         }

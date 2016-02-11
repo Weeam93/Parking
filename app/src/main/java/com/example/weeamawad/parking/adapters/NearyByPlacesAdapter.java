@@ -10,22 +10,22 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class NearyByPlacesAdapter extends ArrayAdapter<Place> {
+public class NearyByPlacesAdapter extends ArrayAdapter<GarageViewModel> {
     Context context;
     int layoutResourceID;
-    ArrayList<Place> parkingPlaces = null;
+    ArrayList<GarageViewModel> parkingGarageViewModels = null;
 
-    public NearyByPlacesAdapter(Context context, int layoutResourceId, ArrayList<Place> parkingPlaces) {
-        super(context, layoutResourceId, parkingPlaces);
+    public NearyByPlacesAdapter(Context context, int layoutResourceId, ArrayList<GarageViewModel> parkingGarageViewModels) {
+        super(context, layoutResourceId, parkingGarageViewModels);
         // TODO Auto-generated constructor stub
         this.context = context;
         this.layoutResourceID = layoutResourceId;
-        this.parkingPlaces = parkingPlaces;
+        this.parkingGarageViewModels = parkingGarageViewModels;
     }
 
     static class ViewHolder {
@@ -55,11 +55,11 @@ public class NearyByPlacesAdapter extends ArrayAdapter<Place> {
         }
         DecimalFormat df = new DecimalFormat("###.#");
 
-        String n = parkingPlaces.get(position).getName();
-        String a = parkingPlaces.get(position).getCompleteAddress();
-        String d = (df.format(parkingPlaces.get(position).getDistance()));
-        String p = Integer.toString(parkingPlaces.get(position).getPrice());
-        String s = Integer.toString(parkingPlaces.get(position).getFreeSpots());
+        String n = parkingGarageViewModels.get(position).getName();
+        String a = parkingGarageViewModels.get(position).getCompleteAddress();
+        String d = (df.format(parkingGarageViewModels.get(position).getDistance()));
+        String p = Integer.toString(parkingGarageViewModels.get(position).getPrice());
+        String s = Integer.toString(parkingGarageViewModels.get(position).getAvailibleSpots());
 
 
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Rounds Black.otf");

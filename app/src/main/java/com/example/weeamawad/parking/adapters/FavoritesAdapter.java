@@ -1,65 +1,42 @@
 package com.example.weeamawad.parking.adapters;
 
-import android.app.Activity;
-import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.databinding.RowFavoritesBinding;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 
 import java.util.ArrayList;
 
 /**
  * Created by Weeam Awad on 1/30/2016.
  */
-public class FavoritesAdapter extends ArrayAdapter<Place> {
-    Context context;
-    int layoutResourceID;
-    ArrayList<Place> parkingPlaces = null;
+public class FavoritesAdapter extends RecyclerView.Adapter<GarageViewHolder> {
 
-    public FavoritesAdapter(Context context, int layoutResourceId, ArrayList<Place> parkingPlaces) {
-        super(context, layoutResourceId, parkingPlaces);
+    ArrayList<GarageViewModel> items = null;
+
+    public FavoritesAdapter(ArrayList<GarageViewModel> items) {
+        super();
         // TODO Auto-generated constructor stub
-        this.context = context;
-        this.layoutResourceID = layoutResourceId;
-        this.parkingPlaces = parkingPlaces;
-    }
-
-    static class ViewHolder {
-        TextView name;
-        TextView address;
-        TextView price;
+        this.items = items;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        if (convertView == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            convertView = inflater.inflate(layoutResourceID, parent, false);
+    public GarageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RowFavoritesBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_favorites, parent, false);
+        return new GarageViewHolder(binding);
+    }
 
-            holder = new ViewHolder();
-            holder.name = (TextView) convertView.findViewById(R.id.tv_favName);
-            holder.address = (TextView) convertView.findViewById(R.id.tv_favAddress);
-            holder.price = (TextView) convertView.findViewById(R.id.tv_favPrice);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+    @Override
+    public void onBindViewHolder(GarageViewHolder holder, int position) {
+        holder.onBindConnection(items.get(position));
+    }
 
-        String n = parkingPlaces.get(position).getName();
-        String a = parkingPlaces.get(position).getCompleteAddress();
-        String p = Integer.toString(parkingPlaces.get(position).getPrice());
-
-        holder.name.setText(n);
-        holder.address.setText(a);
-        holder.price.setText("$" + p);
-
-        return convertView;
-
+    @Override
+    public int getItemCount() {
+        return items.size();
     }
 }

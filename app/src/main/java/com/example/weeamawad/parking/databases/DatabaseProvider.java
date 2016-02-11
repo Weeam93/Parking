@@ -99,6 +99,23 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
     }
 
     /**
+     * Method is used to delete a data item
+     *
+     * @return zero if database is not open
+     */
+    public boolean itemExists(String queryf) {
+        mDatabase = getWritableDatabase();
+        Cursor c = mDatabase.rawQuery(queryf, null);
+        if (c.getCount() == 0) {
+            c.close();
+            return false;
+        } else {
+            c.close();
+            return true;
+        }
+    }
+
+    /**
      * Method is used to retrieve a row of data
      *
      * @param cls

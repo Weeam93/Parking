@@ -3,10 +3,11 @@ package com.example.weeamawad.parking.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
@@ -14,7 +15,7 @@ import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.adapters.FavoritesAdapter;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 
 import java.util.ArrayList;
 
@@ -26,9 +27,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
 
     private View mRootView;
     private Context mContext;
-    private ArrayList<Place> parkingPlaces;
+    private ArrayList<GarageViewModel> parkingGarageViewModels;
     private FavoritesAdapter adapter;
-    private ListView list;
+    private RecyclerView rvFavorites;
     private TextView clearData;
     private boolean isFavorites;
 
@@ -57,7 +58,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
                 } else {
                     DatabaseUtils.deleteAllRecents(mContext);
                 }
-                parkingPlaces.clear();
+                parkingGarageViewModels.clear();
                 adapter.notifyDataSetChanged();
                 break;
         }
@@ -65,10 +66,11 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
 
     private void initViews() {
 
-        list = (ListView) mRootView.findViewById(R.id.lv_favorites);
+        rvFavorites = (RecyclerView) mRootView.findViewById(R.id.lv_favorites);
         clearData = (TextView) mRootView.findViewById(R.id.tv_clear_data);
-        adapter = new FavoritesAdapter(mContext, R.layout.row_favorites, parkingPlaces);
-        list.setAdapter(adapter);
+        adapter = new FavoritesAdapter(parkingGarageViewModels);
+        rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvFavorites.setAdapter(adapter);
         if (isFavorites) {
             clearData.setText(getResources().getString(R.string.clear_favorites));
         } else {
@@ -87,9 +89,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
             isFavorites = getArguments().getBoolean(Constants.FAVORITES_KEY);
         }
         if (isFavorites) {
-            parkingPlaces = DatabaseUtils.getAllFavorites(mContext);
+            parkingGarageViewModels = DatabaseUtils.getAllFavorites(mContext);
         } else {
-            parkingPlaces = DatabaseUtils.getAllRecent(mContext);
+            parkingGarageViewModels = DatabaseUtils.getAllRecent(mContext);
         }
     }
 }

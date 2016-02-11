@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.weeamawad.parking.Utility.Constants;
+import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.adapters.NavigationDrawerAdapter;
 import com.example.weeamawad.parking.fragments.FavoritesFragment;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] mSettingTitles;
     private int currentPosition = -1;
     private LinearLayout mDrawerLinearLayout;
+    private MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,15 +110,18 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 2:
                     fragment = new FavoritesFragment();
-                    Bundle args = new Bundle();
-                    args.putBoolean(Constants.FAVORITES_KEY, true);
-                    fragment.setArguments(args);
+                    Bundle favArgs = new Bundle();
+                    favArgs.putBoolean(Constants.FAVORITES_KEY, true);
+                    fragment.setArguments(favArgs);
                     replaceFragment(fragment);
                     break;
                 case 3:
                     break;
                 case 4:
                     fragment = new FavoritesFragment();
+                    Bundle recentArgs = new Bundle();
+                    recentArgs.putBoolean(Constants.FAVORITES_KEY, false);
+                    fragment.setArguments(recentArgs);
                     replaceFragment(fragment);
                     break;
                 case 5:
@@ -129,14 +134,14 @@ public class MainActivity extends AppCompatActivity {
         currentPosition = position;
         mDrawerList.setItemChecked(position, true);
         mDrawerList.setSelection(position);
-        // mDrawerLayout.closeDrawer(mDrawerLinearLayout);
+        mDrawerLayout.closeDrawer(mDrawerLinearLayout);
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-       // getMenuInflater().inflate(R.menu.menu_items, menu);
+        // getMenuInflater().inflate(R.menu.menu_items, menu);
         return true;
     }
 

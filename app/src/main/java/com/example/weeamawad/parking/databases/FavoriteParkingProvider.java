@@ -1,9 +1,10 @@
 package com.example.weeamawad.parking.databases;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import com.example.weeamawad.parking.Utility.Utils;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,36 +22,36 @@ public class FavoriteParkingProvider {
         mProvider = DatabaseProvider.getInstance(mContext);
     }
 
-    public void addFavorite(Place place) {
-        if (!Utils.isStringEmpty(place.getListingID())) {
+    public void addFavorite(GarageViewModel garageViewModel) {
+        if (!Utils.isStringEmpty(garageViewModel.getListingID())) {
             FavoriteParking favorite = new FavoriteParking();
-            favorite.listingID = place.getListingID();
-            favorite.listingName = place.getName();
-            favorite.listingAddress = place.getAddress();
-            favorite.listingCity = place.getCity();
-            favorite.listingState = place.getState();
-            favorite.listingZip = place.getZip();
-            favorite.latitude = Double.toString(place.getLatitude());
-            favorite.longitude = Double.toString(place.getLongitude());
-            favorite.price = Integer.toString(place.getPrice());
+            favorite.listingID = garageViewModel.getListingID();
+            favorite.listingName = garageViewModel.getName();
+            favorite.listingAddress = garageViewModel.getAddress();
+            favorite.listingCity = garageViewModel.getCity();
+            favorite.listingState = garageViewModel.getState();
+            favorite.listingZip = garageViewModel.getZip();
+            favorite.latitude = Double.toString(garageViewModel.getLatitude());
+            favorite.longitude = Double.toString(garageViewModel.getLongitude());
+            favorite.price = Integer.toString(garageViewModel.getPrice());
             mProvider.create(favorite);
         }
     }
 
-    public void deleteFavorite(Place place) {
+    public void deleteFavorite(GarageViewModel garageViewModel) {
         mProvider.delete(FavoriteParkingSchema.TABLE_NAME, FavoriteParkingSchema.LISTING_ID + " = ?",
-                new String[]{place.getListingID()});
+                new String[]{garageViewModel.getListingID()});
     }
 
-    public ArrayList<Place> getAllFavorites() {
+    public ArrayList<GarageViewModel> getAllFavorites() {
         try {
             List<FavoriteParking> favoriteList = mProvider.getAll(FavoriteParking.class);
             if (!Utils.checkIfNull(favoriteList)) {
-                ArrayList<Place> places = new ArrayList<>();
+                ArrayList<GarageViewModel> garageViewModels = new ArrayList<>();
                 for (FavoriteParking fp : favoriteList) {
-                    places.add(favToPlace(fp));
+                    garageViewModels.add(favToPlace(fp));
                 }
-                return places;
+                return garageViewModels;
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -60,24 +61,29 @@ public class FavoriteParkingProvider {
         return null;
     }
 
+    public boolean checkIfFavorite(String listingID) {
+        String queryf = "select * from " + FavoriteParkingSchema.TABLE_NAME + " where " + FavoriteParkingSchema.LISTING_ID + "='" + listingID + "'";
+        return mProvider.itemExists(queryf);
+    }
+
     public void deleteAllFavorites() {
         mProvider.deleteAllData(FavoriteParkingSchema.TABLE_NAME);
     }
 
-    private Place favToPlace(FavoriteParking fav) {
-        Place place = new Place();
-        place.setListingID(fav.listingID);
-        place.setName(fav.listingName);
-        place.setAddress(fav.listingAddress);
-        place.setCity(fav.listingCity);
-        place.setState(fav.listingState);
-        place.setZip(fav.listingZip);
-        place.setLatitude(Double.parseDouble(fav.latitude));
-        place.setLongitude(Double.parseDouble(fav.longitude));
-        place.setPrice(Double.parseDouble(fav.price));
-        place.formatCompleteAddress();
+    private GarageViewModel favToPlace(FavoriteParking fav) {
+        GarageViewModel garageViewModel = new GarageViewModel();
+        garageViewModel.setListingID(fav.listingID);
+        garageViewModel.setName(fav.listingName);
+        garageViewModel.setAddress(fav.listingAddress);
+        garageViewModel.setCity(fav.listingCity);
+        garageViewModel.setState(fav.listingState);
+        garageViewModel.setZip(fav.listingZip);
+        garageViewModel.setLatitude(Double.parseDouble(fav.latitude));
+        garageViewModel.setLongitude(Double.parseDouble(fav.longitude));
+        garageViewModel.setPrice(Integer.parseInt(fav.price));
+        garageViewModel.formatCompleteAddress();
 
-        return place;
+        return garageViewModel;
     }
 
 }

@@ -3,7 +3,7 @@ package com.example.weeamawad.parking.databases;
 import android.content.Context;
 
 import com.example.weeamawad.parking.Utility.Utils;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,36 +21,36 @@ public class RecentParkingProvider {
         mProvider = DatabaseProvider.getInstance(mContext);
     }
 
-    public void addRecent(Place place) {
-        if (!Utils.isStringEmpty(place.getListingID())) {
+    public void addRecent(GarageViewModel garageViewModel) {
+        if (!Utils.isStringEmpty(garageViewModel.getListingID())) {
             RecentParking recentParking = new RecentParking();
-            recentParking.listingID = place.getListingID();
-            recentParking.listingName = place.getName();
-            recentParking.listingAddress = place.getAddress();
-            recentParking.listingCity = place.getCity();
-            recentParking.listingState = place.getState();
-            recentParking.listingZip = place.getZip();
-            recentParking.latitude = Double.toString(place.getLatitude());
-            recentParking.longitude = Double.toString(place.getLongitude());
-            recentParking.price = Integer.toString(place.getPrice());
+            recentParking.listingID = garageViewModel.getListingID();
+            recentParking.listingName = garageViewModel.getName();
+            recentParking.listingAddress = garageViewModel.getAddress();
+            recentParking.listingCity = garageViewModel.getCity();
+            recentParking.listingState = garageViewModel.getState();
+            recentParking.listingZip = garageViewModel.getZip();
+            recentParking.latitude = Double.toString(garageViewModel.getLatitude());
+            recentParking.longitude = Double.toString(garageViewModel.getLongitude());
+            recentParking.price = Integer.toString(garageViewModel.getPrice());
             mProvider.create(recentParking);
         }
     }
 
-    public void deleteRecent(Place place) {
+    public void deleteRecent(GarageViewModel garageViewModel) {
         mProvider.delete(RecentParkingSchema.TABLE_NAME, RecentParkingSchema.LISTING_ID + " = ?",
-                new String[]{place.getListingID()});
+                new String[]{garageViewModel.getListingID()});
     }
 
-    public ArrayList<Place> getAllRecents() {
+    public ArrayList<GarageViewModel> getAllRecents() {
         try {
             List<RecentParking> recentParkingList = mProvider.getAll(RecentParking.class);
             if (!Utils.checkIfNull(recentParkingList)) {
-                ArrayList<Place> places = new ArrayList<>();
+                ArrayList<GarageViewModel> garageViewModels = new ArrayList<>();
                 for (RecentParking recent : recentParkingList) {
-                    places.add(recentToPlace(recent));
+                    garageViewModels.add(recentToPlace(recent));
                 }
-                return places;
+                return garageViewModels;
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -60,20 +60,20 @@ public class RecentParkingProvider {
         return null;
     }
 
-    private Place recentToPlace(RecentParking recent) {
-        Place place = new Place();
-        place.setListingID(recent.listingID);
-        place.setName(recent.listingName);
-        place.setAddress(recent.listingAddress);
-        place.setCity(recent.listingCity);
-        place.setState(recent.listingState);
-        place.setZip(recent.listingZip);
-        place.setLatitude(Double.parseDouble(recent.latitude));
-        place.setLongitude(Double.parseDouble(recent.longitude));
-        place.setPrice(Double.parseDouble(recent.price));
-        place.formatCompleteAddress();
+    private GarageViewModel recentToPlace(RecentParking recent) {
+        GarageViewModel garageViewModel = new GarageViewModel();
+        garageViewModel.setListingID(recent.listingID);
+        garageViewModel.setName(recent.listingName);
+        garageViewModel.setAddress(recent.listingAddress);
+        garageViewModel.setCity(recent.listingCity);
+        garageViewModel.setState(recent.listingState);
+        garageViewModel.setZip(recent.listingZip);
+        garageViewModel.setLatitude(Double.parseDouble(recent.latitude));
+        garageViewModel.setLongitude(Double.parseDouble(recent.longitude));
+        garageViewModel.setPrice(Integer.parseInt(recent.price));
+        garageViewModel.formatCompleteAddress();
 
-        return place;
+        return garageViewModel;
     }
 
     public void deleteAllRecents() {

@@ -15,7 +15,7 @@ import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.adapters.NearyByPlacesAdapter;
 import com.example.weeamawad.parking.model.AppSettingsModel;
-import com.example.weeamawad.parking.entities.Place;
+import com.example.weeamawad.parking.entities.GarageViewModel;
 import com.example.weeamawad.parking.model.PlacesModel;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Comparator;
 public class PlaceListFragment extends Fragment implements View.OnClickListener {
 
     private ListView list;
-    private ArrayList<Place> parkingPlaces;
+    private ArrayList<GarageViewModel> parkingGarageViewModels;
     private Button distanceBtn;
     private Button priceBtn;
     private NearyByPlacesAdapter adapter;
@@ -39,7 +39,7 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.place_list, container, false);
-        mContext=getActivity();
+        mContext = getActivity();
         initData();
         initViews();
         initListeners();
@@ -62,10 +62,10 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
             case R.id.distanceBtn:
                 distanceBtn.setTextColor(btnSelectedTxtColor);
                 priceBtn.setTextColor(btnDefualtTxtColor);
-                Collections.sort(parkingPlaces, new Comparator<Place>() {
+                Collections.sort(parkingGarageViewModels, new Comparator<GarageViewModel>() {
 
                     @Override
-                    public int compare(Place p1, Place p2) {
+                    public int compare(GarageViewModel p1, GarageViewModel p2) {
                         if (p1.getDistance() < p2.getDistance()) {
                             return -1;
                         } else if (p1.getDistance() > p2.getDistance()) {
@@ -81,10 +81,10 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
             case R.id.priceBtn:
                 distanceBtn.setTextColor(btnDefualtTxtColor);
                 priceBtn.setTextColor(btnSelectedTxtColor);
-                Collections.sort(parkingPlaces, new Comparator<Place>() {
+                Collections.sort(parkingGarageViewModels, new Comparator<GarageViewModel>() {
 
                     @Override
-                    public int compare(Place p1, Place p2) {
+                    public int compare(GarageViewModel p1, GarageViewModel p2) {
                         return (p1.getPrice() - p2.getPrice());
                     }
 
@@ -100,7 +100,7 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
         distanceBtn = (Button) mRootView.findViewById(R.id.distanceBtn);
         priceBtn = (Button) mRootView.findViewById(R.id.priceBtn);
         mapBtn = (ImageButton) mRootView.findViewById(R.id.ib_mapButton);
-        adapter = new NearyByPlacesAdapter(mContext, R.layout.custom_place_view, parkingPlaces);
+        adapter = new NearyByPlacesAdapter(mContext, R.layout.custom_place_view, parkingGarageViewModels);
         list.setAdapter(adapter);
 
     }
@@ -114,10 +114,10 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
     private void initData() {
         mContext = getActivity();
         if (AppSettingsModel.isFavPage) {
-            parkingPlaces = DatabaseUtils.getAllFavorites(mContext);
+            parkingGarageViewModels = DatabaseUtils.getAllFavorites(mContext);
 
         } else {
-            parkingPlaces = PlacesModel.getParkingPlaces();
+            parkingGarageViewModels = PlacesModel.getParkingPlaces();
 
         }
         btnSelectedTxtColor = getResources().getColor(R.color.aqua);
