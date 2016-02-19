@@ -98,9 +98,9 @@
                             android:layout_height="35dp"
                             android:layout_weight="1"
                             android:padding="5dp"
-                            android:text="@{String.valueOf(garage.distance)}"
+                            android:text='@{String.valueOf(garage.distance)+" Miles"}'
                             android:textColor="@color/White"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textStyle="italic" />
 
                         <TextView
@@ -109,9 +109,9 @@
                             android:layout_height="35dp"
                             android:layout_weight=".5"
                             android:padding="5dp"
-                            android:text="@{String.valueOf(garage.price)}"
+                            android:text='@{"$ "+ String.valueOf(garage.price)}'
                             android:textColor="@color/White"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textStyle="italic" />
 
                         <TextView
@@ -120,9 +120,9 @@
                             android:layout_height="35dp"
                             android:layout_weight="1"
                             android:padding="5dp"
-                            android:text="@{String.valueOf(garage.availibleSpots)}"
+                            android:text='@{String.valueOf(garage.availibleSpots) + " Openings"}'
                             android:textColor="@color/White"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textStyle="italic" />
                     </LinearLayout>
                 </LinearLayout>

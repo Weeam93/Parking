@@ -1,10 +1,12 @@
 package com.example.weeamawad.parking.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
+import com.example.weeamawad.parking.Utility.ProgressDialogUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.databinding.MapFragmentBinding;
@@ -218,18 +221,15 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             @Override
             public void onMapClick(LatLng position) {
                 // TODO Auto-generated method stub
-                map.clear();
                 if (outerBottomPanel.getVisibility() != View.GONE) {
                     Utils.animateOutViewFromFromSide(outerBottomPanel, true);
                 }
-                Toast.makeText(mContext, Double.toString(position.latitude) + "," + Double.toString(position.longitude), Toast.LENGTH_SHORT).show();
-                findNearbyParking(position);
+                updateCameraLocation(position.latitude, position.longitude);
             }
         });
     }
 
     private void initViews() {
-
         mSearchView = (FloatingSearchView) mRootView.findViewById(R.id.floating_search_view);
         outerBottomPanel = (RelativeLayout) mRootView.findViewById(R.id.OuterBottomPanel);
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
@@ -239,7 +239,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void initListeners() {
-        // myLocationBtn.setOnClickListener(this);
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
         navigationBtn.setOnClickListener(this);
@@ -269,7 +268,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
                         @Override
                         public void onFailure() {
-
+                            mSearchView.hideProgress();
                         }
                     });
                 }
@@ -284,7 +283,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 ServiceUtility.geocodeService(mContext, searchSuggestion.getBody(), new GeocodeListener() {
                     @Override
                     public void onSuccess(LatLng location) {
-                        findNearbyParking(location);
+                        updateCameraLocation(location.latitude, location.longitude);
                     }
 
                     @Override
@@ -344,55 +343,69 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void findNearbyParking(final LatLng position) {
+        ProgressDialogUtils.showProgress(mContext);
         ServiceUtility.parkingServiceSearch(mContext, position, new ParkingListener() {
             @Override
             public void onSuccess(final ArrayList<GarageViewModel> parkingLocations) {
+                ProgressDialogUtils.dismissDialog();
                 parkingGarageViewModels = parkingLocations;
+                map.clear();
                 map.addMarker(new MarkerOptions()
-                        .position(position)
-                        .snippet(Constants.CENTER_LOCATION));
-                android.os.Handler h = new android.os.Handler();
-                h.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Plotting");
-                        IconGenerator iconGenerator = new IconGenerator(mContext);
-                        iconGenerator.setStyle(iconGenerator.STYLE_BLUE);
-                        iconGenerator.setTextAppearance(R.style.Bubble_TextAppearance_Light);
-                        PlacesModel.setParkingPlaces(parkingLocations);
-                        try {
-                            for (int i = 0; i < parkingLocations.size(); i++) {
-                                GarageViewModel temp = parkingLocations.get(i);
-                                Bitmap bmp = iconGenerator.makeIcon("$" + Integer.toString(temp.getPrice()));
-                                map.addMarker(new MarkerOptions()
-                                        .title(temp.getName()) //name
-                                        .position(new LatLng(temp.getLatitude(), temp.getLongitude())) //location
-                                        .snippet(Integer.toString(i))
-                                        .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                                .position(position)
+                                .snippet(Constants.CENTER_LOCATION)
+                                .icon(BitmapDescriptorFactory.defaultMarker())
+                );
+                if (!parkingLocations.isEmpty()) {
+                    android.os.Handler h = new android.os.Handler();
+                    h.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            IconGenerator iconGenerator = new IconGenerator(mContext);
+                            iconGenerator.setTextAppearance(R.style.Bubble_TextAppearance_Light);
+                            PlacesModel.setParkingPlaces(parkingLocations);
+                            try {
+                                for (int i = 0; i < parkingLocations.size(); i++) {
+                                    GarageViewModel temp = parkingLocations.get(i);
+                                    iconGenerator.setStyle(temp.getMarkerStyle());
+                                    Bitmap bmp = iconGenerator.makeIcon("$" + Integer.toString(temp.getPrice()));
+                                    map.addMarker(new MarkerOptions()
+                                            .title(temp.getName()) //name
+                                            .position(new LatLng(temp.getLatitude(), temp.getLongitude())) //location
+                                            .snippet(Integer.toString(i))
+                                            .icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                                }
+                                // updateCameraLocation(parkingLocations.get(0).getLatitude(), parkingLocations.get(0).getLongitude());
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            updateCameraLocation(parkingLocations.get(0).getLatitude(), parkingLocations.get(0).getLongitude());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(mContext, "No Nearby Parking Found", Toast.LENGTH_SHORT).show();
                         }
-                        System.out.println("Finished");
-                    }
-                });
+                    });
+                }
             }
 
             @Override
             public void onFailure() {
-
+                ProgressDialogUtils.dismissDialog();
+                Toast.makeText(mContext, "No Nearby Parking Found", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void updateCameraLocation(double latitude, double longitude) {
-        CameraPosition cam = new CameraPosition.Builder()
+        final CameraPosition cam = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
                 .zoom(14)
                 .build();
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(cam));
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cam), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                findNearbyParking(cam.target);
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        });
     }
 
     @Override

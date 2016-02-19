@@ -70,6 +70,7 @@ public class ServiceUtility {
                     listener.onSuccess(parkingList);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    listener.onFailure();
                 }
 
             }
@@ -107,6 +108,7 @@ public class ServiceUtility {
                     listener.onSuccess(resultList);
                 } catch (JSONException e) {
                     Log.e("AutoComplete", "Cannot process JSON results", e);
+                    listener.onFailure();
                 }
             }
         }, new Response.ErrorListener() {
@@ -168,6 +170,7 @@ public class ServiceUtility {
             result.setState(j.getString(STATE_KEY));
             result.setZip(j.getString(ZIP_KEY));
             result.formatCompleteAddress();
+            result.setMarkerStyle();
             return result;
         } catch (JSONException e) {
             e.printStackTrace();

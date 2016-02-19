@@ -1,8 +1,11 @@
 package com.example.weeamawad.parking.Utility;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 
 /**
  * Created by Weeam Awad on 1/30/2016.

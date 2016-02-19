@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.example.weeamawad.parking.BR;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.text.DecimalFormat;
 
@@ -23,6 +24,23 @@ public class GarageViewModel extends BaseObservable {
     private double mLatitude;
     private double mLongitude;
     private boolean isFavorite;
+
+    public int getMarkerStyle() {
+        return markerStyle;
+    }
+
+    public void setMarkerStyle() {
+        if (mPrice <= 15) {
+            this.markerStyle = IconGenerator.STYLE_GREEN;
+        } else if ((mPrice > 15) && (mPrice <= 35)) {
+            this.markerStyle = IconGenerator.STYLE_ORANGE;
+        } else if ((mPrice > 35)) {
+            this.markerStyle = IconGenerator.STYLE_RED;
+        }
+
+    }
+
+    private int markerStyle;
 
     @Bindable
     public String getListingID() {

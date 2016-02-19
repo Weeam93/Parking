@@ -5,7 +5,9 @@
 4. Settings
 5. Card layout for Places Lists
 6. Images/ App Logo
-7. Analytics
+7. Analytics/Adds
+8. Add Filters
+9. Link to website to purchase
 
 
 --
