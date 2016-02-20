@@ -45,6 +45,7 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(FavoriteParkingSchema.getCreateTable());
         db.execSQL(RecentParkingSchema.getCreateTable());
+        db.execSQL(FilterSchema.getCreateTable());
 
     }
 
@@ -52,6 +53,7 @@ public class DatabaseProvider<T extends DatabaseModel> extends SQLiteOpenHelper 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + FavoriteParkingSchema.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + RecentParkingSchema.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FilterSchema.TABLE_NAME);
         onCreate(db);
     }
 

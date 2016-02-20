@@ -5,10 +5,13 @@
     <color name="accent">@color/white</color>
     <color name="textColorPrimary">@color/white</color>
     <color name="colorControlHighlight">@color/teal</color>
-    <color name="list_item_selected">@color/silver</color> <!-- papayawhip, Silver !-->
+    <color name="list_item_selected">@color/silver</color>
+    <!-- papayawhip, Silver !-->
     <color name="list_item_default">@color/primary</color>
     <color name="actionMenu_color">#333333</color>
     <color name="google_map_blue">#2196F3</color>
+    <color name="enabled_color">@color/teal</color>
+    <color name="disabled_color">@color/gray_active_icon</color>
 
 
     <color name="white">#FFFFFF</color>

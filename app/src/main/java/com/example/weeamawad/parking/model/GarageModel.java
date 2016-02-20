@@ -1,4 +1,4 @@
-package com.example.weeamawad.parking.entities;
+package com.example.weeamawad.parking.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -8,7 +8,7 @@ import com.google.maps.android.ui.IconGenerator;
 
 import java.text.DecimalFormat;
 
-public class GarageViewModel extends BaseObservable {
+public class GarageModel extends BaseObservable {
 
     private String mListingID;
     private String mName;

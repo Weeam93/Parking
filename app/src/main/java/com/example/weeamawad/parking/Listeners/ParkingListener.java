@@ -1,6 +1,6 @@
 package com.example.weeamawad.parking.Listeners;
 
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Weeam Awad on 8/29/2015.
  */
 public interface ParkingListener {
-    void onSuccess(ArrayList<GarageViewModel> parkingGarageViewModels);
+    void onSuccess(ArrayList<GarageModel> parkingGarageModels);
 
     void onFailure();
 }

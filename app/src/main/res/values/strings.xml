@@ -27,6 +27,37 @@
         <item>Car Location</item>
         <item>History</item>
         <item>About Us</item>
-
+    </string-array>
+    <string-array name="filterLabels">
+        <item>Monthly</item>
+        <item>Shuttle</item>
+        <item>Eticket</item>
+        <item>Perk</item>
+        <item>Valet</item>
+        <item>Indoor</item>
+        <item>Handicap</item>
+        <item>Restroom</item>
+        <item>Security</item>
+        <item>Tailgate</item>
+        <item>Rv</item>
+        <item>Unobstructed</item>
+        <item>Attended</item>
+        <item>Reentry Allowed</item>
+    </string-array>
+    <string-array name="filterDescriptions">
+        <item>Only return monthly parking listings.</item>
+        <item>Only return locations with shuttle service</item>
+        <item>Only return locations that accept Mobile Passes</item>
+        <item>Only return locations that offer ParkWhiz Perks</item>
+        <item>Only return locations that offer valet service</item>
+        <item>Only return indoor/covered locations</item>
+        <item>Only return handicap accessible locations</item>
+        <item>Only return locations that provide a restroom to customers</item>
+        <item>Only return locations with on-site security</item>
+        <item>Only return locations that allow tailgating</item>
+        <item>Only return locations that allow RV parking</item>
+        <item>Only return locations with unobstructed parking spots (vehicle wont be blocked in)</item>
+        <item>Only return locations with an on-site parking attendant</item>
+        <item>Reentry Only return locations that allow reentry</item>
     </string-array>
 </resources>

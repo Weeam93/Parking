@@ -15,7 +15,7 @@ import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.adapters.FavoritesAdapter;
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
 
     private View mRootView;
     private Context mContext;
-    private ArrayList<GarageViewModel> parkingGarageViewModels;
+    private ArrayList<GarageModel> parkingGarageModels;
     private FavoritesAdapter adapter;
     private RecyclerView rvFavorites;
     private TextView clearData;
@@ -58,7 +58,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
                 } else {
                     DatabaseUtils.deleteAllRecents(mContext);
                 }
-                parkingGarageViewModels.clear();
+                parkingGarageModels.clear();
                 adapter.notifyDataSetChanged();
                 break;
         }
@@ -68,7 +68,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
 
         rvFavorites = (RecyclerView) mRootView.findViewById(R.id.lv_favorites);
         clearData = (TextView) mRootView.findViewById(R.id.tv_clear_data);
-        adapter = new FavoritesAdapter(parkingGarageViewModels);
+        adapter = new FavoritesAdapter(parkingGarageModels);
         rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvFavorites.setAdapter(adapter);
         if (isFavorites) {
@@ -84,14 +84,13 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initData() {
-        mContext = getActivity();
         if (!Utils.checkIfNull(getArguments())) {
             isFavorites = getArguments().getBoolean(Constants.FAVORITES_KEY);
         }
         if (isFavorites) {
-            parkingGarageViewModels = DatabaseUtils.getAllFavorites(mContext);
+            parkingGarageModels = DatabaseUtils.getAllFavorites(mContext);
         } else {
-            parkingGarageViewModels = DatabaseUtils.getAllRecent(mContext);
+            parkingGarageModels = DatabaseUtils.getAllRecent(mContext);
         }
     }
 }

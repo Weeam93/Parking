@@ -1,16 +1,15 @@
 package com.example.weeamawad.parking.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,7 +35,7 @@ import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.databinding.MapFragmentBinding;
 import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -57,7 +56,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
@@ -69,7 +67,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private LocationRequest mLocationRequest;
     private LatLng myCoordinates;
     private Circle vision;
-    private ArrayList<GarageViewModel> parkingGarageViewModels;
+    private ArrayList<GarageModel> parkingGarageModels;
     private Context mContext;
     private RelativeLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
@@ -78,7 +76,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private ImageButton navigationBtn;
     private String placeCompleteAddress;
     private ImageButton myLocationBtn;
-    private GarageViewModel selectedGarageViewModel;
+    private GarageModel selectedGarageModel;
     private boolean isGpsClicked;
 
     private View mRootView;
@@ -191,13 +189,13 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 break;
             case R.id.ib_favoriteOff:
                 Log.i(TAG, "Favorite Off Clicked");
-                selectedGarageViewModel.setIsFavorite(true);
-                DatabaseUtils.saveFavorite(mContext, selectedGarageViewModel);
+                selectedGarageModel.setIsFavorite(true);
+                DatabaseUtils.saveFavorite(mContext, selectedGarageModel);
                 break;
             case R.id.ib_favoriteOn:
                 Log.i(TAG, "Favorite On Clicked");
-                selectedGarageViewModel.setIsFavorite(false);
-                DatabaseUtils.deleteFavorite(mContext, selectedGarageViewModel);
+                selectedGarageModel.setIsFavorite(false);
+                DatabaseUtils.deleteFavorite(mContext, selectedGarageModel);
                 break;
             case R.id.launchNavigationBtn1:
                 String uri = Constants.OPEN_GOOGLE_MAPS + placeCompleteAddress;
@@ -305,14 +303,23 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             public void onActionMenuItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_myLocation:
-                        if (!isGpsClicked) {
-                            isGpsClicked = true;
-                            mSearchView.setMenuItemIconColor(getResources().getColor(R.color.Teal));
+                        if (!item.isChecked()) {
+                            item.setChecked(true);
+                            item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
                             updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-
                         } else {
-                            isGpsClicked = false;
-                            mSearchView.setMenuItemIconColor(getResources().getColor(R.color.actionMenu_color));
+                            item.setChecked(false);
+                            item.getIcon().setTint(getResources().getColor(R.color.disabled_color));
+                        }
+                        break;
+                    case R.id.action_filter:
+                        if (!item.isChecked()) {
+                            item.setChecked(true);
+                            item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
+                            addFragment(new FilterFragment());
+                        } else {
+                            item.setChecked(false);
+                            item.getIcon().setTint(getResources().getColor(R.color.disabled_color));
                         }
                         break;
                 }
@@ -346,9 +353,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         ProgressDialogUtils.showProgress(mContext);
         ServiceUtility.parkingServiceSearch(mContext, position, new ParkingListener() {
             @Override
-            public void onSuccess(final ArrayList<GarageViewModel> parkingLocations) {
+            public void onSuccess(final ArrayList<GarageModel> parkingLocations) {
                 ProgressDialogUtils.dismissDialog();
-                parkingGarageViewModels = parkingLocations;
+                parkingGarageModels = parkingLocations;
                 map.clear();
                 map.addMarker(new MarkerOptions()
                                 .position(position)
@@ -365,7 +372,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                             PlacesModel.setParkingPlaces(parkingLocations);
                             try {
                                 for (int i = 0; i < parkingLocations.size(); i++) {
-                                    GarageViewModel temp = parkingLocations.get(i);
+                                    GarageModel temp = parkingLocations.get(i);
                                     iconGenerator.setStyle(temp.getMarkerStyle());
                                     Bitmap bmp = iconGenerator.makeIcon("$" + Integer.toString(temp.getPrice()));
                                     map.addMarker(new MarkerOptions()
@@ -417,18 +424,25 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             return false;
         } else {
             int index = Integer.parseInt(m.getSnippet());
-            selectedGarageViewModel = parkingGarageViewModels.get(index);
-            mBinding.setGarage(selectedGarageViewModel);
-            selectedGarageViewModel.setIsFavorite(DatabaseUtils.isFavorite(mContext, selectedGarageViewModel.getListingID()));
-            placeCompleteAddress = selectedGarageViewModel.getCompleteAddress().replace(" ", "+");
+            selectedGarageModel = parkingGarageModels.get(index);
+            mBinding.setGarage(selectedGarageModel);
+            selectedGarageModel.setIsFavorite(DatabaseUtils.isFavorite(mContext, selectedGarageModel.getListingID()));
+            placeCompleteAddress = selectedGarageModel.getCompleteAddress().replace(" ", "+");
 
             if (outerBottomPanel.getVisibility() != View.VISIBLE) {
                 Utils.animateInViewFromFromSide(outerBottomPanel, true);
             }
-            DatabaseUtils.saveRecent(mContext, selectedGarageViewModel);
+            DatabaseUtils.saveRecent(mContext, selectedGarageModel);
 
             return true;
         }
+    }
+
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(this.getId(), fragment)
+                .commit();
     }
 }
 

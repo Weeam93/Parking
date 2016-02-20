@@ -1,10 +1,9 @@
 package com.example.weeamawad.parking.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.example.weeamawad.parking.databinding.RowFavoritesBinding;
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 
 /**
  * Created by Weeam Awad on 2/10/2016.
@@ -17,7 +16,7 @@ public class GarageViewHolder extends RecyclerView.ViewHolder {
         mRowBinding = rowBinding;
     }
 
-    public void onBindConnection(GarageViewModel garageViewModel) {
-        mRowBinding.setGarage(garageViewModel);
+    public void onBindConnection(GarageModel garageModel) {
+        mRowBinding.setGarage(garageModel);
     }
 }

@@ -10,22 +10,22 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class NearyByPlacesAdapter extends ArrayAdapter<GarageViewModel> {
+public class NearyByPlacesAdapter extends ArrayAdapter<GarageModel> {
     Context context;
     int layoutResourceID;
-    ArrayList<GarageViewModel> parkingGarageViewModels = null;
+    ArrayList<GarageModel> parkingGarageModels = null;
 
-    public NearyByPlacesAdapter(Context context, int layoutResourceId, ArrayList<GarageViewModel> parkingGarageViewModels) {
-        super(context, layoutResourceId, parkingGarageViewModels);
+    public NearyByPlacesAdapter(Context context, int layoutResourceId, ArrayList<GarageModel> parkingGarageModels) {
+        super(context, layoutResourceId, parkingGarageModels);
         // TODO Auto-generated constructor stub
         this.context = context;
         this.layoutResourceID = layoutResourceId;
-        this.parkingGarageViewModels = parkingGarageViewModels;
+        this.parkingGarageModels = parkingGarageModels;
     }
 
     static class ViewHolder {
@@ -55,11 +55,11 @@ public class NearyByPlacesAdapter extends ArrayAdapter<GarageViewModel> {
         }
         DecimalFormat df = new DecimalFormat("###.#");
 
-        String n = parkingGarageViewModels.get(position).getName();
-        String a = parkingGarageViewModels.get(position).getCompleteAddress();
-        String d = (df.format(parkingGarageViewModels.get(position).getDistance()));
-        String p = Integer.toString(parkingGarageViewModels.get(position).getPrice());
-        String s = Integer.toString(parkingGarageViewModels.get(position).getAvailibleSpots());
+        String n = parkingGarageModels.get(position).getName();
+        String a = parkingGarageModels.get(position).getCompleteAddress();
+        String d = (df.format(parkingGarageModels.get(position).getDistance()));
+        String p = Integer.toString(parkingGarageModels.get(position).getPrice());
+        String s = Integer.toString(parkingGarageModels.get(position).getAvailibleSpots());
 
 
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Rounds Black.otf");

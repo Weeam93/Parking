@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.databinding.RowFavoritesBinding;
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ import java.util.ArrayList;
  */
 public class FavoritesAdapter extends RecyclerView.Adapter<GarageViewHolder> {
 
-    ArrayList<GarageViewModel> items = null;
+    ArrayList<GarageModel> items = null;
 
-    public FavoritesAdapter(ArrayList<GarageViewModel> items) {
+    public FavoritesAdapter(ArrayList<GarageModel> items) {
         super();
         // TODO Auto-generated constructor stub
         this.items = items;

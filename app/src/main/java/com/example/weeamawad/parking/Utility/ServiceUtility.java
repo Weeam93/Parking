@@ -13,7 +13,7 @@ import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
-import com.example.weeamawad.parking.entities.GarageViewModel;
+import com.example.weeamawad.parking.model.GarageModel;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -62,9 +62,9 @@ public class ServiceUtility {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray resultArray = response.getJSONArray(PARKING_LISTING_KEY);
-                    ArrayList<GarageViewModel> parkingList = new ArrayList<GarageViewModel>();
+                    ArrayList<GarageModel> parkingList = new ArrayList<GarageModel>();
                     for (int i = 0; i < resultArray.length(); i++) {
-                        GarageViewModel p = parseJSON((JSONObject) resultArray.get(i));
+                        GarageModel p = parseJSON((JSONObject) resultArray.get(i));
                         parkingList.add(p);
                     }
                     listener.onSuccess(parkingList);
@@ -154,8 +154,8 @@ public class ServiceUtility {
         return new AutoCompleteSuggestion(address);
     }
 
-    private static GarageViewModel parseJSON(JSONObject j) {
-        GarageViewModel result = new GarageViewModel();
+    private static GarageModel parseJSON(JSONObject j) {
+        GarageModel result = new GarageModel();
         try {
             result.setListingID(Integer.toString((Integer) j.get(LISTING_ID)));
             result.setLatitude((Double) j.get(LAT_KEY));

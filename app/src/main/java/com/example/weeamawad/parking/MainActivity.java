@@ -21,11 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.weeamawad.parking.Utility.Constants;
-import com.example.weeamawad.parking.Utility.Utils;
+import com.example.weeamawad.parking.Utility.DatabaseUtils;
+import com.example.weeamawad.parking.Utility.SharedPreference;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.adapters.NavigationDrawerAdapter;
 import com.example.weeamawad.parking.fragments.FavoritesFragment;
 import com.example.weeamawad.parking.fragments.MapFragment;
+import com.example.weeamawad.parking.model.FilterModel;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         setDrawerWidth();
+        loadData();
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, myToolbar, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
@@ -83,6 +86,20 @@ public class MainActivity extends AppCompatActivity {
                 selectItem(position);
             }
         });
+    }
+
+    private void loadData() {
+        SharedPreference pref = new SharedPreference(this, Constants.SHARED_PREFRENCE_DEFAULT);
+        if (!pref.getBooleanPref(Constants.IS_NOT_CLEAN_INSTALL, false)) {
+            String[] labels = getResources().getStringArray(R.array.filterLabels);
+            String[] descriptions = getResources().getStringArray(R.array.filterDescriptions);
+            DatabaseUtils.deleteAllFavorites(this);
+            for (int i = 0; i < labels.length; i++) {
+                FilterModel fm = new FilterModel(labels[i], descriptions[i], 0);
+                DatabaseUtils.saveFilter(this, fm);
+            }
+            pref.setPref(Constants.IS_NOT_CLEAN_INSTALL, true);
+        }
     }
 
     private void setDrawerWidth() {
