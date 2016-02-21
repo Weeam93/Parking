@@ -10,5 +10,6 @@ public class Constants {
     public static final String CENTER_LOCATION = "centerLocation";
     public static final String SHARED_PREFRENCE_DEFAULT = "app_name";
     public static final String IS_NOT_CLEAN_INSTALL = "is_not_clean_install";
+    public static final String FILTER_DATA = "filter_data";
 
 }

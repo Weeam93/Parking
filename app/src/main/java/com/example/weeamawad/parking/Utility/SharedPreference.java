@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 /**
  * Created by Weeam Awad on 2/20/2016.
  */
-public class SharedPreference {
+public class SharedPreference<T> {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor prefsEditor;
@@ -22,17 +24,17 @@ public class SharedPreference {
     }
 
     /**
-     *  Method for clearing all data of preference.
+     * Method for clearing all data of preference.
      */
-    public void clearAllPreferences(){
+    public void clearAllPreferences() {
         prefsEditor.clear();
         prefsEditor.commit();
     }
 
     /**
-     *  Method for remove data of preference.
+     * Method for remove data of preference.
      */
-    public void removePreference(String key){
+    public void removePreference(String key) {
         prefsEditor.remove(key);
         prefsEditor.commit();
     }
@@ -56,7 +58,6 @@ public class SharedPreference {
     }
 
     /**
-     *
      * @param key
      * @param value : boolean value
      */
@@ -66,16 +67,14 @@ public class SharedPreference {
     }
 
     /**
-     *
      * @param key
      * @return boolean type
      */
-    public boolean getBooleanPref(String key, boolean defValue){
+    public boolean getBooleanPref(String key, boolean defValue) {
         return sharedPreferences.getBoolean(key, defValue);
     }
 
     /**
-     *
      * @param key
      * @param value : float value
      */
@@ -85,12 +84,24 @@ public class SharedPreference {
     }
 
     /**
-     *
      * @param key
      * @return float type
      */
-    public float getFloatPref(String key, float defValue){
+    public float getFloatPref(String key, float defValue) {
         return sharedPreferences.getFloat(key, defValue);
     }
+
+    public void setObjectPref(String key, Object object) {
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+        setPref(key, json);
+    }
+
+    public Object getObjectPref(String key, T defValue) {
+        Gson gson = new Gson();
+        String json = getStringPref(key, "");
+        return gson.fromJson(json, defValue.getClass());
+    }
+
 
 }

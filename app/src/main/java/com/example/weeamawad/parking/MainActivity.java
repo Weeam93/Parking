@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        SharedPreference pref = new SharedPreference(this, Constants.SHARED_PREFRENCE_DEFAULT);
+        /*SharedPreference pref = new SharedPreference(this, Constants.SHARED_PREFRENCE_DEFAULT);
         if (!pref.getBooleanPref(Constants.IS_NOT_CLEAN_INSTALL, false)) {
             String[] labels = getResources().getStringArray(R.array.filterLabels);
             String[] descriptions = getResources().getStringArray(R.array.filterDescriptions);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 DatabaseUtils.saveFilter(this, fm);
             }
             pref.setPref(Constants.IS_NOT_CLEAN_INSTALL, true);
-        }
+        }*/
     }
 
     private void setDrawerWidth() {

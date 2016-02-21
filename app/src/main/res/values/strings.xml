@@ -20,6 +20,7 @@
     <string name="menu">Menu</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="filter_header">Add Filters</string>
     <string-array name="navHeaders">
         <item>Home</item>
         <item>Settings</item>
@@ -28,36 +29,34 @@
         <item>History</item>
         <item>About Us</item>
     </string-array>
-    <string-array name="filterLabels">
-        <item>Monthly</item>
-        <item>Shuttle</item>
-        <item>Eticket</item>
-        <item>Perk</item>
-        <item>Valet</item>
-        <item>Indoor</item>
-        <item>Handicap</item>
-        <item>Restroom</item>
-        <item>Security</item>
-        <item>Tailgate</item>
-        <item>Rv</item>
-        <item>Unobstructed</item>
-        <item>Attended</item>
-        <item>Reentry Allowed</item>
-    </string-array>
-    <string-array name="filterDescriptions">
-        <item>Only return monthly parking listings.</item>
-        <item>Only return locations with shuttle service</item>
-        <item>Only return locations that accept Mobile Passes</item>
-        <item>Only return locations that offer ParkWhiz Perks</item>
-        <item>Only return locations that offer valet service</item>
-        <item>Only return indoor/covered locations</item>
-        <item>Only return handicap accessible locations</item>
-        <item>Only return locations that provide a restroom to customers</item>
-        <item>Only return locations with on-site security</item>
-        <item>Only return locations that allow tailgating</item>
-        <item>Only return locations that allow RV parking</item>
-        <item>Only return locations with unobstructed parking spots (vehicle wont be blocked in)</item>
-        <item>Only return locations with an on-site parking attendant</item>
-        <item>Reentry Only return locations that allow reentry</item>
-    </string-array>
+
+    <string name="monthly_label">Monthly</string>
+    <string name="shuttle_label">Shuttle</string>
+    <string name="eticket_label">Eticket</string>
+    <string name="perk_label">Perk</string>
+    <string name="valet_label">Valet</string>
+    <string name="indoor_label">Indoor</string>
+    <string name="handicap_label">Handicap</string>
+    <string name="restroom_label">Restroom</string>
+    <string name="security_label">Security</string>
+    <string name="tailgate_label">Tailgate</string>
+    <string name="rv_label">Rv</string>
+    <string name="unobstructed_label">Unobstructed</string>
+    <string name="attended_label">Attended</string>
+    <string name="reentry_label">Reentry Allowed</string>
+
+    <string name="monthly_Description">Only return monthly parking listings.</string>
+    <string name="shuttle_Description">>Only return locations with shuttle service</string>
+    <string name="eticket_Description">Only return locations that accept Mobile Passes</string>
+    <string name="perk_Description">Only return locations that offer ParkWhiz Perks</string>
+    <string name="valet_Description">Only return locations that offer valet service</string>
+    <string name="indoor_Description">Only return indoor/covered locations</string>
+    <string name="handicap_Description">Only return handicap accessible locations</string>
+    <string name="restroom_Description">Only return locations that provide a restroom to customers</string>
+    <string name="security_Description">Only return locations with on-site security</string>
+    <string name="tailgate_Description">Only return locations that allow tailgating</string>
+    <string name="rv_Description">Only return locations that allow RV parking</string>
+    <string name="unobstructed_Description">Only return locations with unobstructed parking spots (vehicle wont be blocked in)</string>
+    <string name="attended_Description">>Only return locations with an on-site parking attendant</string>
+    <string name="reentry_Description">Reentry Only return locations that allow reentry</string>
 </resources>
