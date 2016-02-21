@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.Constants;
@@ -21,6 +23,8 @@ import com.example.weeamawad.parking.adapters.FilterAdapter;
 import com.example.weeamawad.parking.databinding.FragmentFilterBinding;
 import com.example.weeamawad.parking.databinding.LinearLayoutFilterSectionBinding;
 import com.example.weeamawad.parking.model.NewFilterModel;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -34,6 +38,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
     private FragmentFilterBinding mBinding;
     private SharedPreference pref;
     private CheckBox isMonthly, isShuttle, isEticket, isPerk, isValet, isIndoor, isHandicap, isRestRoom, isSecurity, isTailGate, isRv, isUnObstructed, isAttended, isReentryAllowed;
+    private SeekBar maxPrice;
+    private TextView tvMaxPrice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +68,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
 
     private void initViews() {
         btnApply = (Button) mRootView.findViewById(R.id.btn_apply_filter);
+        maxPrice = (SeekBar) mRootView.findViewById(R.id.sb_max_price);
+        tvMaxPrice = (TextView) mRootView.findViewById(R.id.tv_max_price);
         isMonthly = (CheckBox) mRootView.findViewById(R.id.cb_isMonthly);
         isShuttle = (CheckBox) mRootView.findViewById(R.id.cb_isShuttle);
         isEticket = (CheckBox) mRootView.findViewById(R.id.cb_isETicket);
@@ -95,6 +103,25 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
         isUnObstructed.setOnClickListener(this);
         isAttended.setOnClickListener(this);
         isReentryAllowed.setOnClickListener(this);
+        maxPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvMaxPrice.setText("MAX PRICE: $" + progress);
+                filter.setMaxPrice(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     @Override

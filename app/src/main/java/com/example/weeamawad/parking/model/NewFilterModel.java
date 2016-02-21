@@ -4,11 +4,13 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.example.weeamawad.parking.BR;
+import com.example.weeamawad.parking.Utility.Constants;
 
 /**
  * Created by Weeam Awad on 2/21/2016.
  */
 public class NewFilterModel extends BaseObservable {
+    private int maxPrice = Constants.DEFAULT_MAX_PRICE;
     private boolean isMonthly;
     private boolean isShuttle;
     private boolean isEticket;
@@ -23,6 +25,11 @@ public class NewFilterModel extends BaseObservable {
     private boolean isUnObstructed;
     private boolean isAttended;
     private boolean isReentryAllowed;
+
+    @Bindable
+    public int getMaxPrice() {
+        return maxPrice;
+    }
 
     @Bindable
     public boolean isMonthly() {
@@ -92,6 +99,11 @@ public class NewFilterModel extends BaseObservable {
     @Bindable
     public boolean isReentryAllowed() {
         return isReentryAllowed;
+    }
+
+    public void setMaxPrice(int maxPrice) {
+        this.maxPrice = maxPrice;
+        notifyPropertyChanged(BR.maxPrice);
     }
 
     public void setIsMonthly(boolean isMonthly) {
