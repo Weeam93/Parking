@@ -11,6 +11,7 @@ import com.example.weeamawad.parking.Utility.Constants;
  */
 public class NewFilterModel extends BaseObservable {
     private int maxPrice = Constants.DEFAULT_MAX_PRICE;
+    private boolean isEnabled;
     private boolean isMonthly;
     private boolean isShuttle;
     private boolean isEticket;
@@ -25,6 +26,10 @@ public class NewFilterModel extends BaseObservable {
     private boolean isUnObstructed;
     private boolean isAttended;
     private boolean isReentryAllowed;
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 
     @Bindable
     public int getMaxPrice() {
@@ -101,39 +106,50 @@ public class NewFilterModel extends BaseObservable {
         return isReentryAllowed;
     }
 
+    public void setIsEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     public void setMaxPrice(int maxPrice) {
         this.maxPrice = maxPrice;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.maxPrice);
     }
 
     public void setIsMonthly(boolean isMonthly) {
         this.isMonthly = isMonthly;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.monthly);
     }
 
     public void setIsShuttle(boolean isShuttle) {
         this.isShuttle = isShuttle;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.shuttle);
     }
 
     public void setIsEticket(boolean isEticket) {
         this.isEticket = isEticket;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.eticket);
     }
 
     public void setIsPerk(boolean isPerk) {
         this.isPerk = isPerk;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.perk);
 
     }
 
     public void setIsValet(boolean isValet) {
         this.isValet = isValet;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.valet);
     }
 
     public void setIsIndoor(boolean isIndoor) {
         this.isIndoor = isIndoor;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.indoor);
 
     }
@@ -146,24 +162,28 @@ public class NewFilterModel extends BaseObservable {
 
     public void setIsRestRoom(boolean isRestRoom) {
         this.isRestRoom = isRestRoom;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.restRoom);
 
     }
 
     public void setIsSecurity(boolean isSecurity) {
         this.isSecurity = isSecurity;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.security);
 
     }
 
     public void setIsTailGate(boolean isTailGate) {
         this.isTailGate = isTailGate;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.tailGate);
 
     }
 
     public void setIsRv(boolean isRv) {
         this.isRv = isRv;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.rv);
 
     }
@@ -176,12 +196,14 @@ public class NewFilterModel extends BaseObservable {
 
     public void setIsAttended(boolean isAttended) {
         this.isAttended = isAttended;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.attended);
 
     }
 
     public void setIsReentryAllowed(boolean isReentryAllowed) {
         this.isReentryAllowed = isReentryAllowed;
+        this.isEnabled = true;
         notifyPropertyChanged(BR.reentryAllowed);
 
     }

@@ -12,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +34,13 @@ import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
 import com.example.weeamawad.parking.Utility.ProgressDialogUtils;
 import com.example.weeamawad.parking.Utility.ServiceUtility;
+import com.example.weeamawad.parking.Utility.SharedPreference;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.databinding.MapFragmentBinding;
 import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
+import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.GarageModel;
+import com.example.weeamawad.parking.model.NewFilterModel;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -65,9 +70,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
-    private LatLng myCoordinates;
-    private Circle vision;
-    private ArrayList<GarageModel> parkingGarageModels;
     private Context mContext;
     private RelativeLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
@@ -76,12 +78,16 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private ImageButton navigationBtn;
     private String placeCompleteAddress;
     private ImageButton myLocationBtn;
+    private LatLng mSelectedMapLocation;
     private GarageModel selectedGarageModel;
-    private boolean isGpsClicked;
+    private ArrayList<GarageModel> parkingGarageModels;
 
     private View mRootView;
     private FloatingSearchView mSearchView;
     private MapFragmentBinding mBinding;
+    private SharedPreference pref;
+    private NewFilterModel filter;
+    private MenuItem filterMenuItem;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -155,13 +161,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     public void onConnected(Bundle arg0) {
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        LatLng myCoordinates = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        mSelectedMapLocation = myCoordinates;
         CircleOptions c = new CircleOptions()
                 .center(myCoordinates)
                 .radius(500)
                 .strokeColor(Color.argb(62, 0, 255, 0))
                 .fillColor(Color.argb(62, 0, 0, 255));
-        vision = map.addCircle(c);
+        Circle vision = map.addCircle(c);
 
         updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
@@ -222,6 +229,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 if (outerBottomPanel.getVisibility() != View.GONE) {
                     Utils.animateOutViewFromFromSide(outerBottomPanel, true);
                 }
+                mSelectedMapLocation = position;
                 updateCameraLocation(position.latitude, position.longitude);
             }
         });
@@ -229,11 +237,18 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     private void initViews() {
         mSearchView = (FloatingSearchView) mRootView.findViewById(R.id.floating_search_view);
+        filterMenuItem = (MenuItem) mRootView.findViewById(R.id.action_filter);
         outerBottomPanel = (RelativeLayout) mRootView.findViewById(R.id.OuterBottomPanel);
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
         favoriteBtnOn = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOn);
         navigationBtn = (ImageButton) mRootView.findViewById(R.id.launchNavigationBtn1);
 
+        pref = new SharedPreference(mContext, Constants.SHARED_PREFRENCE_DEFAULT);
+        filter = (NewFilterModel) pref.getObjectPref(Constants.FILTER_DATA, new NewFilterModel());
+        if (Utils.checkIfNull(filter)) {
+            filter = new NewFilterModel();
+        }
+        AppSettingsModel.filters = filter;
     }
 
     private void initListeners() {
@@ -303,24 +318,13 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             public void onActionMenuItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_myLocation:
-                        if (!item.isChecked()) {
-                            item.setChecked(true);
-                            item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
-                            updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                        } else {
-                            item.setChecked(false);
-                            item.getIcon().setTint(getResources().getColor(R.color.disabled_color));
-                        }
+                        item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
+                        updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                         break;
                     case R.id.action_filter:
-                        if (!item.isChecked()) {
-                            item.setChecked(true);
-                            item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
-                            addFragment(new FilterFragment());
-                        } else {
-                            item.setChecked(false);
-                            item.getIcon().setTint(getResources().getColor(R.color.disabled_color));
-                        }
+                        item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
+                        FilterFragment filterFragment = new FilterFragment();
+                        addFragment(filterFragment);
                         break;
                 }
             }
@@ -349,8 +353,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     }
 
-    private void findNearbyParking(final LatLng position) {
+    public void findNearbyParking(LatLng p) {
         ProgressDialogUtils.showProgress(mContext);
+        if (Utils.checkIfNull(p)) {
+            p = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        }
+        final LatLng position = p;
         ServiceUtility.parkingServiceSearch(mContext, position, new ParkingListener() {
             @Override
             public void onSuccess(final ArrayList<GarageModel> parkingLocations) {
@@ -443,6 +451,16 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         fragmentManager.beginTransaction()
                 .add(this.getId(), fragment)
                 .commit();
+    }
+
+    public void updateFilterState() {
+        if (filter.isEnabled()) {
+            filterMenuItem.getIcon().setTint(getResources().getColor(R.color.enabled_color));
+
+        } else {
+            filterMenuItem.getIcon().setTint(getResources().getColor(R.color.disabled_color));
+
+        }
     }
 }
 

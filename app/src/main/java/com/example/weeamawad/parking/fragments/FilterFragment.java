@@ -1,5 +1,6 @@
 package com.example.weeamawad.parking.fragments;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.adapters.FilterAdapter;
 import com.example.weeamawad.parking.databinding.FragmentFilterBinding;
 import com.example.weeamawad.parking.databinding.LinearLayoutFilterSectionBinding;
+import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.NewFilterModel;
 
 import org.w3c.dom.Text;
@@ -40,6 +42,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
     private CheckBox isMonthly, isShuttle, isEticket, isPerk, isValet, isIndoor, isHandicap, isRestRoom, isSecurity, isTailGate, isRv, isUnObstructed, isAttended, isReentryAllowed;
     private SeekBar maxPrice;
     private TextView tvMaxPrice;
+    private OnApplyFilterListenter mCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +67,12 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
             filter = new NewFilterModel();
         }
         mBinding.setFilter(filter);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (OnApplyFilterListenter) getActivity();
     }
 
     private void initViews() {
@@ -121,7 +130,6 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
     }
 
     @Override
@@ -129,8 +137,10 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_apply_filter:
                 pref.setObjectPref(Constants.FILTER_DATA, filter);
+                AppSettingsModel.filters = filter;
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().remove(this).commit();
+                mCallback.applyFilter();
                 break;
             case R.id.cb_isMonthly:
                 filter.setIsMonthly(isMonthly.isChecked());
@@ -175,5 +185,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener {
                 filter.setIsReentryAllowed(isReentryAllowed.isChecked());
                 break;
         }
+    }
+
+    public interface OnApplyFilterListenter {
+        void applyFilter();
     }
 }

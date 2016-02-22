@@ -5,5 +5,6 @@ package com.example.weeamawad.parking.model;
  */
 public class AppSettingsModel {
 
-    public static  Boolean isFavPage=false;
+    public static Boolean isFavPage = false;
+    public static NewFilterModel filters = new NewFilterModel();
 }

@@ -21,15 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.weeamawad.parking.Utility.Constants;
-import com.example.weeamawad.parking.Utility.DatabaseUtils;
-import com.example.weeamawad.parking.Utility.SharedPreference;
+import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.adapters.NavigationDrawerAdapter;
 import com.example.weeamawad.parking.fragments.FavoritesFragment;
+import com.example.weeamawad.parking.fragments.FilterFragment;
 import com.example.weeamawad.parking.fragments.MapFragment;
-import com.example.weeamawad.parking.model.FilterModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FilterFragment.OnApplyFilterListenter {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private NavigationDrawerAdapter settingsAdapter;
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     fragment = new MapFragment();
-                    replaceFragment(fragment);
+                    replaceFragment(fragment, MapFragment.class.getSimpleName());
                     break;
                 case 1:
                     break;
@@ -130,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     Bundle favArgs = new Bundle();
                     favArgs.putBoolean(Constants.FAVORITES_KEY, true);
                     fragment.setArguments(favArgs);
-                    replaceFragment(fragment);
+                    replaceFragment(fragment, FavoritesFragment.class.getSimpleName());
                     break;
                 case 3:
                     break;
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     Bundle recentArgs = new Bundle();
                     recentArgs.putBoolean(Constants.FAVORITES_KEY, false);
                     fragment.setArguments(recentArgs);
-                    replaceFragment(fragment);
+                    replaceFragment(fragment, FavoritesFragment.class.getSimpleName());
                     break;
                 case 5:
                     break;
@@ -216,10 +215,21 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment, String fragmentTag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
+        ft.replace(R.id.content_frame, fragment, fragmentTag);
         ft.commit();
+        fragmentManager.executePendingTransactions();
+    }
+
+    @Override
+    public void applyFilter() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.executePendingTransactions();
+        MapFragment fragment = (MapFragment) fragmentManager.findFragmentByTag(MapFragment.class.getSimpleName());
+        if (!Utils.checkIfNull(fragment)) {
+            fragment.findNearbyParking(null);
+        }
     }
 }

@@ -13,7 +13,10 @@ import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
 import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
+import com.example.weeamawad.parking.model.AppSettingsModel;
+import com.example.weeamawad.parking.model.FilterModel;
 import com.example.weeamawad.parking.model.GarageModel;
+import com.example.weeamawad.parking.model.NewFilterModel;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -30,7 +33,7 @@ import java.util.ArrayList;
 public class ServiceUtility {
 
     private static final String GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json?address=%s";
-    private static final String PARKING_BASE = "http://api.parkwhiz.com/search/?lat=%s&lng=%s&key=%s";
+    private static final String PARKING_BASE = "http://api.parkwhiz.com/search/?lat=%s&lng=%s&price=%s&monthly=%s&shuttle=%s&eticket=%s&perk=%s&valet=%s&indoor=%s&handicap=%s&restroom=%s&security=%s&tailgate=%s&rv=%s&unobstructed=%s&attended=%s&reentry_allowed=%s&key=%s";
     private static final String AUTO_COMPLETE_BASE = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%s&components=country:us&key=%s";
     private static final String PARKING_API_KEY = "c71066144c39ee80c3d36f995d914d91";
     private static final String GOOGLE_API_KEY = "AIzaSyBOqw91vKAUAaRhgSDoDBy4lmg-4pEOBwU";
@@ -46,6 +49,24 @@ public class ServiceUtility {
     private static final String STATE_KEY = "state";
     private static final String ZIP_KEY = "zip";
     private static final String PARKING_LISTING_KEY = "parking_listings";
+
+    private static final String MAX_PRICE_KEY = "&price";
+    private static final String IS_MONTHLY_KEY = "&monthly";
+    private static final String IS_SHUTTLE_KEY = "&shuttle";
+    private static final String IS_ETICKET_KEY = "&eticket";
+    private static final String IS_PERK_KEY = "&perk";
+    private static final String IS_VALET_KEY = "&valet";
+    private static final String IS_INDOOR_KEY = "&indoor";
+    private static final String IS_HANDICAP_KEY = "&handicap";
+    private static final String IS_RESRROOM_KEY = "&restroom";
+    private static final String IS_SECURITY_KEY = "&security";
+    private static final String IS_TAILGATE_KEY = "&tailgate";
+    private static final String IS_RV_KEY = "&rv";
+    private static final String IS_UNOBSTRUCTED_KEY = "&unobstructed";
+    private static final String IS_ATTENDED_KEY = "&attended";
+    private static final String IS_REENTRY_ALLOWED = "&reentry_allowed";
+
+
     private static final String RESULTS_KEY = "results";
     private static final String GEOMETRY_KEY = "geometry";
     private static final String LOCATION_KEY = "location";
@@ -56,7 +77,7 @@ public class ServiceUtility {
     private static final String API_KEY = "&key=AIzaSyBOqw91vKAUAaRhgSDoDBy4lmg-4pEOBwU";
 
     public static void parkingServiceSearch(Context context, LatLng location, final ParkingListener listener) {
-        String completeUrl = String.format(PARKING_BASE, location.latitude, location.longitude, PARKING_API_KEY);
+        String completeUrl = parkingUrlApplyFilters(location);
         JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, completeUrl, (String) null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -177,5 +198,31 @@ public class ServiceUtility {
         }
 
         return null;
+    }
+
+    private static String parkingUrlApplyFilters(LatLng location) {
+        NewFilterModel filters = AppSettingsModel.filters;
+        String completeUrl = String.format(PARKING_BASE,
+                location.latitude,
+                location.longitude,
+                filters.getMaxPrice(),
+                filters.isMonthly() ? 1 : 0,
+                filters.isShuttle() ? 1 : 0,
+                filters.isEticket() ? 1 : 0,
+                filters.isPerk() ? 1 : 0,
+                filters.isValet() ? 1 : 0,
+                filters.isIndoor() ? 1 : 0,
+                filters.isHandicap() ? 1 : 0,
+                filters.isRestRoom() ? 1 : 0,
+                filters.isSecurity() ? 1 : 0,
+                filters.isTailGate() ? 1 : 0,
+                filters.isRv() ? 1 : 0,
+                filters.isUnObstructed() ? 1 : 0,
+                filters.isAttended() ? 1 : 0,
+                filters.isReentryAllowed() ? 1 : 0,
+                PARKING_API_KEY);
+
+
+        return completeUrl;
     }
 }

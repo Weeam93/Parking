@@ -10,8 +10,6 @@
         app:showAsAction="ifRoom"></item>
     <item
         android:id="@+id/action_filter"
-        android:checkable="true"
-        android:checked="false"
         android:icon="@drawable/ic_filter_list_black_24dp"
         android:title="Filter Places"
         app:showAsAction="ifRoom">
