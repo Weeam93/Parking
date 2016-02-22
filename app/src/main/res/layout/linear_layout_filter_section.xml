@@ -446,11 +446,11 @@
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerInParent="true"
+                android:layout_alignParentTop="false"
                 android:text="@string/reentry_Description"
                 android:textColor="@color/black"
-                android:textSize="8dp" />
+                android:textSize="8dp"
+                android:layout_centerInParent="true" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/cb_isReentryAllowed"

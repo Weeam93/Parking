@@ -46,17 +46,17 @@
     <string name="reentry_label">Reentry Allowed</string>
 
     <string name="monthly_Description">Only return monthly parking listings.</string>
-    <string name="shuttle_Description">>Only return locations with shuttle service</string>
-    <string name="eticket_Description">Only return locations that accept Mobile Passes</string>
-    <string name="perk_Description">Only return locations that offer ParkWhiz Perks</string>
-    <string name="valet_Description">Only return locations that offer valet service</string>
-    <string name="indoor_Description">Only return indoor/covered locations</string>
+    <string name="shuttle_Description">Only return locations with shuttle service.</string>
+    <string name="eticket_Description">Only return locations that accept Mobile Passes.</string>
+    <string name="perk_Description">Only return locations that offer ParkWhiz Perks.</string>
+    <string name="valet_Description">Only return locations that offer valet service.</string>
+    <string name="indoor_Description">Only return indoor/covered locations.</string>
     <string name="handicap_Description">Only return handicap accessible locations</string>
-    <string name="restroom_Description">Only return locations that provide a restroom to customers</string>
-    <string name="security_Description">Only return locations with on-site security</string>
-    <string name="tailgate_Description">Only return locations that allow tailgating</string>
-    <string name="rv_Description">Only return locations that allow RV parking</string>
-    <string name="unobstructed_Description">Only return locations with unobstructed parking spots (vehicle wont be blocked in)</string>
-    <string name="attended_Description">>Only return locations with an on-site parking attendant</string>
-    <string name="reentry_Description">Reentry Only return locations that allow reentry</string>
+    <string name="restroom_Description">Only return locations that provide a restroom to customers.</string>
+    <string name="security_Description">Only return locations with on-site security.</string>
+    <string name="tailgate_Description">Only return locations that allow tailgating.</string>
+    <string name="rv_Description">Only return locations that allow RV parking.</string>
+    <string name="unobstructed_Description">Only return locations with unobstructed parking spots.</string>
+    <string name="attended_Description">Only return locations with an on-site parking attendant.</string>
+    <string name="reentry_Description">Reentry Only return locations that allow reentry.</string>
 </resources>

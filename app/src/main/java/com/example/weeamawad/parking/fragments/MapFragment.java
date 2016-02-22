@@ -89,6 +89,11 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private NewFilterModel filter;
     private MenuItem filterMenuItem;
 
+    public static Fragment newInstance() {
+        MapFragment myFragment = new MapFragment();
+        return myFragment;
+    }
+
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);     // 5 seconds

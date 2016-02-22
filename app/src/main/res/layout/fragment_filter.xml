@@ -60,9 +60,12 @@
                 android:id="@+id/btn_apply_filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:background="@color/teal"
-                android:text="Done" />
+                android:text="Done"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
 
         </LinearLayout>
     </RelativeLayout>

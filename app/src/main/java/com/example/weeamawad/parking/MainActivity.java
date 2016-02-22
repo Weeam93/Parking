@@ -59,9 +59,7 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
         setDrawerWidth();
-        loadData();
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, myToolbar, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
@@ -85,73 +83,6 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
                 selectItem(position);
             }
         });
-    }
-
-    private void loadData() {
-        /*SharedPreference pref = new SharedPreference(this, Constants.SHARED_PREFRENCE_DEFAULT);
-        if (!pref.getBooleanPref(Constants.IS_NOT_CLEAN_INSTALL, false)) {
-            String[] labels = getResources().getStringArray(R.array.filterLabels);
-            String[] descriptions = getResources().getStringArray(R.array.filterDescriptions);
-            DatabaseUtils.deleteAllFavorites(this);
-            for (int i = 0; i < labels.length; i++) {
-                FilterModel fm = new FilterModel(labels[i], descriptions[i], 0);
-                DatabaseUtils.saveFilter(this, fm);
-            }
-            pref.setPref(Constants.IS_NOT_CLEAN_INSTALL, true);
-        }*/
-    }
-
-    private void setDrawerWidth() {
-        final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
-                new int[]{android.R.attr.actionBarSize});
-        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
-        styledAttributes.recycle();
-
-        int width = getResources().getDisplayMetrics().widthPixels;
-        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) mDrawerLinearLayout.getLayoutParams();
-        params.width = width - mActionBarSize;
-        mDrawerLinearLayout.setLayoutParams(params);
-    }
-
-    private void selectItem(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment;
-        if (position != currentPosition) {
-            switch (position) {
-                case 0:
-                    fragment = new MapFragment();
-                    replaceFragment(fragment, MapFragment.class.getSimpleName());
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    fragment = new FavoritesFragment();
-                    Bundle favArgs = new Bundle();
-                    favArgs.putBoolean(Constants.FAVORITES_KEY, true);
-                    fragment.setArguments(favArgs);
-                    replaceFragment(fragment, FavoritesFragment.class.getSimpleName());
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    fragment = new FavoritesFragment();
-                    Bundle recentArgs = new Bundle();
-                    recentArgs.putBoolean(Constants.FAVORITES_KEY, false);
-                    fragment.setArguments(recentArgs);
-                    replaceFragment(fragment, FavoritesFragment.class.getSimpleName());
-                    break;
-                case 5:
-                    break;
-
-            }
-        }
-        // update selected item title, then close the drawer
-        setTitle(mSettingTitles[position]);
-        currentPosition = position;
-        mDrawerList.setItemChecked(position, true);
-        mDrawerList.setSelection(position);
-        mDrawerLayout.closeDrawer(mDrawerLinearLayout);
-
     }
 
     @Override
@@ -207,23 +138,6 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
     }
 
     @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            mDrawerLayout.closeDrawers();
-            return;
-        }
-        super.onBackPressed();
-    }
-
-    private void replaceFragment(Fragment fragment, String fragmentTag) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.content_frame, fragment, fragmentTag);
-        ft.commit();
-        fragmentManager.executePendingTransactions();
-    }
-
-    @Override
     public void applyFilter() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
@@ -231,5 +145,115 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
         if (!Utils.checkIfNull(fragment)) {
             fragment.findNearbyParking(null);
         }
+    }
+
+    private void setDrawerWidth() {
+        final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+                new int[]{android.R.attr.actionBarSize});
+        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) mDrawerLinearLayout.getLayoutParams();
+        params.width = width - mActionBarSize;
+        mDrawerLinearLayout.setLayoutParams(params);
+    }
+
+    private void selectItem(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment = null;
+        Class fragmentClass = MapFragment.class;
+        Bundle args = new Bundle();
+
+        if (position != currentPosition) {
+            switch (position) {
+                case 0:
+                    fragmentClass = MapFragment.class;
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    fragmentClass = FavoritesFragment.class;
+                    args.putBoolean(Constants.FAVORITES_KEY, true);
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    fragmentClass = FavoritesFragment.class;
+                    args.putBoolean(Constants.FAVORITES_KEY, false);
+                    break;
+                case 5:
+                    break;
+                default:
+                    fragmentClass = MapFragment.class;
+                    break;
+            }
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            fragment.setArguments(args);
+
+            if (Utils.checkIfNull(getSupportFragmentManager().getFragments())) {
+                replaceFragment(fragment, fragmentClass.getSimpleName());
+            } else {
+                addFragment(fragment, fragmentClass.getSimpleName());
+            }
+        }
+
+        // update selected item title, then close the drawer
+        updateSelection(position);
+
+    }
+
+    private void updateSelection(int position) {
+        setTitle(mSettingTitles[position]);
+        currentPosition = position;
+        mDrawerList.setItemChecked(position, true);
+        mDrawerList.setSelection(position);
+        mDrawerLayout.closeDrawer(mDrawerLinearLayout);
+    }
+
+    private void replaceFragment(Fragment fragment, String fragmentTag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.content_frame, fragment, fragmentTag);
+        ft.commit();
+    }
+
+    private void addFragment(Fragment fragment, String fragmentTag) {
+        removeFragment(); //removes current fragment before adding new one
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.add(R.id.content_frame, fragment, fragmentTag);
+        ft.addToBackStack(fragmentTag);
+        ft.commit();
+    }
+
+    private void removeFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            Fragment fragment = fragmentManager.getFragments().get(fragmentManager.getFragments().size() - 1);
+            fragmentManager.beginTransaction().remove(fragment).commit();
+            fragmentManager.popBackStack();
+            fragmentManager.executePendingTransactions();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerLayout.closeDrawers();
+            return;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            removeFragment();
+            updateSelection(0);
+            return;
+        }
+        super.onBackPressed();
     }
 }

@@ -33,6 +33,11 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
     private TextView clearData;
     private boolean isFavorites;
 
+    public static Fragment newInstance() {
+        FavoritesFragment myFragment = new FavoritesFragment();
+        return myFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_favorites, container, false);
