@@ -4,7 +4,6 @@
     <color name="primary_dark">@color/black</color>
     <color name="accent">@color/white</color>
     <color name="textColorPrimary">@color/white</color>
-    <color name="colorControlHighlight">@color/teal</color>
     <color name="list_item_selected">@color/silver</color>
     <!-- papayawhip, Silver !-->
     <color name="list_item_default">@color/primary</color>
@@ -13,6 +12,11 @@
     <color name="enabled_color">@color/teal</color>
     <color name="disabled_color">@color/gray_active_icon</color>
 
+
+    <color name="my_color_highlight">#FF008080</color>
+    <!-- main color for drawable/my_ripple -->
+    <color name="my_color_highlight_press">#77008080</color>
+    <color name="my_color_highlight_focus">#CC008080</color>
 
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFFF00</color>

@@ -15,7 +15,8 @@
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:background="@null"
-        android:src="@android:drawable/ic_dialog_info" />
+        android:src="@drawable/ic_info_outline_black_24dp"
+        android:tint="@color/accent" />
 
     <TextView
         android:id="@+id/tv_navigation"
@@ -24,7 +25,7 @@
         android:layout_marginLeft="72dp"
         android:gravity="center"
         android:text="Sample Text"
-        android:textColor="@color/white"
+        android:textColor="@color/accent"
         android:textSize="14sp" />
 </RelativeLayout>
 

@@ -38,6 +38,7 @@
                 android:id="@+id/floating_search_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 app:floatingSearch_dismissOnOutsideTouch="true"
                 app:floatingSearch_leftActionMode="showSearch"
                 app:floatingSearch_menu="@menu/menu_items"
@@ -46,6 +47,34 @@
                 app:floatingSearch_searchBarMarginTop="5dp"
                 app:floatingSearch_searchHint="Search..."
                 app:floatingSearch_showSearchKey="false" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/iv_search_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_search_black_24dp"
+                    android:tint="@color/accent"
+                    app:backgroundTint="@color/primary" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/iv_gps_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_gps_fixed_black_24dp"
+                    android:tint="@color/accent"
+                    app:backgroundTint="@color/primary" />
+            </RelativeLayout>
+
 
             <RelativeLayout
                 android:id="@+id/OuterBottomPanel"
@@ -73,7 +102,7 @@
                         android:layout_height="35dp"
                         android:padding="5dp"
                         android:text="@{garage.name}"
-                        android:textColor="@color/White"
+                        android:textColor="@color/accent"
                         android:textSize="18dp" />
 
                     <TextView
@@ -82,7 +111,7 @@
                         android:layout_height="35dp"
                         android:padding="5dp"
                         android:text="@{garage.address}"
-                        android:textColor="@color/White"
+                        android:textColor="@color/accent"
                         android:textSize="16sp"
                         android:textStyle="italic" />
 
@@ -99,7 +128,7 @@
                             android:layout_weight="1"
                             android:padding="5dp"
                             android:text='@{String.valueOf(garage.distance)+" Miles"}'
-                            android:textColor="@color/White"
+                            android:textColor="@color/accent"
                             android:textSize="13sp"
                             android:textStyle="italic" />
 
@@ -110,7 +139,7 @@
                             android:layout_weight=".5"
                             android:padding="5dp"
                             android:text='@{"$ "+ String.valueOf(garage.price)}'
-                            android:textColor="@color/White"
+                            android:textColor="@color/accent"
                             android:textSize="13sp"
                             android:textStyle="italic" />
 
@@ -121,7 +150,7 @@
                             android:layout_weight="1"
                             android:padding="5dp"
                             android:text='@{String.valueOf(garage.availibleSpots) + " Openings"}'
-                            android:textColor="@color/White"
+                            android:textColor="@color/accent"
                             android:textSize="13sp"
                             android:textStyle="italic" />
                     </LinearLayout>

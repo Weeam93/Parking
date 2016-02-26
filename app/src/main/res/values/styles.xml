@@ -23,7 +23,7 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:textColorPrimary">@color/accent</item>
-        <item name="android:colorControlHighlight">@color/colorControlHighlight</item>
+        <item name="android:colorControlHighlight">@color/my_color_highlight</item>
     </style>
 
     <!--Progress Dialog style-->

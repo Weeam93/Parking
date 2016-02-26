@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/LightBlack"
+    android:background="@color/primary"
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:divider="@color/white"
+        android:background="@color/accent"
         android:dividerHeight="4dp" />
 
     <TextView
@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/white"
+        android:background="@color/accent"
         android:gravity="center"
-        android:textColor="@color/black"
-        android:text="@string/clear_favorites" />
+        android:text="@string/clear_favorites"
+        android:textColor="@color/primary" />
 </RelativeLayout>

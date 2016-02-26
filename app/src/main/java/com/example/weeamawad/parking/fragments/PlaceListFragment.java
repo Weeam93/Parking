@@ -121,7 +121,7 @@ public class PlaceListFragment extends Fragment implements View.OnClickListener 
 
         }
         btnSelectedTxtColor = getResources().getColor(R.color.aqua);
-        btnDefualtTxtColor = getResources().getColor(R.color.white);
+        btnDefualtTxtColor = getResources().getColor(R.color.accent);
     }
 
 }

@@ -76,6 +76,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
         adapter = new FavoritesAdapter(parkingGarageModels);
         rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvFavorites.setAdapter(adapter);
+
         if (isFavorites) {
             clearData.setText(getResources().getString(R.string.clear_favorites));
         } else {

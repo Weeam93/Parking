@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, myToolbar, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
+                // getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
+                //getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
     }
 
     private void updateSelection(int position) {
-        setTitle(mSettingTitles[position]);
+        setTitle("");//mSettingTitles[position]);
         currentPosition = position;
         mDrawerList.setItemChecked(position, true);
         mDrawerList.setSelection(position);
