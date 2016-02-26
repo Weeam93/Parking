@@ -33,7 +33,9 @@ import java.util.ArrayList;
 public class ServiceUtility {
 
     private static final String GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json?address=%s";
-    private static final String PARKING_BASE = "http://api.parkwhiz.com/search/?lat=%s&lng=%s&price=%s&monthly=%s&shuttle=%s&eticket=%s&perk=%s&valet=%s&indoor=%s&handicap=%s&restroom=%s&security=%s&tailgate=%s&rv=%s&unobstructed=%s&attended=%s&reentry_allowed=%s&key=%s";
+    private static final String PARKING_BASE = "http://api.parkwhiz.com/search/?lat=%s&lng=%s" +
+          //  "&price=%s" +
+            "&monthly=%s&shuttle=%s&eticket=%s&perk=%s&valet=%s&indoor=%s&handicap=%s&restroom=%s&security=%s&tailgate=%s&rv=%s&unobstructed=%s&attended=%s&reentry_allowed=%s&key=%s";
     private static final String AUTO_COMPLETE_BASE = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%s&components=country:us&key=%s";
     private static final String PARKING_API_KEY = "c71066144c39ee80c3d36f995d914d91";
     private static final String GOOGLE_API_KEY = "AIzaSyBOqw91vKAUAaRhgSDoDBy4lmg-4pEOBwU";
@@ -205,7 +207,7 @@ public class ServiceUtility {
         String completeUrl = String.format(PARKING_BASE,
                 location.latitude,
                 location.longitude,
-                filters.getMaxPrice(),
+                //(float)filters.getMaxPrice(),
                 filters.isMonthly() ? 1 : 0,
                 filters.isShuttle() ? 1 : 0,
                 filters.isEticket() ? 1 : 0,

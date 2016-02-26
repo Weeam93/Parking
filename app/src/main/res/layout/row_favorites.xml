@@ -11,15 +11,17 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:background="@color/primary">
+        android:layout_margin="5dp"
+        android:background="@color/primary"
+        android:elevation="4dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:padding="5dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -31,14 +33,16 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="@{garage.name}"
-                    android:textColor="@color/accent" />
+                    android:textColor="@color/accent"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="@{garage.address}"
-                    android:textColor="@color/accent" />
+                    android:textColor="@color/accent"
+                    android:textSize="14dp" />
 
             </LinearLayout>
 

@@ -5,7 +5,7 @@ package com.example.weeamawad.parking.Utility;
  */
 public class Constants {
 
-    public static final int DEFAULT_MAX_PRICE = 1000;
+    public static final int DEFAULT_MAX_PRICE = 100;
     public static final String OPEN_GOOGLE_MAPS = "google.navigation:q=";
     public static final String FAVORITES_KEY = "favorites";
     public static final String CENTER_LOCATION = "centerLocation";

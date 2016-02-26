@@ -18,8 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/accent"
+        android:background="@color/my_color_highlight"
+        android:elevation="4dp"
         android:gravity="center"
         android:text="@string/clear_favorites"
-        android:textColor="@color/primary" />
+        android:textColor="@color/accent"
+        android:textSize="16dp" />
 </RelativeLayout>
