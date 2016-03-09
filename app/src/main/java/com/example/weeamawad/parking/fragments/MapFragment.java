@@ -9,6 +9,7 @@ import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -68,11 +69,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private Context mContext;
     private RelativeLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
-    private ImageButton favoriteBtnOff;
-    private ImageButton favoriteBtnOn;
-    private ImageButton navigationBtn;
+    private ImageButton favoriteBtnOn, favoriteBtnOff, navigationBtn;
+    private FloatingActionButton fabGps;
     private String placeCompleteAddress;
-    private ImageButton myLocationBtn;
     private LatLng mSelectedMapLocation;
     private GarageModel selectedGarageModel;
     private ArrayList<GarageModel> parkingGarageModels;
@@ -170,7 +169,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 .fillColor(Color.argb(62, 0, 0, 255));
         Circle vision = map.addCircle(c);
 
-        updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        moveToMyLocation();
     }
 
     @Override
@@ -200,6 +199,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 drawerCallback.toggleDrawer();
                 break;
             case R.id.autoComplete:
+                break;
+            case R.id.fab_gps_btn:
+                moveToMyLocation();
                 break;
             case R.id.ib_favoriteOff:
                 Log.i(TAG, "Favorite Off Clicked");
@@ -246,6 +248,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide(); //Hide Action Bar
         ivFilter = (ImageView) mRootView.findViewById(R.id.iv_filter);
         ivDrawerMenu = (ImageView) mRootView.findViewById(R.id.iv_drawer_menu);
+        fabGps = (FloatingActionButton) mRootView.findViewById(R.id.fab_gps_btn);
         outerBottomPanel = (RelativeLayout) mRootView.findViewById(R.id.OuterBottomPanel);
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
         favoriteBtnOn = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOn);
@@ -263,6 +266,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private void initListeners() {
         ivFilter.setOnClickListener(this);
         ivDrawerMenu.setOnClickListener(this);
+        fabGps.setOnClickListener(this);
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
         navigationBtn.setOnClickListener(this);
@@ -415,6 +419,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 Toast.makeText(mContext, "No Nearby Parking Found", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void moveToMyLocation() {
+        updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
     public void updateCameraLocation(double latitude, double longitude) {
