@@ -1,7 +1,9 @@
 package com.example.weeamawad.parking;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -12,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +30,14 @@ import com.example.weeamawad.parking.adapters.NavigationDrawerAdapter;
 import com.example.weeamawad.parking.fragments.FavoritesFragment;
 import com.example.weeamawad.parking.fragments.FilterFragment;
 import com.example.weeamawad.parking.fragments.MapFragment;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 public class MainActivity extends AppCompatActivity implements FilterFragment.OnApplyFilterListenter, MapFragment.OnDrawerMenuClick {
+    private final String TAG = this.getClass().getSimpleName().toString();
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private NavigationDrawerAdapter settingsAdapter;
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements FilterFragment.On
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, myToolbar, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
-                 getSupportActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 

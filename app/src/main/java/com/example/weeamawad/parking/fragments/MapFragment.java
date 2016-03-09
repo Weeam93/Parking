@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weeamawad.parking.Listeners.ParkingListener;
@@ -39,10 +40,16 @@ import com.example.weeamawad.parking.model.GarageModel;
 import com.example.weeamawad.parking.model.NewFilterModel;
 import com.example.weeamawad.parking.model.PlacesModel;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -60,6 +67,7 @@ import com.google.maps.android.ui.IconGenerator;
 import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private final String TAG = this.getClass().getSimpleName().toString();
 
     private GoogleMap map;
@@ -67,21 +75,22 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
     private Context mContext;
-    private RelativeLayout outerBottomPanel;
     private boolean mRequestingLocationUpdates;
-    private ImageButton favoriteBtnOn, favoriteBtnOff, navigationBtn;
-    private FloatingActionButton fabGps;
     private String placeCompleteAddress;
     private LatLng mSelectedMapLocation;
     private GarageModel selectedGarageModel;
     private ArrayList<GarageModel> parkingGarageModels;
-
-    private View mRootView;
-    private MapFragmentBinding mBinding;
     private SharedPreference pref;
     private NewFilterModel filter;
-    private ImageView ivFilter, ivDrawerMenu;
     private OnDrawerMenuClick drawerCallback;
+
+    private MapFragmentBinding mBinding;
+    private View mRootView;
+    private RelativeLayout outerBottomPanel;
+    private ImageButton favoriteBtnOn, favoriteBtnOff, navigationBtn;
+    private ImageView ivFilter, ivDrawerMenu;
+    private TextView tvSearchBar;
+    private FloatingActionButton fabGps;
 
     public static Fragment newInstance() {
         MapFragment myFragment = new MapFragment();
@@ -191,14 +200,23 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_drawer_menu:
+                drawerCallback.toggleDrawer();
+                break;
             case R.id.iv_filter:
                 FilterFragment filterFragment = new FilterFragment();
                 addFragment(filterFragment);
                 break;
-            case R.id.iv_drawer_menu:
-                drawerCallback.toggleDrawer();
-                break;
-            case R.id.autoComplete:
+            case R.id.tv_SearchBar:
+                try {
+                    Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .build(getActivity());
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    // TODO: Handle the error.
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // TODO: Handle the error.
+                }
                 break;
             case R.id.fab_gps_btn:
                 moveToMyLocation();
@@ -248,6 +266,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide(); //Hide Action Bar
         ivFilter = (ImageView) mRootView.findViewById(R.id.iv_filter);
         ivDrawerMenu = (ImageView) mRootView.findViewById(R.id.iv_drawer_menu);
+        tvSearchBar = (TextView) mRootView.findViewById(R.id.tv_SearchBar);
         fabGps = (FloatingActionButton) mRootView.findViewById(R.id.fab_gps_btn);
         outerBottomPanel = (RelativeLayout) mRootView.findViewById(R.id.OuterBottomPanel);
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
@@ -264,8 +283,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void initListeners() {
-        ivFilter.setOnClickListener(this);
         ivDrawerMenu.setOnClickListener(this);
+        ivFilter.setOnClickListener(this);
+        tvSearchBar.setOnClickListener(this);
         fabGps.setOnClickListener(this);
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
@@ -484,6 +504,24 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     public interface OnDrawerMenuClick {
         void toggleDrawer();
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == getActivity().RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                tvSearchBar.setText(place.getAddress());
+                updateCameraLocation(place.getLatLng().latitude,place.getLatLng().longitude);
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == getActivity().RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 }
 
