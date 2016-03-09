@@ -18,6 +18,7 @@
     <color name="my_color_highlight_press">#77008080</color>
     <color name="my_color_highlight_focus">#CC008080</color>
 
+    <color name="gray_active_icon">#787878</color>
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFFF00</color>
     <color name="fuchsia">#FF00FF</color>

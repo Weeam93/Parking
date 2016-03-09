@@ -3,6 +3,7 @@ package com.example.weeamawad.parking.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initViews() {
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show(); //Hide Action Bar
         rvFavorites = (RecyclerView) mRootView.findViewById(R.id.lv_favorites);
         clearData = (TextView) mRootView.findViewById(R.id.tv_clear_data);
         adapter = new FavoritesAdapter(parkingGarageModels);

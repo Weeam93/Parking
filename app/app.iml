@@ -75,14 +75,13 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.databinding/adapters/1.0-rc3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.databinding/library/1.0-rc3/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.1.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/design/23.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/design/23.2.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.bartoszlipinski/viewpropertyobjectanimator/1.2.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.arimorty/floatingsearchview/1.1.2/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.2.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.8.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.8.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.8.0/jars" />
@@ -105,8 +104,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.8.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.8.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services/7.8.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.maps.android/android-maps-utils/0.4.2/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/me.grantland/autofittextview/0.2.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.maps.android/android-maps-utils/0.4.3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
@@ -128,20 +126,19 @@
     <orderEntry type="library" exported="" name="play-services-games-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-drive-7.8.0" level="project" />
-    <orderEntry type="library" exported="" name="viewpropertyobjectanimator-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-7.8.0" level="project" />
-    <orderEntry type="library" exported="" name="autofittextview-0.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-7.8.0" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-23.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-7.8.0" level="project" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-appinvite-7.8.0" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="android-maps-utils-0.4.2" level="project" />
-    <orderEntry type="library" exported="" name="floatingsearchview-1.1.2" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-23.2.0" level="project" />
+    <orderEntry type="library" exported="" name="android-maps-utils-0.4.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-safetynet-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="library-1.0-rc3" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-23.2.0" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-23.2.0" level="project" />
+    <orderEntry type="library" exported="" name="animated-vector-drawable-23.2.0" level="project" />
+    <orderEntry type="library" exported="" name="support-vector-drawable-23.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="adapters-1.0-rc3" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-7.8.0" level="project" />
@@ -150,9 +147,8 @@
     <orderEntry type="library" exported="" name="gson-2.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-vision-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="baseLibrary-1.0-rc5" level="project" />
-    <orderEntry type="library" exported="" name="cardview-v7-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="design-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-7.8.0" level="project" />
+    <orderEntry type="library" exported="" name="design-23.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appstate-7.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-7.8.0" level="project" />

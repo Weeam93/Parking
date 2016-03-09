@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,16 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.arlib.floatingsearchview.util.view.BodyTextView;
-import com.arlib.floatingsearchview.util.view.IconImageView;
-import com.example.weeamawad.parking.Listeners.AutoCompleteListener;
-import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.Constants;
@@ -37,7 +33,6 @@ import com.example.weeamawad.parking.Utility.ServiceUtility;
 import com.example.weeamawad.parking.Utility.SharedPreference;
 import com.example.weeamawad.parking.Utility.Utils;
 import com.example.weeamawad.parking.databinding.MapFragmentBinding;
-import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
 import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.GarageModel;
 import com.example.weeamawad.parking.model.NewFilterModel;
@@ -83,11 +78,11 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private ArrayList<GarageModel> parkingGarageModels;
 
     private View mRootView;
-    private FloatingSearchView mSearchView;
     private MapFragmentBinding mBinding;
     private SharedPreference pref;
     private NewFilterModel filter;
-    private MenuItem filterMenuItem;
+    private ImageView ivFilter, ivDrawerMenu;
+    private OnDrawerMenuClick drawerCallback;
 
     public static Fragment newInstance() {
         MapFragment myFragment = new MapFragment();
@@ -197,6 +192,13 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_filter:
+                FilterFragment filterFragment = new FilterFragment();
+                addFragment(filterFragment);
+                break;
+            case R.id.iv_drawer_menu:
+                drawerCallback.toggleDrawer();
+                break;
             case R.id.autoComplete:
                 break;
             case R.id.ib_favoriteOff:
@@ -241,13 +243,15 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void initViews() {
-        mSearchView = (FloatingSearchView) mRootView.findViewById(R.id.floating_search_view);
-        filterMenuItem = (MenuItem) mRootView.findViewById(R.id.action_filter);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide(); //Hide Action Bar
+        ivFilter = (ImageView) mRootView.findViewById(R.id.iv_filter);
+        ivDrawerMenu = (ImageView) mRootView.findViewById(R.id.iv_drawer_menu);
         outerBottomPanel = (RelativeLayout) mRootView.findViewById(R.id.OuterBottomPanel);
         favoriteBtnOff = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOff);
         favoriteBtnOn = (ImageButton) mRootView.findViewById(R.id.ib_favoriteOn);
         navigationBtn = (ImageButton) mRootView.findViewById(R.id.launchNavigationBtn1);
 
+        drawerCallback = (OnDrawerMenuClick) getActivity();
         pref = new SharedPreference(mContext, Constants.SHARED_PREFRENCE_DEFAULT);
         filter = (NewFilterModel) pref.getObjectPref(Constants.FILTER_DATA, new NewFilterModel());
         if (Utils.checkIfNull(filter)) {
@@ -257,10 +261,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     private void initListeners() {
+        ivFilter.setOnClickListener(this);
+        ivDrawerMenu.setOnClickListener(this);
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
         navigationBtn.setOnClickListener(this);
-        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+        /*mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
 
@@ -340,7 +346,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 leftIcon.setImageResource(R.drawable.ic_place_black_24dp);
                 leftIcon.setAlpha(.36f);
             }
-        });
+        });*/
     }
 
     private void initialize() {
@@ -460,12 +466,16 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     public void updateFilterState() {
         if (filter.isEnabled()) {
-            filterMenuItem.getIcon().setTint(getResources().getColor(R.color.enabled_color));
+            //filterMenuItem.getIcon().setTint(getResources().getColor(R.color.enabled_color));
 
         } else {
-            filterMenuItem.getIcon().setTint(getResources().getColor(R.color.disabled_color));
+            //filterMenuItem.getIcon().setTint(getResources().getColor(R.color.disabled_color));
 
         }
+    }
+
+    public interface OnDrawerMenuClick {
+        void toggleDrawer();
     }
 }
 

@@ -8,11 +8,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
-import com.example.weeamawad.parking.Listeners.AutoCompleteListener;
 import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
 import com.example.weeamawad.parking.Volley.VolleyRequestQueue;
-import com.example.weeamawad.parking.entities.AutoCompleteSuggestion;
 import com.example.weeamawad.parking.model.AppSettingsModel;
 import com.example.weeamawad.parking.model.FilterModel;
 import com.example.weeamawad.parking.model.GarageModel;
@@ -108,7 +106,7 @@ public class ServiceUtility {
         VolleyRequestQueue.getInstance(context.getApplicationContext()).addToRequestQueue(jsonRequest);
     }
 
-    public static void autoComplete(Context context, String input, final AutoCompleteListener listener) {
+   /* public static void autoComplete(Context context, String input, final AutoCompleteListener listener) {
         String types = "(cities)";
         // input = "&input=" + input;
         String completeUrl = null;
@@ -141,7 +139,7 @@ public class ServiceUtility {
             }
         });
         VolleyRequestQueue.getInstance(context.getApplicationContext()).addToRequestQueue(jsonRequest);
-    }
+    }*/
 
     public static void geocodeService(Context context, String address, final GeocodeListener listener) {
         String completeUrl = address.replaceAll(" ", "+");
@@ -173,9 +171,6 @@ public class ServiceUtility {
 
     }
 
-    private static AutoCompleteSuggestion convertTOSuggestion(String address) {
-        return new AutoCompleteSuggestion(address);
-    }
 
     private static GarageModel parseJSON(JSONObject j) {
         GarageModel result = new GarageModel();
