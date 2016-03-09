@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/LightBlack"
+    android:background="@color/primary"
     android:dividerPadding="10dp"
     android:orientation="vertical">
 
@@ -10,7 +10,7 @@
         android:id="@+id/searchPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/LightBlack"
+        android:background="@color/primary"
         android:orientation="horizontal"
         android:paddingBottom="15dp"
         android:paddingLeft="5dp"
