@@ -510,7 +510,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                tvSearchBar.setText(place.getAddress());
+                tvSearchBar.setText(place.getName());
                 updateCameraLocation(place.getLatLng().latitude,place.getLatLng().longitude);
                 Log.i(TAG, "Place: " + place.getName());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
