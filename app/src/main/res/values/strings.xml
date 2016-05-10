@@ -43,7 +43,7 @@
     <string name="rv_label">Rv</string>
     <string name="unobstructed_label">Unobstructed</string>
     <string name="attended_label">Attended</string>
-    <string name="reentry_label">Reentry Allowed</string>
+    <string name="reentry_label">Re-Entry</string>
 
     <string name="monthly_Description">Only return monthly parking listings.</string>
     <string name="shuttle_Description">Only return locations with shuttle service.</string>
@@ -58,5 +58,5 @@
     <string name="rv_Description">Only return locations that allow RV parking.</string>
     <string name="unobstructed_Description">Only return locations with unobstructed parking spots.</string>
     <string name="attended_Description">Only return locations with an on-site parking attendant.</string>
-    <string name="reentry_Description">Reentry Only return locations that allow reentry.</string>
+    <string name="reentry_Description">Only return locations that allow reentry.</string>
 </resources>

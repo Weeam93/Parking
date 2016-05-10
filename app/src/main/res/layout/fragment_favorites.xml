@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@color/accent"
+        android:background="@color/secondary"
         android:dividerHeight="4dp" />
 
     <TextView
@@ -22,6 +22,6 @@
         android:elevation="4dp"
         android:gravity="center"
         android:text="@string/clear_favorites"
-        android:textColor="@color/accent"
+        android:textColor="@color/secondary"
         android:textSize="16dp" />
 </RelativeLayout>

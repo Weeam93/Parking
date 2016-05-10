@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">@color/white</color>
+    <color name="secondary">@color/LightBlack</color>
+    <color name="textColorPrimary">@color/black</color>
+    <color name="textColorSecondary">@color/white</color>
+
     <color name="primary_dark">@color/black</color>
-    <color name="accent">@color/LightBlack</color>
-    <color name="textColorPrimary">@color/white</color>
     <color name="list_item_selected">@color/silver</color>
     <!-- papayawhip, Silver !-->
     <color name="list_item_default">@color/primary</color>

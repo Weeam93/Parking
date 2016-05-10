@@ -1,13 +1,14 @@
 package com.example.weeamawad.parking.fragments;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,9 +16,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -26,7 +24,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.weeamawad.parking.Listeners.GeocodeListener;
 import com.example.weeamawad.parking.Listeners.ParkingListener;
+import com.example.weeamawad.parking.Listeners.PlaceIDListener;
+import com.example.weeamawad.parking.Listeners.ReverseGeocodeListener;
 import com.example.weeamawad.parking.R;
 import com.example.weeamawad.parking.Utility.Constants;
 import com.example.weeamawad.parking.Utility.DatabaseUtils;
@@ -47,6 +48,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -65,6 +67,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMarkerClickListener, View.OnClickListener {
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -76,7 +79,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private LocationRequest mLocationRequest;
     private Context mContext;
     private boolean mRequestingLocationUpdates;
-    private String placeCompleteAddress;
     private LatLng mSelectedMapLocation;
     private GarageModel selectedGarageModel;
     private ArrayList<GarageModel> parkingGarageModels;
@@ -209,8 +211,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 break;
             case R.id.tv_SearchBar:
                 try {
+
                     Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                             .build(getActivity());
+                    intent.putExtra("initial_query", tvSearchBar.getText().toString());
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                 } catch (GooglePlayServicesRepairableException e) {
                     // TODO: Handle the error.
@@ -232,6 +236,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 DatabaseUtils.deleteFavorite(mContext, selectedGarageModel);
                 break;
             case R.id.launchNavigationBtn1:
+                String placeCompleteAddress = selectedGarageModel.getCompleteAddress().replace(" ", "+");
                 String uri = Constants.OPEN_GOOGLE_MAPS + placeCompleteAddress;
                 Toast.makeText(mContext, uri, Toast.LENGTH_LONG).show();
                 Intent navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -253,11 +258,21 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             @Override
             public void onMapClick(LatLng position) {
                 // TODO Auto-generated method stub
-                if (outerBottomPanel.getVisibility() != View.GONE) {
-                    Utils.animateOutViewFromFromSide(outerBottomPanel, true);
-                }
+
+                hideInfoPane();
                 mSelectedMapLocation = position;
                 updateCameraLocation(position.latitude, position.longitude);
+                ServiceUtility.reverseGeocodeService(mContext, position, new ReverseGeocodeListener() {
+                    @Override
+                    public void onSuccess(String address) {
+                        tvSearchBar.setText(address);
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
             }
         });
     }
@@ -290,87 +305,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         favoriteBtnOff.setOnClickListener(this);
         favoriteBtnOn.setOnClickListener(this);
         navigationBtn.setOnClickListener(this);
-        /*mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-
-                if (!oldQuery.equals("") && newQuery.equals("")) {
-                    mSearchView.clearSuggestions();
-                } else {
-
-                    //this shows the top left circular progress
-                    //you can call it where ever you want, but
-                    //it makes sense to do it when loading something in
-                    //the background.
-                    mSearchView.showProgress();
-
-                    //simulates a query call to a data source
-                    //with a new query.
-                    ServiceUtility.autoComplete(mContext, newQuery, new AutoCompleteListener() {
-                        @Override
-                        public void onSuccess(ArrayList<AutoCompleteSuggestion> strings) {
-
-                            mSearchView.swapSuggestions(strings);
-                            mSearchView.hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            mSearchView.hideProgress();
-                        }
-                    });
-                }
-
-                Log.d("SearchBar", "onSearchTextChanged()");
-            }
-        });
-        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
-            @Override
-            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-                Log.d(TAG, "onSuggestionClicked()");
-                ServiceUtility.geocodeService(mContext, searchSuggestion.getBody(), new GeocodeListener() {
-                    @Override
-                    public void onSuccess(LatLng location) {
-                        updateCameraLocation(location.latitude, location.longitude);
-                    }
-
-                    @Override
-                    public void onFailure() {
-                    }
-                });
-
-            }
-
-            @Override
-            public void onSearchAction() {
-
-                Log.d(TAG, "onSearchAction()");
-            }
-        });
-
-        mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
-            @Override
-            public void onActionMenuItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_myLocation:
-                        item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
-                        updateCameraLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                        break;
-                    case R.id.action_filter:
-                        item.getIcon().setTint(getResources().getColor(R.color.enabled_color));
-                        FilterFragment filterFragment = new FilterFragment();
-                        addFragment(filterFragment);
-                        break;
-                }
-            }
-        });
-        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(IconImageView leftIcon, BodyTextView bodyText, SearchSuggestion item, int itemPosition) {
-                leftIcon.setImageResource(R.drawable.ic_place_black_24dp);
-                leftIcon.setAlpha(.36f);
-            }
-        });*/
     }
 
     private void initialize() {
@@ -474,13 +408,43 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             selectedGarageModel = parkingGarageModels.get(index);
             mBinding.setGarage(selectedGarageModel);
             selectedGarageModel.setIsFavorite(DatabaseUtils.isFavorite(mContext, selectedGarageModel.getListingID()));
-            placeCompleteAddress = selectedGarageModel.getCompleteAddress().replace(" ", "+");
+            DatabaseUtils.saveRecent(mContext, selectedGarageModel);
+            ServiceUtility.getPlaceID(mContext, selectedGarageModel.getAddress(), new PlaceIDListener() {
+                @Override
+                public void onSuccess(String placeID) {
+                    Log.i("PlaceID" + selectedGarageModel.getName() + " ", placeID);
+                    ServiceUtility.placeDetail(mContext, placeID, new PlaceIDListener() {
+                        @Override
+                        public void onSuccess(String photoReference) {
+                            Log.i("PhotoReference", photoReference);
+                            ServiceUtility.placePhoto(mContext, photoReference, new PlaceIDListener() {
+                                @Override
+                                public void onSuccess(String placeID) {
 
+                                }
+
+                                @Override
+                                public void onFailure() {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+            });
             if (outerBottomPanel.getVisibility() != View.VISIBLE) {
                 Utils.animateInViewFromFromSide(outerBottomPanel, true);
             }
-            DatabaseUtils.saveRecent(mContext, selectedGarageModel);
-
             return true;
         }
     }
@@ -505,14 +469,23 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     public interface OnDrawerMenuClick {
         void toggleDrawer();
     }
+
+    private void hideInfoPane() {
+        if (outerBottomPanel.getVisibility() != View.GONE) {
+            Utils.animateOutViewFromFromSide(outerBottomPanel, true);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                tvSearchBar.setText(place.getName());
-                updateCameraLocation(place.getLatLng().latitude,place.getLatLng().longitude);
-                Log.i(TAG, "Place: " + place.getName());
+                tvSearchBar.setText(place.getAddress());
+                updateCameraLocation(place.getLatLng().latitude, place.getLatLng().longitude);
+                hideInfoPane();
+                Log.i(TAG, "Place Name: " + place.getName());
+                Log.i(TAG, "Place Address: " + place.getAddress());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(getActivity(), data);
                 // TODO: Handle the error.

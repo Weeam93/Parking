@@ -57,16 +57,18 @@
 
                 <TextView
                     android:id="@+id/tv_SearchBar"
-                    android:layout_width="280dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:maxLines="1"
-                    android:text="Search Google Maps"
-                    android:textColor="@color/accent"
-                    android:textSize="18sp" />
+                    android:hint="Search Google Maps"
+                    android:singleLine="true"
+                    android:text="278 East Colorado Boulevard, Pasadena, CA 91101, USA"
+                    android:textColor="@color/secondary"
+                    android:textIsSelectable="false"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_filter"
@@ -92,7 +94,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_margin="20dp"
                     android:src="@drawable/ic_search_black_24dp"
-                    android:tint="@color/accent"
+                    android:tint="@color/secondary"
                     android:visibility="gone"
                     app:backgroundTint="@color/primary" />
 
@@ -106,7 +108,7 @@
                     android:layout_marginTop="85dp"
                     android:elevation="4dp"
                     android:src="@drawable/ic_gps_fixed_black_24dp"
-                    android:tint="@color/accent"
+                    android:tint="@color/secondary"
                     app:backgroundTint="@color/primary" />
             </RelativeLayout>
 
@@ -114,9 +116,10 @@
             <RelativeLayout
                 android:id="@+id/OuterBottomPanel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/primary"
+                android:clickable="true"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -137,7 +140,7 @@
                         android:layout_height="35dp"
                         android:padding="5dp"
                         android:text="@{garage.name}"
-                        android:textColor="@color/accent"
+                        android:textColor="@color/secondary"
                         android:textSize="18dp" />
 
                     <TextView
@@ -146,7 +149,7 @@
                         android:layout_height="35dp"
                         android:padding="5dp"
                         android:text="@{garage.address}"
-                        android:textColor="@color/accent"
+                        android:textColor="@color/secondary"
                         android:textSize="16sp"
                         android:textStyle="italic" />
 
@@ -163,7 +166,7 @@
                             android:layout_weight="1"
                             android:padding="5dp"
                             android:text='@{String.valueOf(garage.distance)+" Miles"}'
-                            android:textColor="@color/accent"
+                            android:textColor="@color/secondary"
                             android:textSize="13sp"
                             android:textStyle="italic" />
 
@@ -174,7 +177,7 @@
                             android:layout_weight=".5"
                             android:padding="5dp"
                             android:text='@{"$ "+ String.valueOf(garage.price)}'
-                            android:textColor="@color/accent"
+                            android:textColor="@color/secondary"
                             android:textSize="13sp"
                             android:textStyle="italic" />
 
@@ -185,53 +188,45 @@
                             android:layout_weight="1"
                             android:padding="5dp"
                             android:text='@{String.valueOf(garage.availibleSpots) + " Openings"}'
-                            android:textColor="@color/accent"
+                            android:textColor="@color/secondary"
                             android:textSize="13sp"
                             android:textStyle="italic" />
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_margin="5dp">
 
                     <ImageButton
                         android:id="@+id/ib_favoriteOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:background="@null"
-                        android:padding="2dp"
                         android:src="@android:drawable/btn_star_big_off"
                         app:visibility="@{!garage.isFavorite ? View.VISIBLE : View.GONE}" />
 
                     <ImageButton
                         android:id="@+id/ib_favoriteOn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:background="@null"
-                        android:padding="2dp"
                         android:src="@android:drawable/btn_star_big_on"
                         app:visibility="@{garage.isFavorite ? View.VISIBLE : View.GONE}" />
-                    android:visibility="gone" />
 
                     <ImageButton
                         android:id="@+id/launchNavigationBtn1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:background="@null"
-                        android:padding="2dp"
-                        android:src="@drawable/ic_directions_car_black_24dp" />
+                        android:src="@drawable/ic_directions_car_black_24dp"
+                        android:layout_marginTop="45dp" />
 
-                </LinearLayout>
+                </RelativeLayout>
             </RelativeLayout>
 
         </RelativeLayout>

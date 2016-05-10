@@ -19,7 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@color/accent"
+            android:layout_margin="10dp"
+            android:background="@color/primary"
+            android:elevation="4dp"
             android:orientation="vertical">
 
             <TextView
@@ -28,6 +30,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:text="@string/filter_header"
+                android:textColor="@color/textColorPrimary"
                 android:textSize="16sp" />
 
             <TextView
@@ -36,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="MAX PRICE: $1000"
+                android:textColor="@color/textColorPrimary"
                 android:textSize="12sp" />
 
             <SeekBar
@@ -61,11 +65,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/teal"
-                android:text="Done"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:text="Apply Filter"
+                android:textColor="@color/textColorSecondary" />
 
         </LinearLayout>
     </RelativeLayout>

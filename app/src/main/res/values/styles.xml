@@ -21,8 +21,8 @@
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <!--   theme UI controls like checkboxes and text fields -->
-        <item name="android:colorAccent">@color/accent</item>
-        <item name="android:textColorPrimary">@color/accent</item>
+        <item name="android:colorAccent">@color/secondary</item>
+        <item name="android:textColorPrimary">@color/secondary</item>
         <item name="android:colorControlHighlight">@color/my_color_highlight</item>
     </style>
 
